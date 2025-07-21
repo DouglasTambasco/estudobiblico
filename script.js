@@ -18,7 +18,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
-// 🔥 Firebase Config
+// 🔥 Configuração Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDSy_V62ZUXK-2E1H05uTbvLvM9Q6D_Lng",
   authDomain: "estudobiblico-1b794.firebaseapp.com",
@@ -39,7 +39,6 @@ document.getElementById("login-btn").addEventListener("click", () => {
   const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("password").value.trim();
   const mensagem = document.getElementById("auth-message");
-
   mensagem.textContent = "";
 
   signInWithEmailAndPassword(auth, email, senha)
@@ -172,10 +171,13 @@ document.getElementById("salvar-todos").addEventListener("click", async () => {
     alert("Erro ao salvar marcações.");
   }
 });
+
 // 👀 Exibir aba de versículos marcados
 document.getElementById("ver-marcados-btn").addEventListener("click", () => {
   const area = document.getElementById("versiculos-marcados");
+  const lista = document.getElementById("lista-marcados");
   area.style.display = area.style.display === "none" ? "block" : "none";
+  lista.innerHTML = "";
   exibirVersiculosMarcados();
 });
 
@@ -185,8 +187,8 @@ document.getElementById("filtro-marcacao").addEventListener("change", () => {
 
 async function exibirVersiculosMarcados() {
   const user = auth.currentUser;
-  const container = document.getElementById("versiculos-marcados");
   const tipoFiltro = document.getElementById("filtro-marcacao").value;
+  const container = document.getElementById("lista-marcados");
   container.innerHTML = "";
 
   if (!user) {

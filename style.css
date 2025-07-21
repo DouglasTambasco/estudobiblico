@@ -5,13 +5,13 @@ body {
 }
 
 h1 {
-  color: #4CAF50; /* Verde */
+  color: #4CAF50;
   text-align: center;
 }
 
 label {
   font-weight: bold;
-  color: #6A1B9A; /* Roxo */
+  color: #6A1B9A;
 }
 
 input, select, textarea, button {
@@ -26,7 +26,7 @@ input, select, textarea, button {
 }
 
 button {
-  background-color: #FF9800; /* Laranja */
+  background-color: #FF9800;
   color: white;
   border: none;
   cursor: pointer;
@@ -54,7 +54,7 @@ button:hover {
 }
 
 #marcacao-box {
-  background-color: #ede7f6; /* Fundo roxo suave */
+  background-color: #ede7f6;
   border: 1px solid #6A1B9A;
   border-radius: 8px;
   padding: 20px;
@@ -67,11 +67,6 @@ button:hover {
   color: #6A1B9A;
 }
 
-textarea {
-  resize: vertical;
-  border-color: #FF9800;
-}
-
 #versiculos-marcados {
   margin-top: 30px;
   background-color: #FFF8E1;
@@ -80,9 +75,9 @@ textarea {
   padding: 15px;
 }
 
-#versiculos-marcados textarea {
-  margin-top: 5px;
-}
+#versiculos-marcados textarea,
 #versiculos-marcados select {
   margin-top: 10px;
+  width: 100%;
+  max-width: 500px;
 }

@@ -8,9 +8,6 @@
 <body>
   <h1>Estudo Bíblico</h1>
 
-    <button id="ver-marcados-btn">Ver Meus Versículos Marcados</button>
-    <div id="versiculos-marcados" style="display: none;"></div>
-
   <div id="auth-area">
     <input type="email" id="email" placeholder="Seu e-mail">
     <input type="password" id="password" placeholder="Sua senha">
@@ -30,16 +27,30 @@
     <div id="versiculos"></div>
 
     <div id="marcacao-box" style="display: none;">
-        <h3>Versículos Marcados</h3>
-        <label for="filtro-marcacao">Filtrar por tipo:</label>
-        <select id="filtro-marcacao">
+      <h3>Marcar versículos selecionados</h3>
+      <select id="tipo-marcacao">
+        <option value="">Escolha uma categoria</option>
+        <option value="promessa">Promessa</option>
+        <option value="ordem">Ordem</option>
+        <option value="principio">Princípio Eterno</option>
+      </select>
+      <textarea id="comentario-geral" placeholder="Comentário geral..."></textarea>
+      <button id="salvar-todos">Salvar marcações</button>
+    </div>
+
+    <hr>
+
+    <button id="ver-marcados-btn">Ver Meus Versículos Marcados</button>
+    <div id="versiculos-marcados" style="display: none;">
+      <h3>Versículos Marcados</h3>
+      <label for="filtro-marcacao">Filtrar por tipo:</label>
+      <select id="filtro-marcacao">
         <option value="">Todos</option>
         <option value="promessa">Promessa</option>
         <option value="ordem">Ordem</option>
         <option value="principio">Princípio Eterno</option>
-        </select>
-      <textarea id="comentario-geral" placeholder="Comentário geral..."></textarea>
-      <button id="salvar-todos">Salvar marcações</button>
+      </select>
+      <div id="lista-marcados"></div>
     </div>
   </div>
 
