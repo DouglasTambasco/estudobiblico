@@ -1,11 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f9f9f9;
+  font-family: 'Quicksand', sans-serif;
+  background-color: #fffef3; /* branco Vaticano */
+  color: #333;
   padding: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.night {
+  background-color: #121212;
+  color: #e0e0e0;
 }
 
 h1 {
-  color: #4CAF50;
+  color: #f4c518; /* amarelo Vaticano */
   text-align: center;
 }
 
@@ -23,22 +32,30 @@ input, select, textarea, button {
   font-size: 16px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  background-color: white;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+body.night input,
+body.night select,
+body.night textarea {
+  background-color: #2c2c2c;
+  color: #fff;
+  border: 1px solid #444;
 }
 
 button {
-  background-color: #FF9800;
-  color: white;
+  background-color: #f4c518;
+  color: #333;
   border: none;
   cursor: pointer;
-  transition: background 0.3s ease;
 }
 
 button:hover {
-  background-color: #F57C00;
+  background-color: #e2b90f;
 }
 
 .versiculo {
-  background-color: #e8f5e9;
   border-left: 5px solid #4CAF50;
   padding: 15px;
   margin: 15px 0;
@@ -49,13 +66,17 @@ button:hover {
 
 .versiculo p {
   margin: 0;
-  color: #333;
   flex-grow: 1;
+  color: #000;
+}
+
+body.night .versiculo p {
+  color: #e0e0e0;
 }
 
 #marcacao-box {
-  background-color: #ede7f6;
-  border: 1px solid #6A1B9A;
+  background-color: #fff9e6;
+  border: 1px solid #f4c518;
   border-radius: 8px;
   padding: 20px;
   margin-top: 30px;
@@ -69,10 +90,15 @@ button:hover {
 
 #versiculos-marcados {
   margin-top: 30px;
-  background-color: #FFF8E1;
-  border: 1px solid #FF9800;
+  background-color: #fffff2;
+  border: 1px solid #f4c518;
   border-radius: 8px;
   padding: 15px;
+}
+
+body.night #versiculos-marcados {
+  background-color: #1c1c1c;
+  border-color: #888;
 }
 
 #versiculos-marcados textarea,
@@ -80,4 +106,97 @@ button:hover {
   margin-top: 10px;
   width: 100%;
   max-width: 500px;
+}
+
+#versiculos-marcados button {
+  margin-top: 5px;
+}
+
+#versiculos-marcados button[id^="excluir"] {
+  background-color: #E53935;
+  color: white;
+}
+
+#versiculos-marcados button[id^="excluir"]:hover {
+  background-color: #D32F2F;
+}
+
+/* Cores por tipo de marcação */
+.versiculo.promessa {
+  background-color: #C8E6C9;
+  border-left: 5px solid #4CAF50;
+}
+
+.versiculo.ordem {
+  background-color: #E1BEE7;
+  border-left: 5px solid #6A1B9A;
+}
+
+.versiculo.principio {
+  background-color: #FFE0B2;
+  border-left: 5px solid #F57C00;
+}
+
+body.night .versiculo.promessa {
+  background-color: #2e4731;
+}
+body.night .versiculo.ordem {
+  background-color: #422753;
+}
+body.night .versiculo.principio {
+  background-color: #5e4524;
+}
+
+#lista-marcados h4 {
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  color: #6A1B9A;
+}
+
+/* 🕊️ Header estilizado */
+#header-estudo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+#header-estudo h1 {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+  color: #f4c518;
+}
+
+#header-estudo img {
+  border-radius: 8px;
+}
+
+/* 🌙 Botão modo noturno fixo */
+#toggle-night {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 8px 12px;
+  background: #f4c518;
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* 📜 Rodapé */
+#rodape {
+  margin-top: 50px;
+  text-align: center;
+  font-size: 14px;
+  color: #444;
+  font-style: italic;
+}
+
+body.night #rodape {
+  color: #aaa;
 }

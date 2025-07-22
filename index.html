@@ -4,10 +4,19 @@
   <meta charset="UTF-8">
   <title>Estudo Bíblico Católico</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3534/3534064.png">
 </head>
 <body>
-  <h1>Estudo Bíblico</h1>
+  <!-- 🌙 Botão modo noturno -->
+  <button id="toggle-night">🌙</button>
 
+  <!-- 🕊️ Cabeçalho estilizado -->
+  <header id="header-estudo">
+    <img src="https://cdn-icons-png.flaticon.com/512/10682/10682329.png" alt="Cruz" width="50">
+    <h1>Estudo Bíblico Católico</h1>
+  </header>
+
+  <!-- 👤 Autenticação -->
   <div id="auth-area">
     <input type="email" id="email" placeholder="Seu e-mail">
     <input type="password" id="password" placeholder="Sua senha">
@@ -15,6 +24,7 @@
     <p id="auth-message" style="color: red;"></p>
   </div>
 
+  <!-- 📖 Conteúdo principal -->
   <div id="conteudo" style="display: none;">
     <div>
       <label for="livro">Livro:</label>
@@ -53,6 +63,11 @@
       <div id="lista-marcados"></div>
     </div>
   </div>
+
+  <!-- 📜 Rodapé dinâmico -->
+  <footer id="rodape">
+    <p id="citacao-biblica"></p>
+  </footer>
 
   <script type="module" src="script.js"></script>
 </body>
