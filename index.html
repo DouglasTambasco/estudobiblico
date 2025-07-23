@@ -1,68 +1,92 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Estudo Bíblico Católico</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3534/3534064.png">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3534/3534064.png" />
 </head>
 <body>
-  <!-- 🌙 Botão modo noturno -->
-  <button id="toggle-night">🌙</button>
-
-  <!-- 🕊️ Cabeçalho estilizado -->
+  
+  <!-- 🎀 Header -->
   <header id="header-estudo">
-    <img src="https://cdn-icons-png.flaticon.com/512/10682/10682329.png" alt="Cruz" width="50">
     <h1>Estudo Bíblico Católico</h1>
+    <div id="header-controls">
+      <!-- quadradinho tema -->
+      <button id="theme-toggle-square" aria-label="Alternar tema"></button>
+      <!-- logout no header, oculto até login -->
+      <button id="logout-btn" class="hidden">🚪 Sair</button>
+    </div>
+    <span id="saudacao" class="badge"></span>
   </header>
 
-  <!-- 👤 Autenticação -->
-  <div id="auth-area">
-    <input type="email" id="email" placeholder="Seu e-mail">
-    <input type="password" id="password" placeholder="Sua senha">
-    <button id="login-btn">Entrar / Cadastrar</button>
-    <p id="auth-message" style="color: red;"></p>
-  </div>
+  <!-- 🗂️ Container principal -->
+  <main class="container">
+    <!-- 👥 Autenticação -->
+    <section id="auth-area">
+      <div id="login-box">
+        <h3>Login</h3>
+        <label for="login-email">E-mail</label>
+        <input type="email" id="login-email" placeholder="seu@exemplo.com" />
+        <label for="login-senha">Senha</label>
+        <input type="password" id="login-senha" placeholder="••••••••" />
+        <button id="login-btn">🔑 Entrar</button>
+      </div>
+      <div id="cadastro-box">
+        <h3>Cadastro</h3>
+        <label for="cadastro-nome">Nome</label>
+        <input type="text" id="cadastro-nome" placeholder="Seu nome" />
+        <label for="cadastro-email">E-mail</label>
+        <input type="email" id="cadastro-email" placeholder="seu@exemplo.com" />
+        <label for="cadastro-senha">Senha</label>
+        <input type="password" id="cadastro-senha" placeholder="••••••••" />
+        <button id="cadastro-btn">📝 Cadastrar</button>
+      </div>
+      <p id="auth-message" class="error"></p>
+    </section>
 
-  <!-- 📖 Conteúdo principal -->
-  <div id="conteudo" style="display: none;">
-    <div>
-      <label for="livro">Livro:</label>
-      <input type="text" id="livro" placeholder="ex: joao">
-      <label for="capitulo">Capítulo:</label>
-      <input type="number" id="capitulo" placeholder="ex: 3">
-      <button id="buscar-btn">Buscar Versículos</button>
+    <!-- 📖 Conteúdo principal (após login) -->
+    <div id="conteudo" class="hidden">
+      <div class="busca-verse">
+        <label for="livro">Livro</label>
+        <input type="text" id="livro" placeholder="ex: joao" />
+        <label for="capitulo">Capítulo</label>
+        <input type="number" id="capitulo" placeholder="ex: 3" />
+        <button id="buscar-btn">🔍 Buscar</button>
+      </div>
+
+      <div id="versiculos"></div>
+
+      <div id="marcacao-box" class="hidden">
+        <h3>Marcar selecionados</h3>
+        <label for="tipo-marcacao">Categoria</label>
+        <select id="tipo-marcacao">
+          <option value="">Selecione...</option>
+          <option value="promessa">Promessa</option>
+          <option value="ordem">Ordem</option>
+          <option value="principio">Princípio Eterno</option>
+        </select>
+        <label for="comentario-geral">Comentário</label>
+        <textarea id="comentario-geral" placeholder="Comentário geral..."></textarea>
+        <button id="salvar-todos">💾 Salvar</button>
+      </div>
+
+      <hr />
+
+      <button id="ver-marcados-btn">📑 Meus Versículos</button>
+      <div id="versiculos-marcados" class="hidden">
+        <h3>Versículos Marcados</h3>
+        <label for="filtro-marcacao">Filtrar</label>
+        <select id="filtro-marcacao">
+          <option value="">Todos</option>
+          <option value="promessa">Promessa</option>
+          <option value="ordem">Ordem</option>
+          <option value="principio">Princípio Eterno</option>
+        </select>
+        <div id="lista-marcados" class="grid-cards"></div>
+      </div>
     </div>
-
-    <div id="versiculos"></div>
-
-    <div id="marcacao-box" style="display: none;">
-      <h3>Marcar versículos selecionados</h3>
-      <select id="tipo-marcacao">
-        <option value="">Escolha uma categoria</option>
-        <option value="promessa">Promessa</option>
-        <option value="ordem">Ordem</option>
-        <option value="principio">Princípio Eterno</option>
-      </select>
-      <textarea id="comentario-geral" placeholder="Comentário geral..."></textarea>
-      <button id="salvar-todos">Salvar marcações</button>
-    </div>
-
-    <hr>
-
-    <button id="ver-marcados-btn">Ver Meus Versículos Marcados</button>
-    <div id="versiculos-marcados" style="display: none;">
-      <h3>Versículos Marcados</h3>
-      <label for="filtro-marcacao">Filtrar por tipo:</label>
-      <select id="filtro-marcacao">
-        <option value="">Todos</option>
-        <option value="promessa">Promessa</option>
-        <option value="ordem">Ordem</option>
-        <option value="principio">Princípio Eterno</option>
-      </select>
-      <div id="lista-marcados"></div>
-    </div>
-  </div>
+  </main>
 
   <!-- 📜 Rodapé dinâmico -->
   <footer id="rodape">

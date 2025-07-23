@@ -1,202 +1,340 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
 
+/* Reset & variáveis */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --vatican-yellow: #f4c518;
+  --vatican-white: #fffef3;
+  --text-dark: #333;
+  --text-light: #e0e0e0;
+  --border-radius-main: 8px;
+  --shadow-light: 0 2px 6px rgba(0, 0, 0, 0.1);
+  --promessa-bg: #C8E6C9;
+  --ordem-bg:    #E1BEE7;
+  --principio-bg:#FFE0B2;
+}
+
+/* Corpo */
 body {
   font-family: 'Quicksand', sans-serif;
-  background-color: #fffef3; /* branco Vaticano */
-  color: #333;
-  padding: 20px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--vatican-white);
+  color: var(--text-dark);
+  transition: background 0.3s, color 0.3s;
 }
-
 body.night {
   background-color: #121212;
-  color: #e0e0e0;
+  color: var(--text-light);
+}
+.hidden {
+  display: none !important;
 }
 
-h1 {
-  color: #f4c518; /* amarelo Vaticano */
+/* Container centralizado */
+.container {
+  max-width: 960px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+/* Header */
+#header-estudo {
+  background: var(--vatican-white);
+  border: 2px solid var(--vatican-yellow);
+  border-radius: var(--border-radius-main);
+  padding: 20px;
   text-align: center;
+  box-shadow: var(--shadow-light);
+  margin-bottom: 30px;
+  position: relative;
+  transition: background 0.3s, border-color 0.3s;
+}
+body.night #header-estudo {
+  background-color: #1e1e1e;
+  border-color: #888;
+}
+#header-estudo h1 {
+  font-size: 2.2rem;
+  color: var(--vatican-yellow);
+}
+#header-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.badge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 12px;
+  background: var(--vatican-yellow);
+  color: var(--text-dark);
+  border-radius: var(--border-radius-main);
+  font-size: 1rem;
+  transition: background 0.3s, color 0.3s;
+}
+body.night .badge {
+  background: #888;
+  color: var(--text-light);
+}
+
+/* Toggle de tema (quadradinho) */
+#theme-toggle-square {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
+  background-image: url('https://cdn-icons-png.flaticon.com/128/581/581601.png'); /* lua */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60%;
+  cursor: pointer;
+  transition: background-image 0.3s;
+}
+body.night #theme-toggle-square {
+  background-image: url('https://cdn-icons-png.flaticon.com/512/869/869869.png'); /* sol */
+}
+
+/* Logout no header */
+#logout-btn {
+  background: var(--vatican-yellow);
+  color: var(--text-dark);
+  border: none;
+  padding: 6px 12px;
+  border-radius: var(--border-radius-main);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s;
+}
+#logout-btn:hover {
+  background: #e2b90f;
+}
+
+/* Autenticação */
+#auth-area {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+#login-box, #cadastro-box {
+  background: var(--vatican-white);
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius-main);
+  padding: 20px;
+  width: 100%;
+  max-width: 350px;
+  box-shadow: var(--shadow-light);
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+body.night #login-box,
+body.night #cadastro-box {
+  background: #1c1c1c;
+  border-color: #666;
+  color: var(--text-light);
+}
+#auth-area h3 {
+  color: var(--vatican-yellow);
+  margin-bottom: 12px;
 }
 
 label {
-  font-weight: bold;
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
   color: #6A1B9A;
 }
 
 input, select, textarea, button {
-  display: block;
-  margin: 10px auto;
+  width: 100%;
+  margin-top: 6px;
   padding: 10px;
-  width: 90%;
-  max-width: 400px;
-  font-size: 16px;
+  font-size: 1rem;
   border-radius: 5px;
   border: 1px solid #ccc;
-  background-color: white;
-  transition: background 0.3s ease, color 0.3s ease;
+  background: #fff;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
-
 body.night input,
 body.night select,
 body.night textarea {
-  background-color: #2c2c2c;
+  background: #2c2c2c;
+  border-color: #444;
   color: #fff;
-  border: 1px solid #444;
 }
-
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--vatican-yellow);
+}
 button {
-  background-color: #f4c518;
-  color: #333;
+  background: var(--vatican-yellow);
+  color: var(--text-dark);
   border: none;
   cursor: pointer;
+  transition: background 0.3s;
 }
-
 button:hover {
-  background-color: #e2b90f;
+  background: #e2b90f;
 }
 
-.versiculo {
-  border-left: 5px solid #4CAF50;
-  padding: 15px;
-  margin: 15px 0;
-  border-radius: 5px;
+/* Busca de versículos */
+.busca-verse {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-end;
+  justify-content: center;
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+/* Marcação */
+#marcacao-box {
+  background: #fff9e6;
+  border: 1px solid var(--vatican-yellow);
+  border-radius: var(--border-radius-main);
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 600px;
+  transition: background 0.3s, border-color 0.3s;
+}
+body.night #marcacao-box {
+  background: #2c2c2c;
+  border-color: #999;
+}
+#marcacao-box h3 {
+  color: #6A1B9A;
+  margin-bottom: 12px;
+}
+hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 30px 0;
+}
+
+/* Grid de cards */
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Cards de versículo */
+.versiculo-card {
+  background: #fff;
+  border-radius: var(--border-radius-main);
+  box-shadow: var(--shadow-light);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s;
+}
+.versiculo-card:hover {
+  transform: translateY(-4px);
+}
+.versiculo-card p {
+  margin-bottom: 12px;
+  color: var(--text-dark);
+}
+body.night .versiculo-card p {
+  color: var(--text-light);
+}
+
+/* Inputs e ações no card */
+.versiculo-inputs {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.versiculo-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Botões editar/excluir mais fiéis */
+.btn-save,
+.btn-delete {
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-save {
+  background: #4CAF50;
+}
+.btn-save img {
+  width: 16px;
+  height: 16px;
+  filter: invert(1);
+}
+.btn-save:hover {
+  background: #43A047;
+}
+.btn-delete {
+  background: #E53935;
+}
+.btn-delete img {
+  width: 16px;
+  height: 16px;
+  filter: invert(1);
+}
+.btn-delete:hover {
+  background: #D32F2F;
 }
 
-.versiculo p {
-  margin: 0;
-  flex-grow: 1;
-  color: #000;
+/* Cores por tipo */
+.versiculo-card.promessa {
+  background-color: var(--promessa-bg);
+  border-left: 4px solid #4CAF50;
 }
-
-body.night .versiculo p {
-  color: #e0e0e0;
+.versiculo-card.ordem {
+  background-color: var(--ordem-bg);
+  border-left: 4px solid #6A1B9A;
 }
-
-#marcacao-box {
-  background-color: #fff9e6;
-  border: 1px solid #f4c518;
-  border-radius: 8px;
-  padding: 20px;
-  margin-top: 30px;
-  max-width: 500px;
+.versiculo-card.principio {
+  background-color: var(--principio-bg);
+  border-left: 4px solid #F57C00;
 }
-
-#marcacao-box h3 {
-  text-align: center;
-  color: #6A1B9A;
-}
-
-#versiculos-marcados {
-  margin-top: 30px;
-  background-color: #fffff2;
-  border: 1px solid #f4c518;
-  border-radius: 8px;
-  padding: 15px;
-}
-
-body.night #versiculos-marcados {
-  background-color: #1c1c1c;
-  border-color: #888;
-}
-
-#versiculos-marcados textarea,
-#versiculos-marcados select {
-  margin-top: 10px;
-  width: 100%;
-  max-width: 500px;
-}
-
-#versiculos-marcados button {
-  margin-top: 5px;
-}
-
-#versiculos-marcados button[id^="excluir"] {
-  background-color: #E53935;
-  color: white;
-}
-
-#versiculos-marcados button[id^="excluir"]:hover {
-  background-color: #D32F2F;
-}
-
-/* Cores por tipo de marcação */
-.versiculo.promessa {
-  background-color: #C8E6C9;
-  border-left: 5px solid #4CAF50;
-}
-
-.versiculo.ordem {
-  background-color: #E1BEE7;
-  border-left: 5px solid #6A1B9A;
-}
-
-.versiculo.principio {
-  background-color: #FFE0B2;
-  border-left: 5px solid #F57C00;
-}
-
-body.night .versiculo.promessa {
+body.night .versiculo-card.promessa {
   background-color: #2e4731;
 }
-body.night .versiculo.ordem {
+body.night .versiculo-card.ordem {
   background-color: #422753;
 }
-body.night .versiculo.principio {
+body.night .versiculo-card.principio {
   background-color: #5e4524;
 }
 
-#lista-marcados h4 {
+/* Títulos de livro no grid */
+.grid-cards h4 {
+  grid-column: 1 / -1;
   border-bottom: 2px solid #ccc;
   padding-bottom: 5px;
   margin-bottom: 10px;
   color: #6A1B9A;
 }
 
-/* 🕊️ Header estilizado */
-#header-estudo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 30px;
-}
-
-#header-estudo h1 {
-  font-size: 28px;
-  font-weight: 600;
-  margin: 0;
-  color: #f4c518;
-}
-
-#header-estudo img {
-  border-radius: 8px;
-}
-
-/* 🌙 Botão modo noturno fixo */
-#toggle-night {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 8px 12px;
-  background: #f4c518;
-  color: #333;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  z-index: 1000;
-}
-
-/* 📜 Rodapé */
+/* Rodapé */
 #rodape {
-  margin-top: 50px;
   text-align: center;
-  font-size: 14px;
+  padding: 20px 0;
+  font-size: 0.9rem;
   color: #444;
   font-style: italic;
 }
-
 body.night #rodape {
   color: #aaa;
 }
