@@ -4,27 +4,34 @@
   <meta charset="UTF-8" />
   <title>Estudo Bíblico Católico</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3534/3534064.png" />
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/2600/2600768.png" />
 </head>
 <body>
-  
-  <!-- 🎀 Header -->
-  <header id="header-estudo">
-    <h1>Estudo Bíblico Católico</h1>
-    <div id="header-controls">
-      <!-- quadradinho tema -->
-      <button id="theme-toggle-square" aria-label="Alternar tema"></button>
-      <!-- logout no header, oculto até login -->
-      <button id="logout-btn" class="hidden">🚪 Sair</button>
+
+  <!-- Cabeçalho -->
+  <header class="header-estudo">
+    <div class="header-saudacao">
+      <span class="badge hidden" id="saudacao"></span>
     </div>
-    <span id="saudacao" class="badge"></span>
+
+    <div class="header-center">
+      <img class="header-icon-left" id="header-icon-left" src="https://cdn-icons-png.flaticon.com/128/2770/2770487.png" alt="Ícone Esquerdo" />
+      <h1>Estudo Bíblico Católico</h1>
+      <img class="header-icon-right" id="header-icon-right" src="https://cdn-icons-png.flaticon.com/128/3657/3657120.png" alt="Ícone Direito" />
+    </div>
+
+    <div class="header-controls">
+      <button class="theme-toggle-square" id="theme-toggle-square" aria-label="Alternar tema"></button>
+      <button class="logout-btn hidden" id="logout-btn">🚪 Sair</button>
+    </div>
   </header>
 
-  <!-- 🗂️ Container principal -->
+  <!-- Área principal -->
   <main class="container">
-    <!-- 👥 Autenticação -->
-    <section id="auth-area">
-      <div id="login-box">
+
+    <!-- Autenticação -->
+    <section class="auth-area" id="auth-area">
+      <div class="login-box" id="login-box">
         <h3>Login</h3>
         <label for="login-email">E-mail</label>
         <input type="email" id="login-email" placeholder="seu@exemplo.com" />
@@ -32,7 +39,8 @@
         <input type="password" id="login-senha" placeholder="••••••••" />
         <button id="login-btn">🔑 Entrar</button>
       </div>
-      <div id="cadastro-box">
+
+      <div class="cadastro-box" id="cadastro-box">
         <h3>Cadastro</h3>
         <label for="cadastro-nome">Nome</label>
         <input type="text" id="cadastro-nome" placeholder="Seu nome" />
@@ -42,14 +50,17 @@
         <input type="password" id="cadastro-senha" placeholder="••••••••" />
         <button id="cadastro-btn">📝 Cadastrar</button>
       </div>
-      <p id="auth-message" class="error"></p>
+
+      <p class="error" id="auth-message"></p>
     </section>
 
-    <!-- 📖 Conteúdo principal (após login) -->
-    <div id="conteudo" class="hidden">
+    <!-- Conteúdo pós-login -->
+    <div class="hidden" id="conteudo">
+
+      <!-- Busca -->
       <div class="busca-verse">
         <label for="livro">Livro</label>
-        <input type="text" id="livro" placeholder="ex: joao" />
+        <input type="text" id="livro" placeholder="ex: João" />
         <label for="capitulo">Capítulo</label>
         <input type="number" id="capitulo" placeholder="ex: 3" />
         <button id="buscar-btn">🔍 Buscar</button>
@@ -57,7 +68,8 @@
 
       <div id="versiculos"></div>
 
-      <div id="marcacao-box" class="hidden">
+      <!-- Marcação -->
+      <div class="hidden marcacao-box" id="marcacao-box">
         <h3>Marcar selecionados</h3>
         <label for="tipo-marcacao">Categoria</label>
         <select id="tipo-marcacao">
@@ -73,8 +85,9 @@
 
       <hr />
 
+      <!-- Versículos marcados -->
       <button id="ver-marcados-btn">📑 Meus Versículos</button>
-      <div id="versiculos-marcados" class="hidden">
+      <div class="hidden" id="versiculos-marcados">
         <h3>Versículos Marcados</h3>
         <label for="filtro-marcacao">Filtrar</label>
         <select id="filtro-marcacao">
@@ -83,13 +96,13 @@
           <option value="ordem">Ordem</option>
           <option value="principio">Princípio Eterno</option>
         </select>
-        <div id="lista-marcados" class="grid-cards"></div>
+        <div class="grid-cards" id="lista-marcados"></div>
       </div>
     </div>
   </main>
 
-  <!-- 📜 Rodapé dinâmico -->
-  <footer id="rodape">
+  <!-- Rodapé -->
+  <footer class="rodape" id="rodape">
     <p id="citacao-biblica"></p>
   </footer>
 

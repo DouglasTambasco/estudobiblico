@@ -89,8 +89,9 @@ themeBtn.addEventListener("click", () => {
 
 // 🎉 Inicialização pós-login
 function initUser(user) {
-  document.getElementById("saudacao").textContent =
-    `Bem-vindo(a), ${user.displayName || user.email}!`;
+document.getElementById("saudacao").innerHTML =
+  `<img src="https://cdn-icons-png.flaticon.com/128/2600/2600620.png" alt="Ícone usuário" class="saudacao-icon" /> Bem-vindo(a), ${user.displayName || user.email}!`;
+  document.getElementById("saudacao").classList.remove("hidden");
   document.getElementById("auth-area").classList.add("hidden");
   document.getElementById("conteudo").classList.remove("hidden");
   logoutBtn.classList.remove("hidden");
