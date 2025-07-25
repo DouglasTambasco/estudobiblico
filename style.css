@@ -45,7 +45,7 @@ body.night {
 /* Cabeçalho */
 .header-estudo {
   display: flex;
-  flex-wrap: wrap;       /* permite que os itens quebrem de linha */
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   position: relative;
@@ -151,6 +151,14 @@ body.night .badge {
 .saudacao-icon {
   width: 18px;
   height: 18px;
+}
+
+/* Header saudação */
+.header-saudacao {
+  position: absolute;
+  left: 20px;
+  top: 16px;
+  z-index: 2;
 }
 
 /* Autenticação */
@@ -406,42 +414,51 @@ body.night .rodape {
   color: #aaa;
 }
 
-/* Header saudação */
-.header-saudacao {
-  position: absolute;
-  left: 20px;
-  top: 16px;
-  z-index: 2;
+/* ========= RESPONSIVIDADE ========= */
+
+/* Tablet / Small Desktop até 1200px */
+@media (max-width: 1200px) {
+  .container {
+    padding: 0 16px;
+  }
+  .header-estudo {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 20px;
+    gap: 8px;
+    margin-bottom: 30px;
+  }
+  .header-saudacao,
+  .header-center,
+  .header-controls {
+    position: static !important;
+    transform: none !important;
+    width: 100%;
+    display: flex;
+  }
+  .header-saudacao {
+    justify-content: flex-start;
+  }
+  .header-center {
+    justify-content: center;
+    gap: 12px;
+  }
+  .header-controls {
+    justify-content: flex-end;
+  }
 }
 
-/* Responsividade */
+/* Mobile até 700px */
 @media (max-width: 700px) {
   .container {
     padding: 0 8px;
   }
   .header-estudo {
-    flex-direction: column;
-    align-items: flex-start;
     padding: 16px 8px 10px;
-    min-height: unset;
-  }
-  .header-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: nowrap;
   }
   .header-center h1 {
     font-size: 1.2rem;
     text-align: left;
-  }
-  .header-controls,
-  .header-saudacao {
-    position: static;
-    margin-bottom: 8px;
-    width: 100%;
-    justify-content: flex-end;
   }
   .login-box,
   .cadastro-box {
@@ -464,6 +481,7 @@ body.night .rodape {
   }
 }
 
+/* Pequenos dispositivos até 400px */
 @media (max-width: 400px) {
   .header-center h1 {
     font-size: 1rem;
@@ -480,43 +498,5 @@ body.night .rodape {
   .rodape {
     font-size: 0.8rem;
     padding: 10px 0;
-  }
-}
-
-@media (max-width: 700px) {
-  /* Organiza itens em coluna e respeita a sequência DOM */
-  .header-estudo {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 16px 8px 10px;
-    min-height: unset;
-  }
-
-  /* Header-center volta a ser estático e ocupa 100% de largura */
-  .header-center {
-    position: static;
-    transform: none;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin: 8px 0;
-  }
-
-  /* Saudação alinhada à esquerda */
-  .header-saudacao {
-    position: static;
-    margin-bottom: 8px;
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-  }
-
-  /* Controles (tema + logout) alinhados à direita */
-  .header-controls {
-    position: static;
-    margin-bottom: 8px;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
   }
 }
