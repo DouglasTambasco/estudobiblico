@@ -93,7 +93,7 @@ body.night .header-estudo {
   top: 16px;
   display: flex;
   align-items: center;
-  gap: 50px;
+  gap: 20px;
   z-index: 2;
 }
 
@@ -118,7 +118,7 @@ body.night .theme-toggle-square {
   background: var(--vatican-yellow);
   color: var(--text-dark);
   border: none;
-  padding: 6px 12px;
+  padding: 10px 10px;
   border-radius: var(--border-radius-main);
   cursor: pointer;
   font-size: 0.9rem;
@@ -134,18 +134,17 @@ body.night .theme-toggle-square {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 8px;
+  padding: 10px 10px;
   background: var(--vatican-yellow);
-  color: var(--vatican-white);
+  color: #000000;
   border-radius: var(--border-radius-main);
-  font-size: 0.85rem;
-  white-space: nowrap;
+  font-size: 1rem;
   width: auto !important;
 }
 
 body.night .badge {
   background: var(--vatican-yellow);
-  color: #fff;
+  color: #000000;
 }
 
 .saudacao-icon {
@@ -404,8 +403,8 @@ body.night .versiculo-card.principio {
 /* Rodapé */
 .rodape {
   text-align: center;
-  padding: 20px 0;
-  font-size: 0.9rem;
+  padding: 20px 5px;
+  font-size: 15px;
   color: #444;
   font-style: italic;
 }
@@ -498,5 +497,45 @@ body.night .rodape {
   .rodape {
     font-size: 0.8rem;
     padding: 10px 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  .header-controls .logout-btn {
+    width: auto;
+    flex: 0 0 auto;
+  }
+}
+
+/* Reposiciona controles para cima — para todos os tamanhos ou só no mobile */
+.header-estudo {
+  display: flex;
+  flex-direction: column; /* empilha saudação, controles e título */
+  align-items: stretch;
+}
+
+@media (max-width: 1200px) {
+  .header-estudo {
+    display: grid;
+    grid-template-areas:
+      "saudacao controles"
+      "center   center";
+    grid-template-columns: 1fr auto;
+    row-gap: 12px;        /* espaço vertical entre linhas */
+    align-items: center;  /* centraliza verticalmente na primeira linha */
+  }
+
+  .header-saudacao {
+    grid-area: saudacao;
+  }
+
+  .header-controls {
+    grid-area: controles;
+    justify-self: end;    /* força a coluna de controles à direita */
+  }
+
+  .header-center {
+    grid-area: center;
+    justify-self: center; /* título centralizado na 2ª linha */
   }
 }
