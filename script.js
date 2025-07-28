@@ -31,6 +31,10 @@ const cadastroBtn = document.getElementById("cadastro-btn");
 const logoutBtn   = document.getElementById("logout-btn");
 const themeBtn    = document.getElementById("theme-toggle-square");
 
+if (localStorage.getItem("modoEscuro") === "on") {
+  document.body.classList.add("night");
+}
+
 // 👤 Login
 loginBtn.addEventListener("click", async () => {
   authMsg.textContent = "";
@@ -60,6 +64,44 @@ cadastroBtn.addEventListener("click", async () => {
   }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+
+// Captura todo clique na página e filtra pelos botões de toggle de senha
+document.addEventListener("click", e => {
+  const btn = e.target.closest(".toggle-senha");
+  if (!btn) return;
+
+  const input = document.getElementById(btn.dataset.target);
+  if (!input) return;
+
+  const isText = input.type === "text";
+  input.type = isText ? "password" : "text";
+  btn.textContent = isText ? "👁️" : "🙈";
+});
+
+  // ⏎ Enter para login
+  ["login-email", "login-senha"].forEach(id => {
+    const campo = document.getElementById(id);
+    campo.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        document.getElementById("login-btn").click();
+      }
+    });
+  });
+
+  // ⏎ Enter para cadastro
+  ["cadastro-nome", "cadastro-email", "cadastro-senha"].forEach(id => {
+    const campo = document.getElementById(id);
+    campo.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        document.getElementById("cadastro-btn").click();
+      }
+    });
+  });
+});
+
 // 🔄 Sessão ativa
 onAuthStateChanged(auth, user => {
   if (user) initUser(user);
@@ -70,9 +112,10 @@ logoutBtn.addEventListener("click", () => {
   signOut(auth).then(() => location.reload());
 });
 
-// 🌗 Alternar tema
+// 🌗 Alternar tema (com salvamento)
 themeBtn.addEventListener("click", () => {
-  document.body.classList.toggle("night");
+  const nightMode = document.body.classList.toggle("night");
+  localStorage.setItem("modoEscuro", nightMode ? "on" : "off");
 });
 
 // 🎉 Inicialização pós-login

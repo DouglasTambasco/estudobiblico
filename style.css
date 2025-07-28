@@ -201,6 +201,21 @@ label {
   color: #6A1B9A;
 }
 
+.senha-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.toggle-senha {
+  width: auto;
+  padding: 0 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
 input,
 select,
 textarea,
@@ -426,15 +441,27 @@ body.night .versiculo-card.principio {
 
 /* Rodapé */
 .rodape {
-  text-align: center;
-  padding: 20px 5px;
-  font-size: 15px;
-  color: #444;
-  font-style: italic;
+    background-color: var(--vatican-white);
+    color: var(--vatican-yellow);
+    font-family: 'Quicksand', sans-serif;
+    border: 2px solid var(--vatican-yellow);
+    border-radius: var(--border-radius-main);
+    padding: 10px;
+    text-align: center;
+    bottom: 0;
+    width: 100%;
+    border-radius: 5px;
 }
 
 body.night .rodape {
-  color: #aaa;
+  background-color: #1e1e1e;
+  color:var(--vatican-yellow);
+}
+
+.rodape a {
+  color: var(--vatican-yellow);
+  font-weight: bold;
+  text-decoration: none;
 }
 
 /* ========= RESPONSIVIDADE ========= */

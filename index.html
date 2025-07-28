@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Estudo Bíblico Católico</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/2600/2600768.png" />
@@ -16,13 +16,27 @@
     </div>
 
     <div class="header-center">
-      <img class="header-icon-left" id="header-icon-left" src="https://cdn-icons-png.flaticon.com/128/2770/2770487.png" alt="Ícone Esquerdo" />
+      <img
+        class="header-icon-left"
+        id="header-icon-left"
+        src="https://cdn-icons-png.flaticon.com/128/2770/2770487.png"
+        alt="Ícone Esquerdo"
+      />
       <h1>Estudo Bíblico Católico</h1>
-      <img class="header-icon-right" id="header-icon-right" src="https://cdn-icons-png.flaticon.com/128/3657/3657120.png" alt="Ícone Direito" />
+      <img
+        class="header-icon-right"
+        id="header-icon-right"
+        src="https://cdn-icons-png.flaticon.com/128/3657/3657120.png"
+        alt="Ícone Direito"
+      />
     </div>
 
     <div class="header-controls">
-      <button class="theme-toggle-square" id="theme-toggle-square" aria-label="Alternar tema"></button>
+      <button
+        class="theme-toggle-square"
+        id="theme-toggle-square"
+        aria-label="Alternar tema"
+      ></button>
       <button class="logout-btn hidden" id="logout-btn">🚪 Sair</button>
     </div>
   </header>
@@ -35,21 +49,62 @@
       <div class="login-box" id="login-box">
         <h3>Login</h3>
         <label for="login-email">E-mail</label>
-        <input type="email" id="login-email" placeholder="seu@exemplo.com" />
+        <input
+          type="email"
+          id="login-email"
+          placeholder="seu@exemplo.com"
+        />
+
         <label for="login-senha">Senha</label>
-        <input type="password" id="login-senha" placeholder="••••••••" />
-        <button id="login-btn">🔑 Entrar</button>
+        <div class="senha-wrapper">
+          <input
+            type="password"
+            id="login-senha"
+            placeholder="••••••••"
+          />
+          <button
+            type="button"
+            class="toggle-senha"
+            data-target="login-senha"
+          >
+            👁️
+          </button>
+        </div>
+
+        <!-- botão de login adicionado -->
+        <button type="button" id="login-btn">Login</button>
       </div>
 
       <div class="cadastro-box" id="cadastro-box">
         <h3>Cadastro</h3>
         <label for="cadastro-nome">Nome</label>
         <input type="text" id="cadastro-nome" placeholder="Seu nome" />
+
         <label for="cadastro-email">E-mail</label>
-        <input type="email" id="cadastro-email" placeholder="seu@exemplo.com" />
+        <input
+          type="email"
+          id="cadastro-email"
+          placeholder="seu@exemplo.com"
+        />
+
         <label for="cadastro-senha">Senha</label>
-        <input type="password" id="cadastro-senha" placeholder="••••••••" />
-        <button id="cadastro-btn">📝 Cadastrar</button>
+        <div class="senha-wrapper">
+          <input
+            type="password"
+            id="cadastro-senha"
+            placeholder="••••••••"
+          />
+          <button
+            type="button"
+            class="toggle-senha"
+            data-target="cadastro-senha"
+          >
+            👁️
+          </button>
+        </div>
+
+        <!-- botão de cadastro adicionado -->
+        <button type="button" id="cadastro-btn">Cadastrar</button>
       </div>
 
       <p class="error" id="auth-message"></p>
@@ -62,8 +117,10 @@
       <div class="busca-verse">
         <label for="livro">Livro</label>
         <input type="text" id="livro" placeholder="ex: João" />
+
         <label for="capitulo">Capítulo</label>
         <input type="number" id="capitulo" placeholder="ex: 3" />
+
         <button id="buscar-btn">🔍 Buscar</button>
       </div>
 
@@ -80,7 +137,10 @@
           <option value="principio">Princípio Eterno</option>
         </select>
         <label for="comentario-geral">Comentário</label>
-        <textarea id="comentario-geral" placeholder="Comentário geral..."></textarea>
+        <textarea
+          id="comentario-geral"
+          placeholder="Comentário geral..."
+        ></textarea>
         <button id="salvar-todos">💾 Salvar</button>
       </div>
 
@@ -111,6 +171,9 @@
   <!-- Rodapé -->
   <footer class="rodape" id="rodape">
     <p id="citacao-biblica"></p>
+    <br />
+    <p>Feito por <a href="https://github.com/DouglasTambasco" target="_blank">Douglas Tambasco</a> &copy;</p>
+    <p>2025</p>
   </footer>
 
   <script type="module" src="script.js"></script>
