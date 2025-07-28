@@ -89,8 +89,11 @@ themeBtn.addEventListener("click", () => {
 
 // 🎉 Inicialização pós-login
 function initUser(user) {
-document.getElementById("saudacao").innerHTML =
-  `<img src="https://cdn-icons-png.flaticon.com/128/2600/2600620.png" alt="Ícone usuário" class="saudacao-icon" /> Bem-vindo(a), ${user.displayName || user.email}!`;
+  document.getElementById("saudacao").innerHTML =
+    `<img src="https://cdn-icons-png.flaticon.com/128/2600/2600620.png"
+          alt="Ícone usuário"
+          class="saudacao-icon" />
+     Bem-vindo(a), ${user.displayName || user.email}!`;
   document.getElementById("saudacao").classList.remove("hidden");
   document.getElementById("auth-area").classList.add("hidden");
   document.getElementById("conteudo").classList.remove("hidden");
@@ -120,7 +123,8 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
       row.className = "versiculo";
 
       const chk = document.createElement("input");
-      chk.type = "checkbox"; chk.style.marginRight = "10px";
+      chk.type = "checkbox";
+      chk.style.marginRight = "10px";
 
       const p = document.createElement("p");
       p.textContent = `${v.verse} – ${v.text}`;
@@ -129,16 +133,20 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
       div.appendChild(row);
 
       const info = {
-        uid: user.uid,
+        uid:      user.uid,
         livro,
         capitulo: parseInt(cap),
-        numero: v.verse,
-        texto: v.text
+        numero:   v.verse,
+        texto:    v.text
       };
 
       chk.addEventListener("change", () => {
-        if (chk.checked) marcacoesSelecionadas.push(info);
-        else marcacoesSelecionadas = marcacoesSelecionadas.filter(x => x.numero !== v.verse);
+        if (chk.checked) {
+          marcacoesSelecionadas.push(info);
+        } else {
+          marcacoesSelecionadas =
+            marcacoesSelecionadas.filter(x => x.numero !== v.verse);
+        }
         box.classList.toggle("hidden", marcacoesSelecionadas.length === 0);
       });
     });
@@ -147,153 +155,184 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
   }
 });
 
-// 💾 Salvar marcações múltiplas
+// 💾 Salvar marcações agrupadas
 document.getElementById("salvar-todos").addEventListener("click", async () => {
   const tipo   = document.getElementById("tipo-marcacao").value;
-  const coment = document.getElementById("comentario-geral").value;
-  if (!tipo) return alert("Selecione uma categoria.");
-  if (!marcacoesSelecionadas.length) return alert("Nenhum versículo selecionado.");
+  const coment = document.getElementById("comentario-geral").value.trim();
+  const user   = auth.currentUser;
+
+  if (!user)      return alert("Faça login para continuar.");
+  if (!tipo)      return alert("Selecione uma categoria.");
+  if (!marcacoesSelecionadas.length)
+    return alert("Nenhum versículo selecionado.");
 
   try {
-    for (const v of marcacoesSelecionadas) {
-      const ref  = collection(db, "versiculos_usuario");
-      const q    = query(ref,
-        where("uid",      "==", v.uid),
-        where("livro",    "==", v.livro),
-        where("capitulo", "==", v.capitulo),
-        where("numero",   "==", v.numero)
-      );
-      const snap = await getDocs(q);
-      if (!snap.empty) {
-        const id = snap.docs[0].id;
-        await updateDoc(doc(db, "versiculos_usuario", id), { tipo, comentario: coment });
-      } else {
-        await setDoc(doc(collection(db, "versiculos_usuario")), {
-          ...v,
-          tipo,
-          comentario: coment,
-          timestamp: serverTimestamp()
-        });
-      }
-    }
+    // Monta o array de versos
+    const versiculosArray = marcacoesSelecionadas.map(v => ({
+      livro:    v.livro,
+      capitulo: v.capitulo,
+      numero:   v.numero,
+      texto:    v.texto
+    }));
 
-    alert("Versículos salvos!");
-    document.getElementById("tipo-marcacao").value = "";
+    // Grava um único documento em marcacoes_grupadas
+    await setDoc(
+      doc(collection(db, "marcacoes_grupadas")),
+      {
+        uid:        user.uid,
+        tipo,
+        comentario: coment,
+        versiculos: versiculosArray,
+        timestamp:  serverTimestamp()
+      }
+    );
+
+    alert("Versículos salvos em grupo!");
+    // reset UI
+    document.getElementById("tipo-marcacao").value    = "";
     document.getElementById("comentario-geral").value = "";
     marcacoesSelecionadas = [];
     document.getElementById("marcacao-box").classList.add("hidden");
   } catch (e) {
     console.error(e);
-    alert("Erro ao salvar.");
+    alert("Erro ao salvar os versículos agrupados.");
   }
 });
 
-// 📂 Exibir versículos marcados
-async function exibirVersiculosMarcados() {
+// 📂 Exibir grupos de marcações (com edição)
+async function exibirGruposMarcacoes() {
   const user      = auth.currentUser;
   const tipoF     = document.getElementById("filtro-marcacao").value;
   const container = document.getElementById("lista-marcados");
   container.innerHTML = "";
 
   if (!user) {
-    container.innerHTML = "<p>Faça login para ver seus versículos.</p>";
+    container.innerHTML = "<p>Faça login para ver suas marcações.</p>";
     return;
   }
 
-  const ref  = collection(db,"versiculos_usuario");
+  const ref  = collection(db, "marcacoes_grupadas");
   const q    = tipoF
     ? query(ref, where("uid","==",user.uid), where("tipo","==",tipoF))
     : query(ref, where("uid","==",user.uid));
   const snap = await getDocs(q);
+
   if (snap.empty) {
-    container.innerHTML = "<p>Nenhum versículo marcado.</p>";
+    container.innerHTML = "<p>Nenhuma marcação agrupada.</p>";
     return;
   }
 
-  const docs = [...snap.docs].sort((a,b) => {
-    const A = a.data(), B = b.data();
-    return A.livro.localeCompare(B.livro) || A.capitulo - B.capitulo || A.numero - B.numero;
-  });
-
   let ultimoLivro = "";
-  docs.forEach(docSnap => {
-    const v = docSnap.data();
-    if (v.livro !== ultimoLivro) {
-      const h4 = document.createElement("h4");
-      h4.textContent = `📖 ${v.livro.charAt(0).toUpperCase() + v.livro.slice(1)}`;
-      container.appendChild(h4);
-      ultimoLivro = v.livro;
-    }
 
-    const selectId = `tipo-${docSnap.id}`;
-    const textId   = `coment-${docSnap.id}`;
-    const btnId    = `editar-${docSnap.id}`;
-    const delId    = `excluir-${docSnap.id}`;
-
+  snap.docs.forEach(docSnap => {
+    const g    = docSnap.data();
     const card = document.createElement("div");
-    card.classList.add("versiculo-card", v.tipo);
+    card.classList.add("versiculo-card", g.tipo);
 
-card.innerHTML = `
-  <div class="versiculo-content">
-    <p><strong>${v.livro} ${v.capitulo}:${v.numero}</strong> – ${v.texto}</p>
-    <div class="versiculo-inputs">
-      <select id="${selectId}">
-        <option value="promessa" ${v.tipo === "promessa" ? "selected" : ""}>Promessa</option>
-        <option value="ordem" ${v.tipo === "ordem" ? "selected" : ""}>Ordem</option>
-        <option value="principio" ${v.tipo === "principio" ? "selected" : ""}>Princípio Eterno</option>
+    const livroAtual = g.versiculos[0]?.livro;
+
+if (livroAtual !== ultimoLivro) {
+  const h4 = document.createElement("h4");
+  h4.textContent = `📖 ${livroAtual.charAt(0).toUpperCase() + livroAtual.slice(1)}`;
+  container.appendChild(h4);
+  ultimoLivro = livroAtual;
+}
+
+    // Header (categoria e data)
+    const header = document.createElement("div");
+    header.innerHTML = `
+      <p><strong>Categoria:</strong></p>
+      <select class="group-tipo" disabled>
+        <option value="promessa"  ${g.tipo==="promessa"  ? "selected":""}>Promessa</option>
+        <option value="ordem"     ${g.tipo==="ordem"     ? "selected":""}>Ordem</option>
+        <option value="principio" ${g.tipo==="principio" ? "selected":""}>Princípio Eterno</option>
       </select>
-      <textarea id="${textId}" placeholder="Comentário...">${v.comentario || ""}</textarea>
-    </div>
-  </div>
-  <div class="versiculo-actions">
-    <button id="${btnId}" class="btn-save" title="Salvar edição">
-      <img src="https://cdn-icons-png.flaticon.com/128/84/84380.png" alt="editar">
-    </button>
-    <button id="${delId}" class="btn-delete" title="Excluir versículo">
-      <img src="https://cdn-icons-png.flaticon.com/128/54/54324.png" alt="Lixeira">
-    </button>
-  </div>
-`;
+      <p style="margin-top:8px;"><strong>Data:</strong> ${g.timestamp?.toDate().toLocaleDateString()||"-"}</p>
+    `;
+    header.style.marginBottom = "12px";
+
+    // Lista de versos
+    const lista = document.createElement("div");
+    g.versiculos.forEach(v => {
+      const p = document.createElement("p");
+      p.textContent = `${v.livro} ${v.capitulo}:${v.numero} – ${v.texto}`;
+      lista.appendChild(p);
+    });
+
+    // Comentário geral
+    const comentEl = document.createElement("textarea");
+    comentEl.classList.add("group-comment");
+    comentEl.readOnly       = true;
+    comentEl.value          = g.comentario;
+    comentEl.style.marginTop = "12px";
+
+    // Ações (editar, salvar e excluir)
+    const actions = document.createElement("div");
+    actions.className = "versiculo-actions";
+    actions.innerHTML = `
+      <button class="btn-edit" title="Editar grupo">✏️</button>
+      <button class="btn-save-edit hidden" title="Salvar alterações">💾</button>
+      <button class="btn-delete" title="Excluir grupo">🗑️</button>
+    `;
+
+    // Handlers
+    const tipoSelect  = header.querySelector(".group-tipo");
+    const saveBtn     = actions.querySelector(".btn-save-edit");
+    const editBtn     = actions.querySelector(".btn-edit");
+    const deleteBtn   = actions.querySelector(".btn-delete");
+
+    // Entrar em modo edição
+    editBtn.addEventListener("click", () => {
+      tipoSelect.disabled     = false;
+      comentEl.readOnly       = false;
+      editBtn.classList.add("hidden");
+      saveBtn.classList.remove("hidden");
+    });
+
+    // Salvar edição
+    saveBtn.addEventListener("click", async () => {
+      const novoTipo   = tipoSelect.value;
+      const novoComent = comentEl.value.trim();
+      try {
+        await updateDoc(
+          doc(db, "marcacoes_grupadas", docSnap.id),
+          { tipo: novoTipo, comentario: novoComent }
+        );
+        alert("Grupo atualizado com sucesso!");
+        // reverte UI
+        tipoSelect.disabled    = true;
+        comentEl.readOnly      = true;
+        saveBtn.classList.add("hidden");
+        editBtn.classList.remove("hidden");
+        // atualiza classe de cor
+        card.classList.replace(card.classList[1], novoTipo);
+      } catch (e) {
+        console.error(e);
+        alert("Erro ao atualizar grupo.");
+      }
+    });
+
+    // Excluir grupo
+    deleteBtn.addEventListener("click", async () => {
+      if (!confirm("Excluir este grupo de marcações?")) return;
+      await deleteDoc(doc(db, "marcacoes_grupadas", docSnap.id));
+      exibirGruposMarcacoes();
+    });
+
+    // Monta o card
+    card.append(header, lista, comentEl, actions);
     container.appendChild(card);
-
-    // ✏️ Editar
-    document.getElementById(btnId).addEventListener("click", async () => {
-      const novoTipo   = document.getElementById(selectId).value;
-      const novoComent = document.getElementById(textId).value;
-      try {
-        await updateDoc(doc(db, "versiculos_usuario", docSnap.id), {
-          tipo: novoTipo,
-          comentario: novoComent
-        });
-        alert("Versículo atualizado com sucesso!");
-      } catch (e) {
-        console.error(e);
-        alert("Erro ao atualizar.");
-      }
-    });
-
-    // 🗑️ Excluir
-    document.getElementById(delId).addEventListener("click", async () => {
-      if (!confirm("Tem certeza que deseja excluir este versículo?")) return;
-      try {
-        await deleteDoc(doc(db, "versiculos_usuario", docSnap.id));
-        exibirVersiculosMarcados();
-      } catch (e) {
-        console.error(e);
-        alert("Erro ao excluir.");
-      }
-    });
   });
 }
 
-// 📑 Botão ver marcados
+// 📑 Botão “Meus Versículos” (agora grupos)
 document.getElementById("ver-marcados-btn").addEventListener("click", () => {
   const area = document.getElementById("versiculos-marcados");
   area.classList.toggle("hidden");
-  document.getElementById("lista-marcados").innerHTML = "";
-  exibirVersiculosMarcados();
+  exibirGruposMarcacoes();
 });
-document.getElementById("filtro-marcacao").addEventListener("change", exibirVersiculosMarcados);
+document.getElementById("filtro-marcacao")
+        .addEventListener("change", exibirGruposMarcacoes);
 
 // 📜 Citação aleatória no rodapé
 const citacoes = [
