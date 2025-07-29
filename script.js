@@ -451,15 +451,15 @@ const styles = `
     }
     .versiculo-card.promessa {
       border-left-color: #4CAF50;
-      background-color: #E8F5E9;
+      background-color: #4caf4f8e;
     }
     .versiculo-card.ordem {
       border-left-color: #3F51B5;
-      background-color: #FFEBEE;
+      background-color: #3f51b54e;
     }
     .versiculo-card.principio {
       border-left-color: #F44336;
-      background-color: #E8EAF6;
+      background-color: #f4433695;
     }
     .versiculo-card p {
       margin: 6px 0;
@@ -479,7 +479,7 @@ const styles = `
   </style>
 `;
   const htmlContent = `
-    <h1>Meus Versículos Agrupados</h1>
+    <h1>Meu Estudo Bíblico</h1>
     ${clone.innerHTML}
   `;
 
