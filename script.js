@@ -469,7 +469,8 @@ const styles = `
       display: block;
       margin-top: 12px;
       font-style: italic;
-      color: #555;
+      font-weight: bold;
+      color: #000000;
       white-space: pre-wrap;
     }
     .group-tipo {
