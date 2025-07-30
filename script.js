@@ -150,19 +150,35 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
     const dados = await res.json();
 
     (dados.verses || []).forEach(v => {
+      // 1. Linha principal
       const row = document.createElement("div");
-      row.className = "versiculo";
+      row.classList.add("versiculo");
 
+      // 2. Checkbox
       const chk = document.createElement("input");
       chk.type = "checkbox";
-      chk.style.marginRight = "10px";
+      chk.classList.add("versiculo-checkbox");
 
-      const p = document.createElement("p");
-      p.textContent = `${v.verse} – ${v.text}`;
+      // 3. Container de número + texto
+      const textoContainer = document.createElement("div");
+      textoContainer.classList.add("versiculo-texto");
 
-      row.append(chk, p);
+      // 4. Número do versículo em <sup>
+      const sup = document.createElement("sup");
+      sup.classList.add("num-versiculo");
+      sup.textContent = v.verse;
+
+      // 5. Texto do versículo
+      const content = document.createElement("div");
+      content.classList.add("versiculo-conteudo");
+      content.textContent = v.text;
+
+      // Montagem final
+      textoContainer.append(sup, content);
+      row.append(chk, textoContainer);
       div.appendChild(row);
 
+      // 6. Configura evento de marcação
       const info = {
         uid:      user.uid,
         livro,
@@ -175,12 +191,13 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
         if (chk.checked) {
           marcacoesSelecionadas.push(info);
         } else {
-          marcacoesSelecionadas =
+          marcacoesSelecionadas = 
             marcacoesSelecionadas.filter(x => x.numero !== v.verse);
         }
         box.classList.toggle("hidden", marcacoesSelecionadas.length === 0);
       });
     });
+
   } catch (e) {
     div.innerHTML = `<p style="color:red;">Erro: ${e.message}</p>`;
   }
