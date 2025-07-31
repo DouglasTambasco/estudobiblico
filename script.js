@@ -154,6 +154,15 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
       const row = document.createElement("div");
       row.classList.add("versiculo");
 
+      // MODO FOCO: mostrar o botão 🎯
+    const focusBtn = document.getElementById("focus-toggle");
+
+    if (dados.verses && dados.verses.length > 0) {
+      focusBtn.classList.remove("hidden");
+    } else {
+      focusBtn.classList.add("hidden");
+    }
+
       // 2. Checkbox
       const chk = document.createElement("input");
       chk.type = "checkbox";
@@ -529,3 +538,17 @@ const styles = `
   printWindow.print();
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  const focusBtn = document.getElementById("focus-toggle");
+  focusBtn.addEventListener("click", () => {
+    console.log("🎯 Modo foco clicado");
+    document.body.classList.toggle("focus-mode");
+  });
+});
+    const focusBtn = document.getElementById("focus-toggle");
+    if (dados.verses && dados.verses.length > 0) {
+      focusBtn.classList.remove("hidden");
+    } else {
+      focusBtn.classList.add("hidden");
+    }
+  ;

@@ -658,3 +658,12 @@ body.night .num-versiculo {
 body.night .versiculo-conteudo {
   color: var(--text-light);
 }
+
+body.focus-mode .header-estudo,
+body.focus-mode .busca-verse,
+body.focus-mode .marcacao-box,
+body.focus-mode #ver-marcados-btn,
+body.focus-mode #versiculos-marcados,
+body.focus-mode footer {    /* ou #footer / .footer, conforme seu markup */
+  display: none !important;
+}

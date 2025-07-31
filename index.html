@@ -57,21 +57,10 @@
 
         <label for="login-senha">Senha</label>
         <div class="senha-wrapper">
-          <input
-            type="password"
-            id="login-senha"
-            placeholder="••••••••"
-          />
-          <button
-            type="button"
-            class="toggle-senha"
-            data-target="login-senha"
-          >
-            👁️
-          </button>
+          <input type="password" id="login-senha" placeholder="••••••••" />
+          <button type="button" class="toggle-senha" data-target="login-senha" > 👁️ </button>
         </div>
 
-        <!-- botão de login adicionado -->
         <button type="button" id="login-btn">Login</button>
       </div>
 
@@ -81,29 +70,14 @@
         <input type="text" id="cadastro-nome" placeholder="Seu nome" />
 
         <label for="cadastro-email">E-mail</label>
-        <input
-          type="email"
-          id="cadastro-email"
-          placeholder="seu@exemplo.com"
-        />
+        <input type="email" id="cadastro-email" placeholder="seu@exemplo.com" />
 
         <label for="cadastro-senha">Senha</label>
         <div class="senha-wrapper">
-          <input
-            type="password"
-            id="cadastro-senha"
-            placeholder="••••••••"
-          />
-          <button
-            type="button"
-            class="toggle-senha"
-            data-target="cadastro-senha"
-          >
-            👁️
-          </button>
+          <input type="password" id="cadastro-senha" placeholder="••••••••" />
+          <button type="button" class="toggle-senha" data-target="cadastro-senha" > 👁️ </button>
         </div>
 
-        <!-- botão de cadastro adicionado -->
         <button type="button" id="cadastro-btn">Cadastrar</button>
       </div>
 
@@ -123,6 +97,9 @@
 
         <button id="buscar-btn">🔍 Buscar</button>
       </div>
+
+      <!-- Modo Estudo Focado: inicialmente oculto, será exibido após carregar capítulo -->
+      <button id="focus-toggle" class="hidden" title="Modo Estudo Focado" >🎯 Modo Foco</button>
 
       <div id="versiculos"></div>
 
