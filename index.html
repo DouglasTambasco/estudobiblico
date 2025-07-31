@@ -16,27 +16,13 @@
     </div>
 
     <div class="header-center">
-      <img
-        class="header-icon-left"
-        id="header-icon-left"
-        src="https://cdn-icons-png.flaticon.com/128/2770/2770487.png"
-        alt="Ícone Esquerdo"
-      />
+      <img class="header-icon-left" id="header-icon-left" src="https://cdn-icons-png.flaticon.com/128/2770/2770487.png" alt="Ícone Esquerdo" />
       <h1>Estudo Bíblico Católico</h1>
-      <img
-        class="header-icon-right"
-        id="header-icon-right"
-        src="https://cdn-icons-png.flaticon.com/128/3657/3657120.png"
-        alt="Ícone Direito"
-      />
+      <img class="header-icon-right" id="header-icon-right" src="https://cdn-icons-png.flaticon.com/128/3657/3657120.png" alt="Ícone Direito" />
     </div>
 
     <div class="header-controls">
-      <button
-        class="theme-toggle-square"
-        id="theme-toggle-square"
-        aria-label="Alternar tema"
-      ></button>
+      <button class="theme-toggle-square" id="theme-toggle-square" aria-label="Alternar tema" ></button>
       <button class="logout-btn hidden" id="logout-btn">🚪 Sair</button>
     </div>
   </header>
@@ -49,11 +35,7 @@
       <div class="login-box" id="login-box">
         <h3>Login</h3>
         <label for="login-email">E-mail</label>
-        <input
-          type="email"
-          id="login-email"
-          placeholder="seu@exemplo.com"
-        />
+        <input type="email" id="login-email" placeholder="seu@exemplo.com" />
 
         <label for="login-senha">Senha</label>
         <div class="senha-wrapper">
@@ -88,41 +70,39 @@
     <div class="hidden" id="conteudo">
 
       <!-- Busca de capítulo -->
-      <div class="busca-verse">
-        <label for="livro">Livro</label>
-        <input type="text" id="livro" placeholder="ex: João" />
+ <div class="busca-verse">
+  <label for="livro">Livro</label>
+  <input type="text" id="livro" placeholder="ex: João" />
 
-        <label for="capitulo">Capítulo</label>
-        <input type="number" id="capitulo" placeholder="ex: 3" />
+  <label for="capitulo">Capítulo</label>
+  <input type="number" id="capitulo" placeholder="ex: 3" />
 
-        <button id="buscar-btn">🔍 Buscar</button>
-      </div>
+  <button id="buscar-btn">🔍 Buscar</button>
+</div>
 
-      <!-- Botão Modo Estudo Focado -->
-      <button id="focus-toggle" class="hidden" title="Modo Estudo Focado">🎯 Modo Foco</button>
+<!-- Botão Modo Estudo Focado -->
+<button id="focus-toggle" class="hidden" title="Modo Estudo Focado">
+  🎯 Modo Foco
+</button>
 
-      <!-- Container de versículos já em split-screen -->
-      <div id="versiculos" class="split-screen"></div>
+<div id="versiculos"></div>
 
-      <!-- Área de marcação -->
-      <div class="hidden marcacao-box" id="marcacao-box">
-        <h3>Marcar selecionados</h3>
-        <label for="tipo-marcacao">Categoria</label>
-        <select id="tipo-marcacao">
-          <option value="">Selecione...</option>
-          <option value="promessa">Promessa</option>
-          <option value="ordem">Ordem</option>
-          <option value="principio">Princípio Eterno</option>
-        </select>
+<!-- Área de marcação -->
+<div class="hidden marcacao-box" id="marcacao-box">
+  <h3>Marcar selecionados</h3>
+  <label for="tipo-marcacao">Categoria</label>
+  <select id="tipo-marcacao">
+    <option value="">Selecione...</option>
+    <option value="promessa">Promessa</option>
+    <option value="ordem">Ordem</option>
+    <option value="principio">Princípio Eterno</option>
+  </select>
 
-        <label for="comentario-geral">Comentário</label>
-        <textarea
-          id="comentario-geral"
-          placeholder="Comentário geral..."
-        ></textarea>
+  <label for="comentario-geral">Comentário</label>
+  <textarea id="comentario-geral" placeholder="Comentário geral..."></textarea>
 
-        <button id="salvar-todos">💾 Salvar</button>
-      </div>
+  <button id="salvar-todos">💾 Salvar</button>
+</div>
 
       <hr />
 

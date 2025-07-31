@@ -149,51 +149,45 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
     const res   = await fetch(`https://bible-api.com/${livro}+${cap}?translation=almeida`);
     const dados = await res.json();
 
-    (dados.verses || []).forEach(v => {
-      // 1. Linha principal
-      const row = document.createElement("div");
-      row.classList.add("versiculo");
-
-      // MODO FOCO: mostrar o botão 🎯
+    // MODO FOCO: mostrar/esconder botão 🎯
     const focusBtn = document.getElementById("focus-toggle");
-
     if (dados.verses && dados.verses.length > 0) {
       focusBtn.classList.remove("hidden");
     } else {
       focusBtn.classList.add("hidden");
     }
 
-    if (dados.verses && dados.verses.length > 0) {
-      document.body.classList.add("split-screen");
-    } else {
-      document.body.classList.remove("split-screen");
-    }
+    // Agora monta cada versículo
+(dados.verses || []).forEach(v => {
+  // 1. Linha principal
+const row = document.createElement("div");
+row.classList.add("versiculo");
 
-      // 2. Checkbox
-      const chk = document.createElement("input");
-      chk.type = "checkbox";
-      chk.classList.add("versiculo-checkbox");
+// 1. checkbox
+const chk = document.createElement("input");
+chk.type = "checkbox";
+chk.classList.add("versiculo-checkbox");
 
-      // 3. Container de número + texto
-      const textoContainer = document.createElement("div");
-      textoContainer.classList.add("versiculo-texto");
+// 2. número
+const sup = document.createElement("sup");
+sup.classList.add("num-versiculo");
+sup.textContent = v.verse;
 
-      // 4. Número do versículo em <sup>
-      const sup = document.createElement("sup");
-      sup.classList.add("num-versiculo");
-      sup.textContent = v.verse;
+// 3. agrupa checkbox + número
+const numeroContainer = document.createElement("div");
+numeroContainer.classList.add("versiculo-numero");
+numeroContainer.append(chk, sup);
 
-      // 5. Texto do versículo
-      const content = document.createElement("div");
-      content.classList.add("versiculo-conteudo");
-      content.textContent = v.text;
+// 4. texto do versículo
+const content = document.createElement("div");
+content.classList.add("versiculo-conteudo");
+content.textContent = v.text;
 
-      // Montagem final
-      textoContainer.append(sup, content);
-      row.append(chk, textoContainer);
-      div.appendChild(row);
+// 5. monta tudo na ordem desejada
+row.append(numeroContainer, content);
+div.appendChild(row);
 
-      // 6. Configura evento de marcação
+      // evento de marcação
       const info = {
         uid:      user.uid,
         livro,
@@ -201,12 +195,11 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
         numero:   v.verse,
         texto:    v.text
       };
-
       chk.addEventListener("change", () => {
         if (chk.checked) {
           marcacoesSelecionadas.push(info);
         } else {
-          marcacoesSelecionadas = 
+          marcacoesSelecionadas =
             marcacoesSelecionadas.filter(x => x.numero !== v.verse);
         }
         box.classList.toggle("hidden", marcacoesSelecionadas.length === 0);
