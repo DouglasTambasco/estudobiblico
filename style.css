@@ -82,8 +82,8 @@ body.night .header-estudo {
 
 .header-icon-left,
 .header-icon-right {
-  width: 32px;
-  height: 32px;
+  width: 60px;
+  height: 60px;
 }
 
 /* Controles do header */
@@ -366,7 +366,7 @@ body.night .versiculo-card p {
   margin-top: auto;
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 15px;
 }
 
 /* Botões salvar/excluir */

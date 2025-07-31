@@ -323,7 +323,7 @@ grupos.sort((a, b) => {
       ultimoLivro = livroAtual;
     }
 
-    // Header (categoria e data)
+    // IMPRESSAO (categoria e data)
     const header = document.createElement("div");
     header.innerHTML = `
       <p><strong>Categoria:</strong></p>
