@@ -592,7 +592,6 @@ body.night .rodape {
 }
 
 /* ==== Layout dos Versículos ==== */
-
 #versiculos {
   display: flex;
   flex-direction: column;
@@ -666,4 +665,26 @@ body.focus-mode #ver-marcados-btn,
 body.focus-mode #versiculos-marcados,
 body.focus-mode footer {    /* ou #footer / .footer, conforme seu markup */
   display: none !important;
+}
+
+/* === Layout padrão: uma coluna === */
+#versiculos {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* === Modo split-screen: duas colunas com Grid === */
+body.split-screen #versiculos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+/* Evita quebra de um versículo no meio da coluna */
+body.split-screen #versiculos .versiculo {
+  break-inside: avoid;
+  margin-bottom: 0.1rem;
 }

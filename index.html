@@ -58,7 +58,7 @@
         <label for="login-senha">Senha</label>
         <div class="senha-wrapper">
           <input type="password" id="login-senha" placeholder="••••••••" />
-          <button type="button" class="toggle-senha" data-target="login-senha" > 👁️ </button>
+          <button type="button" class="toggle-senha" data-target="login-senha">👁️</button>
         </div>
 
         <button type="button" id="login-btn">Login</button>
@@ -75,7 +75,7 @@
         <label for="cadastro-senha">Senha</label>
         <div class="senha-wrapper">
           <input type="password" id="cadastro-senha" placeholder="••••••••" />
-          <button type="button" class="toggle-senha" data-target="cadastro-senha" > 👁️ </button>
+          <button type="button" class="toggle-senha" data-target="cadastro-senha">👁️</button>
         </div>
 
         <button type="button" id="cadastro-btn">Cadastrar</button>
@@ -87,7 +87,7 @@
     <!-- Conteúdo pós-login -->
     <div class="hidden" id="conteudo">
 
-      <!-- Busca -->
+      <!-- Busca de capítulo -->
       <div class="busca-verse">
         <label for="livro">Livro</label>
         <input type="text" id="livro" placeholder="ex: João" />
@@ -98,12 +98,13 @@
         <button id="buscar-btn">🔍 Buscar</button>
       </div>
 
-      <!-- Modo Estudo Focado: inicialmente oculto, será exibido após carregar capítulo -->
-      <button id="focus-toggle" class="hidden" title="Modo Estudo Focado" >🎯 Modo Foco</button>
+      <!-- Botão Modo Estudo Focado -->
+      <button id="focus-toggle" class="hidden" title="Modo Estudo Focado">🎯 Modo Foco</button>
 
-      <div id="versiculos"></div>
+      <!-- Container de versículos já em split-screen -->
+      <div id="versiculos" class="split-screen"></div>
 
-      <!-- Marcação -->
+      <!-- Área de marcação -->
       <div class="hidden marcacao-box" id="marcacao-box">
         <h3>Marcar selecionados</h3>
         <label for="tipo-marcacao">Categoria</label>
@@ -113,11 +114,13 @@
           <option value="ordem">Ordem</option>
           <option value="principio">Princípio Eterno</option>
         </select>
+
         <label for="comentario-geral">Comentário</label>
         <textarea
           id="comentario-geral"
           placeholder="Comentário geral..."
         ></textarea>
+
         <button id="salvar-todos">💾 Salvar</button>
       </div>
 
@@ -127,6 +130,7 @@
       <button id="ver-marcados-btn">📑 Meus Versículos</button>
       <div class="hidden" id="versiculos-marcados">
         <h3>Versículos Marcados</h3>
+
         <label for="filtro-marcacao">Filtrar</label>
         <select id="filtro-marcacao">
           <option value="">Todos</option>
@@ -134,6 +138,7 @@
           <option value="ordem">Ordem</option>
           <option value="principio">Princípio Eterno</option>
         </select>
+
         <label for="filtro-livro">Filtrar por livro</label>
         <select id="filtro-livro">
           <option value="">Todos</option>
@@ -142,6 +147,7 @@
         <div class="grid-cards" id="lista-marcados"></div>
         <button id="btn-imprimir" title="Imprimir marcações">🖨️ Imprimir</button>
       </div>
+
     </div>
   </main>
 

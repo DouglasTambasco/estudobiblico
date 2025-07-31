@@ -163,6 +163,12 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
       focusBtn.classList.add("hidden");
     }
 
+    if (dados.verses && dados.verses.length > 0) {
+      document.body.classList.add("split-screen");
+    } else {
+      document.body.classList.remove("split-screen");
+    }
+
       // 2. Checkbox
       const chk = document.createElement("input");
       chk.type = "checkbox";
