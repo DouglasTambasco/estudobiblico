@@ -16,14 +16,14 @@
     </div>
 
     <div class="header-center">
-      <img class="header-icon-left" id="header-icon-left" src="igreja.gif" alt="Ícone Esquerdo" />
+      <img class="header-icon-left" id="header-icon-left" src="igreja.gif" alt="Ícone de igreja à esquerda" />
       <h1>Estudo Bíblico Católico</h1>
-      <img class="header-icon-right" id="header-icon-right" src="biblia.gif" alt="Ícone Direito" />
+      <img class="header-icon-right" id="header-icon-right" src="biblia.gif" alt="Ícone de bíblia à direita" />
     </div>
 
     <div class="header-controls">
-      <button class="theme-toggle-square" id="theme-toggle-square" aria-label="Alternar tema" ></button>
-      <button class="logout-btn hidden" id="logout-btn">🚪 Sair</button>
+      <button class="theme-toggle-square" id="theme-toggle-square" aria-label="Alternar tema"></button>
+      <button class="logout-btn hidden" id="logout-btn" aria-label="Sair da conta">🚪 Sair</button>
     </div>
   </header>
 
@@ -35,32 +35,32 @@
       <div class="login-box" id="login-box">
         <h3>Login</h3>
         <label for="login-email">E-mail</label>
-        <input type="email" id="login-email" placeholder="seu@exemplo.com" />
+        <input type="email" id="login-email" placeholder="seu@exemplo.com" aria-label="E-mail para login" />
 
         <label for="login-senha">Senha</label>
         <div class="senha-wrapper">
-          <input type="password" id="login-senha" placeholder="••••••••" />
-          <button type="button" class="toggle-senha" data-target="login-senha">👁️</button>
+          <input type="password" id="login-senha" placeholder="••••••••" aria-label="Senha para login" />
+          <button type="button" class="toggle-senha" data-target="login-senha" aria-label="Mostrar/ocultar senha">👁️</button>
         </div>
 
-        <button type="button" id="login-btn">Login</button>
+        <button type="button" id="login-btn" aria-label="Entrar">Login</button>
       </div>
 
       <div class="cadastro-box" id="cadastro-box">
         <h3>Cadastro</h3>
         <label for="cadastro-nome">Nome</label>
-        <input type="text" id="cadastro-nome" placeholder="Seu nome" />
+        <input type="text" id="cadastro-nome" placeholder="Seu nome" aria-label="Nome para cadastro" />
 
         <label for="cadastro-email">E-mail</label>
-        <input type="email" id="cadastro-email" placeholder="seu@exemplo.com" />
+        <input type="email" id="cadastro-email" placeholder="seu@exemplo.com" aria-label="E-mail para cadastro" />
 
         <label for="cadastro-senha">Senha</label>
         <div class="senha-wrapper">
-          <input type="password" id="cadastro-senha" placeholder="••••••••" />
-          <button type="button" class="toggle-senha" data-target="cadastro-senha">👁️</button>
+          <input type="password" id="cadastro-senha" placeholder="••••••••" aria-label="Senha para cadastro" />
+          <button type="button" class="toggle-senha" data-target="cadastro-senha" aria-label="Mostrar/ocultar senha">👁️</button>
         </div>
 
-        <button type="button" id="cadastro-btn">Cadastrar</button>
+        <button type="button" id="cadastro-btn" aria-label="Cadastrar">Cadastrar</button>
       </div>
 
       <p class="error" id="auth-message"></p>
@@ -70,48 +70,51 @@
     <div class="hidden" id="conteudo">
 
       <!-- Busca de capítulo -->
- <div class="busca-verse">
-  <label for="livro">Livro</label>
-  <input type="text" id="livro" placeholder="ex: João" />
+      <div class="busca-verse">
+        <label for="livro">Livro</label>
+        <input type="text" id="livro" placeholder="ex: 1 João" aria-label="Nome do livro bíblico" />
 
-  <label for="capitulo">Capítulo</label>
-  <input type="number" id="capitulo" placeholder="ex: 3" />
+        <label for="capitulo">Capítulo</label>
+        <input type="number" id="capitulo" placeholder="ex: 2" aria-label="Número do capítulo bíblico" />
 
-  <button id="buscar-btn">
-  <img src="https://cdn-icons-png.flaticon.com/128/2770/2770487.png" alt="Buscar" class="btn-icon" /> Buscar </button>
-</div>
+        <button id="buscar-btn" aria-label="Buscar versículos">
+          <img src="https://cdn-icons-png.flaticon.com/128/2770/2770487.png" alt="Ícone de busca" class="btn-icon" /> Buscar
+        </button>
+      </div>
+        <br>
+      <!-- Botão Modo Estudo Focado -->
+      <button id="focus-toggle" class="hidden" title="Modo Estudo Focado" aria-label="Alternar modo de estudo focado"> 🎯 Modo Foco </button>
 
-<!-- Botão Modo Estudo Focado -->
-<button id="focus-toggle" class="hidden" title="Modo Estudo Focado"> 🎯 Modo Foco </button>
+      <div id="versiculos"></div>
 
-<div id="versiculos"></div>
+      <!-- Área de marcação -->
+      <div class="hidden marcacao-box" id="marcacao-box">
+        <h3>Marcar selecionados</h3>
+        <label for="tipo-marcacao">Categoria</label>
+        <select id="tipo-marcacao" aria-label="Categoria da marcação">
+          <option value="">Selecione...</option>
+          <option value="promessa">Promessa</option>
+          <option value="ordem">Ordem</option>
+          <option value="principio">Princípio Eterno</option>
+        </select>
 
-<!-- Área de marcação -->
-<div class="hidden marcacao-box" id="marcacao-box">
-  <h3>Marcar selecionados</h3>
-  <label for="tipo-marcacao">Categoria</label>
-  <select id="tipo-marcacao">
-    <option value="">Selecione...</option>
-    <option value="promessa">Promessa</option>
-    <option value="ordem">Ordem</option>
-    <option value="principio">Princípio Eterno</option>
-  </select>
+        <label for="comentario-geral">Comentário</label>
+        <textarea id="comentario-geral" placeholder="Comentário geral..." aria-label="Comentário geral"></textarea>
 
-  <label for="comentario-geral">Comentário</label>
-  <textarea id="comentario-geral" placeholder="Comentário geral..."></textarea>
-
-  <button id="salvar-todos">💾 Salvar</button>
-</div>
+        <button id="salvar-todos" aria-label="Salvar marcações">💾 Salvar</button>
+      </div>
 
       <hr />
 
       <!-- Versículos marcados -->
-        <button id="ver-marcados-btn"> <img src="https://cdn-icons-png.flaticon.com/128/4364/4364664.png" alt="Buscar" class="btn-icon" /> Meus Versículos</button>
+      <button id="ver-marcados-btn" aria-label="Ver meus versículos">
+        <img src="https://cdn-icons-png.flaticon.com/128/4364/4364664.png" alt="Ícone de versículos marcados" class="btn-icon" /> Meus Versículos
+      </button>
       <div class="hidden" id="versiculos-marcados">
         <h3>Versículos Marcados</h3>
 
         <label for="filtro-marcacao">Filtrar</label>
-        <select id="filtro-marcacao">
+        <select id="filtro-marcacao" aria-label="Filtrar por categoria">
           <option value="">Todos</option>
           <option value="promessa">Promessa</option>
           <option value="ordem">Ordem</option>
@@ -119,12 +122,13 @@
         </select>
 
         <label for="filtro-livro">Filtrar por livro</label>
-        <select id="filtro-livro">
+        <select id="filtro-livro" aria-label="Filtrar por livro">
           <option value="">Todos</option>
         </select>
 
         <div class="grid-cards" id="lista-marcados"></div>
-        <button id="btn-imprimir" title="Imprimir marcações">🖨️ Imprimir</button>
+        <br />
+        <button id="btn-imprimir" title="Imprimir marcações" aria-label="Imprimir marcações">🖨️ Imprimir</button>
       </div>
 
     </div>

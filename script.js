@@ -1,13 +1,7 @@
 // 🔥 Firebase setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import {
-  getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-  updateProfile, onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
-import {
-  getFirestore, collection, query, where, getDocs,
-  setDoc, updateDoc, deleteDoc, doc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+import { getFirestore, collection, query, where, getDocs, setDoc, updateDoc, deleteDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDSy_V62ZUXK-2E1H05uTbvLvM9Q6D_Lng",
@@ -149,7 +143,7 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
     const res   = await fetch(`https://bible-api.com/${livro}+${cap}?translation=almeida`);
     const dados = await res.json();
 
-    // MODO FOCO: mostrar/esconder botão 🎯
+    // MODO FOCO: mostrar/esconder botão 
     const focusBtn = document.getElementById("focus-toggle");
     if (dados.verses && dados.verses.length > 0) {
       focusBtn.classList.remove("hidden");
@@ -157,33 +151,33 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
       focusBtn.classList.add("hidden");
     }
 
-    // Agora monta cada versículo
+// montando versículo
 (dados.verses || []).forEach(v => {
-  // 1. Linha principal
+// 1. Linha principal
 const row = document.createElement("div");
 row.classList.add("versiculo");
 
-// 1. checkbox
+// 2. checkbox
 const chk = document.createElement("input");
 chk.type = "checkbox";
 chk.classList.add("versiculo-checkbox");
 
-// 2. número
+// 3. número
 const sup = document.createElement("sup");
 sup.classList.add("num-versiculo");
 sup.textContent = v.verse;
 
-// 3. agrupa checkbox + número
+// 4. agrupa checkbox + número
 const numeroContainer = document.createElement("div");
 numeroContainer.classList.add("versiculo-numero");
 numeroContainer.append(chk, sup);
 
-// 4. texto do versículo
+// 5. texto do versículo
 const content = document.createElement("div");
 content.classList.add("versiculo-conteudo");
 content.textContent = v.text;
 
-// 5. monta tudo na ordem desejada
+// 6. monta tudo na ordem desejada
 row.append(numeroContainer, content);
 div.appendChild(row);
 
@@ -237,7 +231,8 @@ document.getElementById("salvar-todos").addEventListener("click", async () => {
         tipo,
         comentario: coment,
         versiculos: versiculosArray,
-        timestamp:  serverTimestamp()
+        timestamp:  serverTimestamp(),
+        favorito:   false
       }
     );
 
@@ -349,7 +344,7 @@ grupos.sort((a, b) => {
     comentEl.classList.add("group-comment");
     comentEl.readOnly       = true;
     comentEl.value          = g.comentario;
-    comentEl.style.marginTop = "12px";
+    comentEl.style.marginTop = "5px";
 
     // Ações
     const actions = document.createElement("div");
@@ -437,7 +432,7 @@ const citacoes = [
   "\"Então Pedro aproximou-se de Jesus e perguntou: 'Senhor, quantas vezes deverei perdoar a meu irmão quando ele pecar contra mim? Até sete vezes?' Jesus respondeu: 'Eu digo a você: Não até sete, mas até setenta vezes sete.'\" — Mateus 18:21-22"
 ];
 document.getElementById("citacao-biblica").innerHTML =
-  `<em>${citacoes[Math.floor(Math.random() * citacoes.length)]}</em>`;
+  `<em><strong>${citacoes[Math.floor(Math.random() * citacoes.length)]}</strong></em>`; // está em itálico por causa do <em> no HTML
 
   //impressão 
 document.getElementById("btn-imprimir").addEventListener("click", () => {
@@ -544,10 +539,3 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.toggle("focus-mode");
   });
 });
-    const focusBtn = document.getElementById("focus-toggle");
-    if (dados.verses && dados.verses.length > 0) {
-      focusBtn.classList.remove("hidden");
-    } else {
-      focusBtn.classList.add("hidden");
-    }
-  ;

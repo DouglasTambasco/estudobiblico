@@ -51,6 +51,7 @@ body.night {
   position: relative;
   min-height: 100px;
   background: var(--vatican-white);
+  background-color: #d6d6d661;
   border: 2px solid var(--vatican-yellow);
   border-radius: var(--border-radius-main);
   padding: 24px 20px 16px;
@@ -139,6 +140,7 @@ body.night .theme-toggle-square {
   color: #000000;
   border-radius: var(--border-radius-main);
   font-size: 0.85rem;
+  font-weight: bold; 
   width: auto !important;
 }
 
@@ -195,7 +197,7 @@ body.night .cadastro-box {
 /* Formulários e botões */
 label {
   display: block;
-  margin-top: 12px;
+  margin-top: 15px;
   font-weight: 900;
   color: #6A1B9A;
 }
@@ -251,27 +253,43 @@ button {
   transition: background 0.3s;
 }
 
-/* Busca de versículos */
 .busca-verse {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
   gap: 10px;
-  align-items: flex-end;
-  justify-content: center;
-  margin: 20px auto;
+  margin: 10px auto;
   max-width: 600px;
 }
 
+/* labels centralizadas na 1ª linha */
+.busca-verse label {
+  text-align: center;
+  grid-row: 1;
+  font-size: large;
+  font-weight: bold;
+}
+
+/* inputs ocupam toda a largura da coluna na 2ª linha */
+.busca-verse input {
+  grid-row: 2;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--vatican-yellow);
+  border-radius: 4px;
+}
+
+/* botão no tamanho do conteúdo, 3ª coluna, 2ª linha */
 #buscar-btn {
-  display: inline-flex;           /* flex no botão */
-  align-items: center;            /* verticalmente centralizado */
-  justify-content: center;        /* horizontalmente centralizado */
-  gap: 0.5rem;                    /* espaço entre ícone e texto */
-  padding: 0.5rem 1rem;           
+  grid-column: 3;
+  grid-row: 2;
+  justify-self: center;
+  align-self: center;
+  padding: 0.5rem 1rem;
   border: none;
   background-color: var(--vatican-yellow);
-  color: 000000;
+  color: var(--text-dark);
   cursor: pointer;
+  border-radius: 4px;
 }
 
 #buscar-btn .btn-icon {
@@ -367,6 +385,16 @@ body.night .versiculo-card p {
   display: flex;
   justify-content: flex-end;
   gap: 15px;
+}
+
+.group-comment {
+  min-height: 80px;
+  height: 120px;
+  resize: vertical;
+  font-size: 1rem;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Botões salvar/excluir */
@@ -474,7 +502,7 @@ body.night .versiculo-card.principio {
 
 /* Rodapé */
 .rodape {
-    background-color: var(--vatican-white);
+    background-color: #d6d6d661;
     color: var(--vatican-yellow);
     font-family: 'Quicksand', sans-serif;
     border: 2px solid var(--vatican-yellow);
