@@ -232,7 +232,6 @@ document.getElementById("salvar-todos").addEventListener("click", async () => {
         comentario: coment,
         versiculos: versiculosArray,
         timestamp:  serverTimestamp(),
-        favorito:   false
       }
     );
 
