@@ -259,10 +259,24 @@ async function exibirGruposMarcacoes() {
     return;
   }
 
-  const ref  = collection(db, "marcacoes_grupadas");
-  const q    = tipoF
-    ? query(ref, where("uid","==",user.uid), where("tipo","==",tipoF))
-    : query(ref, where("uid","==",user.uid));
+  const ref = collection(db, "marcacoes_grupadas");
+  let q;
+
+  // ▶️ Ajuste aqui: se tipoF === "favorito", filtramos pelo booleano favorito
+  if (tipoF === "favorito") {
+    q = query(ref,
+      where("uid", "==", user.uid),
+      where("favorito", "==", true)
+    );
+  } else if (tipoF) {
+    q = query(ref,
+      where("uid", "==", user.uid),
+      where("tipo", "==", tipoF)
+    );
+  } else {
+    q = query(ref, where("uid", "==", user.uid));
+  }
+
   const snap = await getDocs(q);
 
   if (snap.empty) {
@@ -299,11 +313,12 @@ async function exibirGruposMarcacoes() {
 
   let ultimoLivro = "";
 
-grupos.sort((a, b) => {
-  const livroA = a.data().versiculos[0]?.livro.toLowerCase() || "";
-  const livroB = b.data().versiculos[0]?.livro.toLowerCase() || "";
-  return livroA.localeCompare(livroB);
-});
+  grupos.sort((a, b) => {
+    const livroA = a.data().versiculos[0]?.livro.toLowerCase() || "";
+    const livroB = b.data().versiculos[0]?.livro.toLowerCase() || "";
+    return livroA.localeCompare(livroB);
+  });
+
   grupos.forEach(docSnap => {
     const g    = docSnap.data();
     const card = document.createElement("div");
@@ -312,12 +327,13 @@ grupos.sort((a, b) => {
     const livroAtual = g.versiculos[0]?.livro;
     if (livroAtual !== ultimoLivro) {
       const h4 = document.createElement("h4");
-      h4.textContent = `📖 ${livroAtual.charAt(0).toUpperCase() + livroAtual.slice(1)}`;
+      h4.textContent =
+        `📖 ${livroAtual.charAt(0).toUpperCase() + livroAtual.slice(1)}`;
       container.appendChild(h4);
       ultimoLivro = livroAtual;
     }
 
-    // IMPRESSAO (categoria e data)
+    // IMPRESSÃO (categoria e data)
     const header = document.createElement("div");
     header.innerHTML = `
       <p><strong>Categoria:</strong></p>
@@ -341,8 +357,8 @@ grupos.sort((a, b) => {
     // Comentário geral
     const comentEl = document.createElement("textarea");
     comentEl.classList.add("group-comment");
-    comentEl.readOnly       = true;
-    comentEl.value          = g.comentario;
+    comentEl.readOnly        = true;
+    comentEl.value           = g.comentario;
     comentEl.style.marginTop = "5px";
 
     // Ações
@@ -354,12 +370,37 @@ grupos.sort((a, b) => {
       <button class="btn-delete" title="Excluir grupo">🗑️</button>
     `;
 
-    const tipoSelect  = header.querySelector(".group-tipo");
-    const saveBtn     = actions.querySelector(".btn-save-edit");
-    const editBtn     = actions.querySelector(".btn-edit");
-    const deleteBtn   = actions.querySelector(".btn-delete");
+    // botão de excluir (referência para inserir o de favorito)
+    const deleteBtn = actions.querySelector(".btn-delete");
 
-    // Modo edição
+    // botão de favorito
+    const favBtn = document.createElement("button");
+    favBtn.className   = "btn-fav";
+    favBtn.title       = "Favoritar";
+    favBtn.textContent = g.favorito ? "⭐" : "☆";
+    actions.insertBefore(favBtn, deleteBtn);
+
+    favBtn.addEventListener("click", async () => {
+      const novoFav = !g.favorito;
+      try {
+        await updateDoc(
+          doc(db, "marcacoes_grupadas", docSnap.id),
+          { favorito: novoFav }
+        );
+        g.favorito = novoFav;
+        favBtn.textContent = novoFav ? "⭐" : "☆";
+        favBtn.classList.toggle("favorited", novoFav);
+      } catch (e) {
+        console.error(e);
+        alert("Erro ao favoritar/desfavoritar.");
+      }
+    });
+
+    // botões de editar e salvar
+    const tipoSelect = header.querySelector(".group-tipo");
+    const saveBtn    = actions.querySelector(".btn-save-edit");
+    const editBtn    = actions.querySelector(".btn-edit");
+
     editBtn.addEventListener("click", () => {
       tipoSelect.disabled = false;
       comentEl.readOnly   = false;
