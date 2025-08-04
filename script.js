@@ -463,8 +463,14 @@ const citacoes = [
   "\"O amor é paciente, o amor é bondoso. Não inveja, não se vangloria, não se orgulha. Não maltrata, não procura seus interesses, não se ira facilmente, não guarda rancor. O amor não se alegra com a injustiça, mas se alegra com a verdade. Tudo sofre, tudo crê, tudo espera, tudo suporta.\" — 1 Coríntios 13:4-7",
   "\"Então Pedro aproximou-se de Jesus e perguntou: 'Senhor, quantas vezes deverei perdoar a meu irmão quando ele pecar contra mim? Até sete vezes?' Jesus respondeu: 'Eu digo a você: Não até sete, mas até setenta vezes sete.'\" — Mateus 18:21-22"
 ];
-document.getElementById("citacao-biblica").innerHTML =
-  `<em><strong>${citacoes[Math.floor(Math.random() * citacoes.length)]}</strong></em>`; // está em itálico por causa do <em> no HTML
+  document.addEventListener("DOMContentLoaded", () => {
+    const el = document.getElementById("citacao-biblica");
+    if (!el || citacoes.length === 0) return;
+
+    const index = Math.floor(Math.random() * citacoes.length);
+    el.textContent = citacoes[index];
+  });
+ // está em itálico por causa do <em> no HTML
 
   // impressão 
 document.getElementById("btn-imprimir").addEventListener("click", () => {
@@ -493,17 +499,17 @@ const styles = `
   <style>
     body {
       font-family: system-ui, sans-serif;
-      padding: 40px;
-      line-height: 1.6;
+      padding: 20px;
+      line-height: 1;
       color: #333;
     }
     h1 {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 10px;
     }
     h4 {
-      margin-top: 40px;
-      font-size: 20px;
+      margin-top: 5px;
+      font-size: 15px;
       color: #222;
       border-bottom: 1px solid #aaa;
       padding-bottom: 4px;
@@ -518,19 +524,19 @@ const styles = `
     }
     .versiculo-card.promessa {
       border-left-color: #4CAF50;
-      background-color: #4caf4f8e;
+      background-color: #C8E6C9;
     }
     .versiculo-card.ordem {
       border-left-color: #3F51B5;
-      background-color: #3f51b54e;
+      background-color: #E1BEE7;
     }
     .versiculo-card.principio {
       border-left-color: #F44336;
-      background-color: #f4433695;
+      background-color: #FFE0B2;
     }
     .versiculo-card p {
-      margin: 6px 0;
-      font-size: 16px;
+      margin: 4px 0;
+      font-size: 10px;
     }
     .group-comment {
       display: block;
@@ -547,7 +553,7 @@ const styles = `
   </style>
 `;
   const htmlContent = `
-    <h1>Meu Estudo Bíblico</h1>
+    <h1>Meu Estudo Bíblico Católico</h1>
     ${clone.innerHTML}
   `;
 

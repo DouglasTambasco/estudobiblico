@@ -505,7 +505,7 @@ body.night .versiculo-card.principio {
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: #d6d6a6  /* fundo claro semi-transparente */;
+  background-color: #d6d6d661  /* fundo claro semi-transparente */;
   color: var(--vatican-yellow);
   font-family: 'Quicksand', sans-serif;
   border: 2px solid var(--vatican-yellow);
