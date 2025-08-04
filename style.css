@@ -727,3 +727,17 @@ body.focus-mode #versiculos-marcados,
 body.focus-mode footer {    
   display: none !important;
 }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust:    100%;
+  -ms-text-size-adjust:     100%;
+}
+
+footer#rodape p {
+  font-size: clamp(15px, 2.5vw, 15px);
+  line-height: 1.0;
+  word-break: break-word;
+  hyphens: auto;
+  margin: 0 0 0.1em;
+}

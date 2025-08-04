@@ -463,14 +463,8 @@ const citacoes = [
   "\"O amor é paciente, o amor é bondoso. Não inveja, não se vangloria, não se orgulha. Não maltrata, não procura seus interesses, não se ira facilmente, não guarda rancor. O amor não se alegra com a injustiça, mas se alegra com a verdade. Tudo sofre, tudo crê, tudo espera, tudo suporta.\" — 1 Coríntios 13:4-7",
   "\"Então Pedro aproximou-se de Jesus e perguntou: 'Senhor, quantas vezes deverei perdoar a meu irmão quando ele pecar contra mim? Até sete vezes?' Jesus respondeu: 'Eu digo a você: Não até sete, mas até setenta vezes sete.'\" — Mateus 18:21-22"
 ];
-  document.addEventListener("DOMContentLoaded", () => {
-    const el = document.getElementById("citacao-biblica");
-    if (!el || citacoes.length === 0) return;
-
-    const index = Math.floor(Math.random() * citacoes.length);
-    el.textContent = citacoes[index];
-  });
- // está em itálico por causa do <em> no HTML
+document.getElementById("citacao-biblica").innerHTML =
+  `<em><strong>${citacoes[Math.floor(Math.random() * citacoes.length)]}</strong></em>`; // está em itálico por causa do <em> no HTML
 
   // impressão 
 document.getElementById("btn-imprimir").addEventListener("click", () => {
@@ -577,3 +571,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.toggle("focus-mode");
   });
 });
+
+//document.getElementById("citacao-biblica").innerHTML =
+//  `<em><strong>${citacoes[Math.floor(Math.random() * citacoes.length)]}</strong></em>`; // está em itálico por causa do <em> no HTML
+
+//document.addEventListener("DOMContentLoaded", () => {
+   //const el = document.getElementById("citacao-biblica");
+   // if (!el || citacoes.length === 0) return;
+
+   // const index = Math.floor(Math.random() * citacoes.length);
+   // el.textContent = citacoes[index];
+  //});
