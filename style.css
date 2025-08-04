@@ -502,21 +502,21 @@ body.night .versiculo-card.principio {
 
 /* Rodapé */
 .rodape {
-    background-color: #d6d6d661;
-    color: var(--vatican-yellow);
-    font-family: 'Quicksand', sans-serif;
-    border: 2px solid var(--vatican-yellow);
-    border-radius: var(--border-radius-main);
-    padding: 10px;
-    text-align: center;
-    bottom: 0;
-    width: 100%;
-    border-radius: 5px;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #d6d6a6  /* fundo claro semi-transparente */;
+  color: var(--vatican-yellow);
+  font-family: 'Quicksand', sans-serif;
+  border: 2px solid var(--vatican-yellow);
+  border-radius: var(--border-radius-main);
+  padding: 1rem;
+  text-align: center;
 }
 
 body.night .rodape {
   background-color: #1e1e1e;
-  color:var(--vatican-yellow);
+  /* mantém a mesma cor de texto */
 }
 
 .rodape a {
@@ -524,6 +524,7 @@ body.night .rodape {
   font-weight: bold;
   text-decoration: none;
 }
+
 
 /* ========= RESPONSIVIDADE ========= */
 
@@ -606,11 +607,12 @@ body.night .rodape {
     font-size: 0.75rem;
     padding: 4px 8px;
   }
-  .rodape {
-    font-size: 0.8rem;
-    padding: 10px 0;
+   .rodape {
+    font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+    padding: 0.5rem 0;
   }
 }
+
 
 @media (max-width: 1200px) {
   .header-controls .logout-btn {
@@ -722,6 +724,6 @@ body.focus-mode .busca-verse,
 body.focus-mode .marcacao-box,
 body.focus-mode #ver-marcados-btn,
 body.focus-mode #versiculos-marcados,
-body.focus-mode footer {    /* ou #footer / .footer, conforme seu markup */
+body.focus-mode footer {    
   display: none !important;
 }

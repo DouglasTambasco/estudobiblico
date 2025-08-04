@@ -1,4 +1,4 @@
-// 🔥 Firebase setup
+// Firebase setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
 import { getFirestore, collection, query, where, getDocs, setDoc, updateDoc, deleteDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
@@ -18,7 +18,7 @@ const auth = getAuth(app);
 const db   = getFirestore(app);
 let marcacoesSelecionadas = [];
 
-// 🎯 Elementos fixos
+// Elementos fixos
 const authMsg     = document.getElementById("auth-message");
 const loginBtn    = document.getElementById("login-btn");
 const cadastroBtn = document.getElementById("cadastro-btn");
@@ -29,7 +29,7 @@ if (localStorage.getItem("modoEscuro") === "on") {
   document.body.classList.add("night");
 }
 
-// 👤 Login
+// Login
 loginBtn.addEventListener("click", async () => {
   authMsg.textContent = "";
   const email = document.getElementById("login-email").value.trim();
@@ -42,7 +42,7 @@ loginBtn.addEventListener("click", async () => {
   }
 });
 
-// 🆕 Cadastro
+// Cadastro
 cadastroBtn.addEventListener("click", async () => {
   authMsg.textContent = "";
   const nome  = document.getElementById("cadastro-nome").value.trim();
@@ -73,7 +73,7 @@ document.addEventListener("click", e => {
   btn.textContent = isText ? "👁️" : "🙈";
 });
 
-  // ⏎ Enter para login
+  // Enter para login
   ["login-email", "login-senha"].forEach(id => {
     const campo = document.getElementById(id);
     campo.addEventListener("keydown", e => {
@@ -84,7 +84,7 @@ document.addEventListener("click", e => {
     });
   });
 
-  // ⏎ Enter para cadastro
+  //  Enter para cadastro
   ["cadastro-nome", "cadastro-email", "cadastro-senha"].forEach(id => {
     const campo = document.getElementById(id);
     campo.addEventListener("keydown", e => {
@@ -96,23 +96,23 @@ document.addEventListener("click", e => {
   });
 });
 
-// 🔄 Sessão ativa
+// Sessão ativa
 onAuthStateChanged(auth, user => {
   if (user) initUser(user);
 });
 
-// 🚪 Logout
+// Logout
 logoutBtn.addEventListener("click", () => {
   signOut(auth).then(() => location.reload());
 });
 
-// 🌗 Alternar tema (com salvamento)
+// Alternar tema (com salvamento)
 themeBtn.addEventListener("click", () => {
   const nightMode = document.body.classList.toggle("night");
   localStorage.setItem("modoEscuro", nightMode ? "on" : "off");
 });
 
-// 🎉 Inicialização pós-login
+// Inicialização pós-login
 function initUser(user) {
   document.getElementById("saudacao").innerHTML =
     `<img src="https://cdn-icons-png.flaticon.com/128/2600/2600620.png"
@@ -125,7 +125,7 @@ function initUser(user) {
   logoutBtn.classList.remove("hidden");
 }
 
-// 📖 Buscar versículos
+// Buscar versículos
 document.getElementById("buscar-btn").addEventListener("click", async () => {
   const livro = document.getElementById("livro").value.trim().toLowerCase();
   const cap   = document.getElementById("capitulo").value.trim();
@@ -143,7 +143,7 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
     const res   = await fetch(`https://bible-api.com/${livro}+${cap}?translation=almeida`);
     const dados = await res.json();
 
-    // MODO FOCO: mostrar/esconder botão 
+  // MODO FOCO: mostrar/esconder botão 
     const focusBtn = document.getElementById("focus-toggle");
     if (dados.verses && dados.verses.length > 0) {
       focusBtn.classList.remove("hidden");
@@ -205,7 +205,7 @@ div.appendChild(row);
   }
 });
 
-// 💾 Salvar marcações agrupadas
+// Salvar marcações agrupadas
 document.getElementById("salvar-todos").addEventListener("click", async () => {
   const tipo   = document.getElementById("tipo-marcacao").value;
   const coment = document.getElementById("comentario-geral").value.trim();
@@ -246,7 +246,7 @@ document.getElementById("salvar-todos").addEventListener("click", async () => {
   }
 });
 
-// 📂 Exibir grupos de marcações (com filtros dinâmicos)
+// Exibir grupos de marcações (com filtros dinâmicos)
 async function exibirGruposMarcacoes() {
   const user      = auth.currentUser;
   const tipoF     = document.getElementById("filtro-marcacao").value;
@@ -280,7 +280,7 @@ const snap = await getDocs(q);
     return;
   }
 
-  // 🔄 Gerar filtro de livros dinamicamente
+  // Gerar filtro de livros dinamicamente
   const livrosUnicos = new Set();
   snap.docs.forEach(docSnap => {
     docSnap.data().versiculos.forEach(v => {
@@ -297,7 +297,7 @@ const snap = await getDocs(q);
     filtroLivro.appendChild(opt);
   });
 
-  // 🔍 Aplicar filtro por livro
+  // Aplicar filtro por livro
   let grupos = snap.docs;
   if (livroF) {
     grupos = grupos.filter(docSnap =>
@@ -431,7 +431,7 @@ const snap = await getDocs(q);
   });
 }
 
-// 📑 Botões e filtros
+// Botões e filtros
 document.getElementById("ver-marcados-btn").addEventListener("click", () => {
   const area = document.getElementById("versiculos-marcados");
   area.classList.toggle("hidden");
@@ -440,7 +440,7 @@ document.getElementById("ver-marcados-btn").addEventListener("click", () => {
 document.getElementById("filtro-marcacao").addEventListener("change", exibirGruposMarcacoes);
 document.getElementById("filtro-livro").addEventListener("change", exibirGruposMarcacoes);
 
-// 📜 Citação bíblica aleatória
+// Citação bíblica aleatória
 const citacoes = [
   "\"Porque Deus tanto amou o mundo que deu o seu Filho Unigênito, para que todo o que nele crer não pereça, mas tenha a vida eterna.\" — João 3:16",
   "\"Portanto, vão e façam discípulos de todas as nações, batizando-os em nome do Pai e do Filho e do Espírito Santo, ensinando-os a obedecer a tudo o que eu lhes ordenei. E eu estarei sempre com vocês, até o fim dos tempos.\" — Mateus 28:19-20",
@@ -466,7 +466,7 @@ const citacoes = [
 document.getElementById("citacao-biblica").innerHTML =
   `<em><strong>${citacoes[Math.floor(Math.random() * citacoes.length)]}</strong></em>`; // está em itálico por causa do <em> no HTML
 
-  //impressão 
+  // impressão 
 document.getElementById("btn-imprimir").addEventListener("click", () => {
   const area = document.getElementById("lista-marcados");
   if (area.innerHTML.trim() === "") {
