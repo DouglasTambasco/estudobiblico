@@ -678,7 +678,7 @@ body.focus-mode footer {
     padding: 16px 8px 10px;
   }
   .header-center h1 {
-    font-size: 1.2rem;
+    font-size: 1.9rem;
     text-align: left;
   }
   .login-box,
@@ -702,24 +702,48 @@ body.focus-mode footer {
   }
 }
 
-@media (max-width: 400px) {
+/* Pequenos dispositivos até 400px */
+
+/* Pequenos dispositivos até 500px */
+@media (max-width: 500px) {
+  /* Título do header */
   .header-center h1 {
-    font-size: 1.2rem; /* aumentei de 1rem para 1.2rem */
+    font-size: clamp(1.8rem, 5vw, 2.2rem);
   }
 
+  /* Ícones do header */
   .header-icon-left,
   .header-icon-right {
-    width: 32px;   /* antes 24px */
-    height: 32px;
+    width: 40px;
+    height: 40px;
   }
 
+  /* Botões gerais e inputs */
+  input,
+  select,
+  textarea,
+  button {
+    font-size: clamp(1rem, 3.5vw, 1.25rem);
+    padding: 0.75rem 1rem;
+  }
+
+  /* Badge */
   .badge {
-    font-size: 0.85rem;  /* era 0.75rem */
-    padding: 6px 10px;   /* ficou mais espaçoso */
+    font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+    padding: 0.4rem 0.8rem;
   }
 
+  /* Rodapé */
   .rodape {
-    font-size: clamp(0.85rem, 3vw, 1rem); /* antes 0.7~0.8rem */
+    font-size: clamp(0.8rem, 2.2vw, 1rem);
     padding: 0.75rem 0;
+  }
+
+  /* Garantir área de toque mínima */
+  button,
+  .header-icon-left,
+  .header-icon-right {
+    min-width: 44px;
+    min-height: 44px;
   }
 }
