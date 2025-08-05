@@ -37,7 +37,7 @@ body.night {
 }
 
 .container {
-  max-width: 960px;
+  max-width: 1200px;
   margin: 20px auto;
   padding: 0 20px;
 }
@@ -127,7 +127,7 @@ body.night .theme-toggle-square {
 }
 
 .logout-btn:hover {
-  background: #e2b90f;
+  background: #e1c967;
 }
 
 /* Badge saudação */
@@ -150,8 +150,8 @@ body.night .badge {
 }
 
 .saudacao-icon {
-  width: 20px;
-  height: 18px;
+  width: 25px;
+  height: 25px;
 }
 
 /* Header saudação */
@@ -208,6 +208,7 @@ label {
   align-items: center;
   gap: 8px;
 }
+
 .toggle-senha {
   width: auto;
   padding: 0 8px;
@@ -245,12 +246,16 @@ textarea:focus {
   outline: 2px solid var(--vatican-yellow);
 }
 
-button {
+button { /* Botão imprimir está aqui */
   background: var(--vatican-yellow);
   color: var(--text-dark);
   border: none;
   cursor: pointer;
   transition: background 0.3s;
+}
+
+button:hover {
+  background: #e1c967;
 }
 
 .busca-verse {
@@ -297,6 +302,10 @@ button {
   height: 20px;
 }
 
+#buscar-btn:hover {
+  background-color: #e1c967;
+}
+
 #ver-marcados-btn {
   display: inline-flex;           /* flex no botão */
   align-items: center;            /* verticalmente centralizado */
@@ -312,6 +321,10 @@ button {
 #ver-marcados-btn .btn-icon {
   width: 20px;
   height: 20px;
+}
+
+#ver-marcados-btn:hover {
+  background-color: #e1c967;
 }
 
 /* Marcação */

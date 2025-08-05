@@ -332,13 +332,11 @@ const snap = await getDocs(q);
     // IMPRESSÃO (categoria e data)
     const header = document.createElement("div");
     header.innerHTML = `
-      <p><strong>Categoria:</strong></p>
-      <select class="group-tipo" disabled>
+      <p><strong>Categoria: <select class="group-tipo" disabled></strong></p>
         <option value="promessa"  ${g.tipo==="promessa"  ? "selected":""}>Promessa</option>
         <option value="ordem"     ${g.tipo==="ordem"     ? "selected":""}>Ordem</option>
         <option value="principio" ${g.tipo==="principio" ? "selected":""}>Princípio Eterno</option>
       </select>
-      <p style="margin-top:8px;"><strong>Data:</strong> ${g.timestamp?.toDate().toLocaleDateString()||"-"}</p>
     `;
     header.style.marginBottom = "12px";
 
