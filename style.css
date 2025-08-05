@@ -702,13 +702,11 @@ body.focus-mode footer {
   }
 }
 
-/* Pequenos dispositivos até 400px */
-
 /* Pequenos dispositivos até 500px */
 @media (max-width: 500px) {
   /* Título do header */
   .header-center h1 {
-    font-size: clamp(1.8rem, 5vw, 2.2rem);
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
   }
 
   /* Ícones do header */
