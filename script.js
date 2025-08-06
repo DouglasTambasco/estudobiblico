@@ -569,14 +569,3 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.toggle("focus-mode");
   });
 });
-
-//document.getElementById("citacao-biblica").innerHTML =
-//  `<em><strong>${citacoes[Math.floor(Math.random() * citacoes.length)]}</strong></em>`; // está em itálico por causa do <em> no HTML
-
-//document.addEventListener("DOMContentLoaded", () => {
-   //const el = document.getElementById("citacao-biblica");
-   // if (!el || citacoes.length === 0) return;
-
-   // const index = Math.floor(Math.random() * citacoes.length);
-   // el.textContent = citacoes[index];
-  //});
