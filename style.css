@@ -676,11 +676,19 @@ body.focus-mode footer {
   }
 }
 
-/* Mobile até 700px */
-@media (max-width: 700px) {
+/* Mobile até 750px */
+@media (max-width: 750px) {
   .container {
     padding: 0 8px;
   }
+
+  h2 {
+  color: var(--vatican-yellow);
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 1rem;
+}
+
   .header-estudo {
     padding: 16px 8px 10px;
   }
