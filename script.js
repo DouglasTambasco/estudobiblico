@@ -314,7 +314,6 @@ const snap = await getDocs(q);
     );
   }
 
-  // ordenar alfabeticamente pelo primeiro versículo
 // ordenar grupos por livro, depois por capítulo e versículo crescentes
 grupos.sort((a, b) => {
   // função auxiliar que retorna o menor versículo de cada grupo
