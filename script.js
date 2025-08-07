@@ -315,11 +315,35 @@ const snap = await getDocs(q);
   }
 
   // ordenar alfabeticamente pelo primeiro versículo
-  grupos.sort((a, b) => {
-    const livroA = a.data().versiculos[0]?.livro.toLowerCase() || "";
-    const livroB = b.data().versiculos[0]?.livro.toLowerCase() || "";
-    return livroA.localeCompare(livroB);
-  });
+// ordenar grupos por livro, depois por capítulo e versículo crescentes
+grupos.sort((a, b) => {
+  // função auxiliar que retorna o menor versículo de cada grupo
+  function primeiroVerso(docSnap) {
+    return docSnap
+      .data()
+      .versiculos
+      .map(v => ({
+        livro:    v.livro,
+        cap:      parseInt(v.capitulo.toString().trim(), 10) || 0,
+        num:      parseInt(v.numero.toString().trim(), 10)   || 0
+      }))
+      .sort((x, y) =>
+        x.livro.localeCompare(y.livro) ||
+        x.cap - y.cap ||
+        x.num - y.num
+      )[0];
+  }
+
+  const vA = primeiroVerso(a);
+  const vB = primeiroVerso(b);
+
+  // comparar livro (alfabético), depois capítulo e versículo
+  return (
+    vA.livro.localeCompare(vB.livro) ||
+    vA.cap - vB.cap ||
+    vA.num - vB.num
+  );
+});
 
   let ultimoLivro = "";
 
