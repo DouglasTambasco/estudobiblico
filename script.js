@@ -206,45 +206,54 @@ div.appendChild(row);
 });
 
 // Salvar marcações agrupadas
-document.getElementById("salvar-todos").addEventListener("click", async () => {
-  const tipo   = document.getElementById("tipo-marcacao").value;
-  const coment = document.getElementById("comentario-geral").value.trim();
-  const user   = auth.currentUser;
+document
+  .getElementById("salvar-todos")
+  .addEventListener("click", async () => {
+    const tipo   = document.getElementById("tipo-marcacao").value;
+    const coment = document.getElementById("comentario-geral").value.trim();
+    const user   = auth.currentUser;
 
-  if (!user)      return alert("Faça login para continuar.");
-  if (!tipo)      return alert("Selecione uma categoria.");
-  if (!marcacoesSelecionadas.length)
-    return alert("Nenhum versículo selecionado.");
+    if (!user)   return alert("Faça login para continuar.");
+    if (!tipo)   return alert("Selecione uma categoria.");
+    if (!marcacoesSelecionadas.length)
+                  return alert("Nenhum versículo selecionado.");
 
-  try {
-    const versiculosArray = marcacoesSelecionadas.map(v => ({
-      livro:    v.livro,
-      capitulo: v.capitulo,
-      numero:   v.numero,
-      texto:    v.texto
-    }));
+    try {
+      // 1. Cria a referência (auto-ID)
+      const refMarc = doc(collection(db, "marcacoes_grupadas"));
 
-    await setDoc(
-      doc(collection(db, "marcacoes_grupadas")),
-      {
+      // 2. Persiste no Firestore
+      await setDoc(refMarc, {
         uid:        user.uid,
         tipo,
         comentario: coment,
-        versiculos: versiculosArray,
-        timestamp:  serverTimestamp(),
-      }
-    );
+        versiculos: marcacoesSelecionadas.map(v => ({
+          livro:    v.livro,
+          capitulo: v.capitulo,
+          numero:   v.numero,
+          texto:    v.texto
+        })),
+        favorito:   false,
+        timestamp:  serverTimestamp()
+      });
 
-    alert("Versículos salvos em grupo!");
-    document.getElementById("tipo-marcacao").value    = "";
-    document.getElementById("comentario-geral").value = "";
-    marcacoesSelecionadas = [];
-    document.getElementById("marcacao-box").classList.add("hidden");
-  } catch (e) {
-    console.error(e);
-    alert("Erro ao salvar os versículos agrupados.");
-  }
-});
+      // 3. Limpa formulário e estado
+      document.getElementById("tipo-marcacao").value    = "";
+      document.getElementById("comentario-geral").value = "";
+      marcacoesSelecionadas = [];
+      document.getElementById("marcacao-box").classList.add("hidden");
+
+      // 4. Exibe imediatamente o painel de “Meus Versículos”
+      const marcadosArea = document.getElementById("versiculos-marcados");
+      marcadosArea.classList.remove("hidden");
+
+      // 5. Re-renderiza (inclui o novo grupo)
+      await exibirGruposMarcacoes();
+    } catch (e) {
+      console.error(e);
+      alert("Erro ao salvar os versículos agrupados.");
+    }
+  });
 
 // Exibir grupos de marcações (com filtros dinâmicos)
 async function exibirGruposMarcacoes() {
