@@ -1,7 +1,8 @@
 // Firebase setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut, sendEmailVerification, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
 import { getFirestore, collection, query, where, getDocs, setDoc, updateDoc, deleteDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDSy_V62ZUXK-2E1H05uTbvLvM9Q6D_Lng",
@@ -34,12 +35,17 @@ loginBtn.addEventListener("click", async () => {
   authMsg.textContent = "";
   const email = document.getElementById("login-email").value.trim();
   const senha = document.getElementById("login-senha").value.trim();
-  try {
-    const cred = await signInWithEmailAndPassword(auth, email, senha);
-    initUser(cred.user);
-  } catch (e) {
-    authMsg.textContent = "Erro no login: " + e.message;
+try {
+  const cred = await signInWithEmailAndPassword(auth, email, senha);
+  if (!cred.user.emailVerified) {
+    await signOut(auth);
+    authMsg.textContent = "E-mail não verificado. Confira sua caixa de entrada.";
+    return;
   }
+  initUser(cred.user);
+} catch (e) {
+  authMsg.textContent = "Erro no login: " + e.message;
+}
 });
 
 // Cadastro
@@ -49,14 +55,31 @@ cadastroBtn.addEventListener("click", async () => {
   const email = document.getElementById("cadastro-email").value.trim();
   const senha = document.getElementById("cadastro-senha").value.trim();
   if (!nome) return authMsg.textContent = "Por favor, insira seu nome.";
-  try {
-    const cred = await createUserWithEmailAndPassword(auth, email, senha);
-    await updateProfile(cred.user, { displayName: nome });
-    initUser(cred.user);
-  } catch (e) {
-    authMsg.textContent = "Erro no cadastro: " + e.message;
-  }
+try {
+  const cred = await createUserWithEmailAndPassword(auth, email, senha);
+  await updateProfile(cred.user, { displayName: nome });
+  // Envia e-mail de verificação
+  await sendEmailVerification(cred.user);
+  authMsg.textContent = "Cadastro realizado! Verifique seu e-mail antes de fazer login.";
+  // Opcional: deslogar automaticamente para impedir acesso antes de confirmar
+  await signOut(auth);
+} catch (e) {
+  authMsg.textContent = "Erro no cadastro: " + e.message;
+}
 });
+
+const googleBtn = document.getElementById("login-google");
+if (googleBtn) {
+  googleBtn.addEventListener("click", async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      initUser(result.user);
+    } catch (err) {
+      authMsg.textContent = "Erro no login com Google: " + err.message;
+    }
+  });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
 
