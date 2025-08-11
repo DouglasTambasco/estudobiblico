@@ -31,26 +31,7 @@ const logoutBtn = document.getElementById("logout-btn");
 const themeBtn = document.getElementById("theme-toggle-square");
 if (localStorage.getItem("modoEscuro") === "on") document.body.classList.add("night");
 
-// Login
-loginBtn.addEventListener("click", async () => {
-  authMsg.textContent = "";
-  const email = document.getElementById("login-email").value.trim();
-  const senha = document.getElementById("login-senha").value.trim();
-  if (!email || !senha) return authMsg.textContent = "Informe e-mail e senha.";
-  try {
-    const cred = await signInWithEmailAndPassword(auth, email, senha);
-    await cred.user.reload();
-    // Não alerta aqui — deixa para o onAuthStateChanged
-    if (!cred.user.emailVerified) {
-      await signOut(auth);
-      return;
-    }
-  } catch (e) {
-    authMsg.textContent = "Erro no login: " + (e.message || e);
-  }
-});
-
-// Validação de e-mail
+// Validação de e-mail via API
 async function isValidEmailAPI(email) {
   const apiKey = "0737d275d3bc4309b26d6c9fbb119f19";
   const url = `https://emailvalidation.abstractapi.com/v1/?api_key=${apiKey}&email=${encodeURIComponent(email)}`;
@@ -81,7 +62,7 @@ cadastroBtn.addEventListener("click", async () => {
   let valido = await isValidEmailAPI(email);
   if (valido === null) valido = isValidEmailFallback(email);
   if (!valido) {
-    alert("E-mail inválido ou temporário."); // agora é alert
+    alert("E-mail inválido ou temporário.");
     return;
   }
   try {
@@ -89,10 +70,31 @@ cadastroBtn.addEventListener("click", async () => {
     await updateProfile(cred.user, { displayName: nome });
     await cred.user.reload();
     await sendEmailVerification(cred.user);
+
+    alert("Conta criada com sucesso! Foi enviado um e-mail para verificação. Confira sua caixa de entrada.");
     authMsg.textContent = "Cadastro realizado! Verifique seu e-mail.";
-    initUser(auth.currentUser);
+
+    await signOut(auth); // força login só após verificação
   } catch (e) {
     authMsg.textContent = "Erro no cadastro: " + (e.message || e);
+  }
+});
+
+// Login
+loginBtn.addEventListener("click", async () => {
+  authMsg.textContent = "";
+  const email = document.getElementById("login-email").value.trim();
+  const senha = document.getElementById("login-senha").value.trim();
+  if (!email || !senha) return authMsg.textContent = "Informe e-mail e senha.";
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, senha);
+    await cred.user.reload();
+    if (!cred.user.emailVerified) {
+      await signOut(auth);
+      return;
+    }
+  } catch (e) {
+    authMsg.textContent = "Erro no login: " + (e.message || e);
   }
 });
 
@@ -102,8 +104,8 @@ if (googleBtn) {
   googleBtn.addEventListener("click", async () => {
     try {
       const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      await result.user.reload();
+      await signInWithPopup(auth, provider);
+      // onAuthStateChanged vai rodar, e se o e-mail não estiver verificado, vai barrar
     } catch (err) {
       authMsg.textContent = "Erro no login com Google: " + (err.message || err);
     }
@@ -122,7 +124,7 @@ if (googleBtn) {
   });
 });
 
-// Sessão ativa
+// Sessão ativa com checagem única
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     await user.reload();
