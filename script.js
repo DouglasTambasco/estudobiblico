@@ -96,6 +96,76 @@ document.addEventListener("click", e => {
   btn.textContent = isText ? "👁️" : "🙈";
 });
 
+// Função usando AbstractAPI
+async function isValidEmailAPI(email) {
+  const apiKey = "0737d275d3bc4309b26d6c9fbb119f19"; // coloque sua API Key da AbstractAPI aqui
+  const url = `https://emailvalidation.abstractapi.com/v1/?api_key=${apiKey}&email=${encodeURIComponent(email)}`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    return (
+      data.is_valid_format.value === true &&
+      data.is_disposable_email.value === false &&
+      data.deliverability === "DELIVERABLE"
+    );
+  } catch (e) {
+    console.error("Erro na API:", e);
+    return null; // sinaliza que houve falha na API
+  }
+}
+
+// Fallback simples (lista curta de domínios bloqueados)
+function isValidEmailFallback(email) {
+  const bloqueados = [
+    "mailinator.com",
+    "yopmail.com",
+    "tempmail.com",
+    "guerrillamail.com"
+  ];
+  const dominio = email.split("@")[1]?.toLowerCase();
+  return dominio && !bloqueados.includes(dominio);
+}
+
+// Listener do botão de cadastro
+cadastroBtn.addEventListener("click", async () => {
+  authMsg.textContent = "";
+
+  const nome  = document.getElementById("cadastro-nome").value.trim();
+  const email = document.getElementById("cadastro-email").value.trim();
+  const senha = document.getElementById("cadastro-senha").value.trim();
+
+  if (!nome) {
+    authMsg.textContent = "Por favor, insira seu nome.";
+    return;
+  }
+
+  authMsg.textContent = "Validando e-mail...";
+  let valido = await isValidEmailAPI(email);
+
+  // Se API falhar, usa fallback local
+  if (valido === null) {
+    console.warn("Usando fallback local para validar e-mail...");
+    valido = isValidEmailFallback(email);
+  }
+
+  if (!valido) {
+    authMsg.textContent = "E-mail inválido ou temporário. Use um e-mail real.";
+    return;
+  }
+
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, senha);
+    await updateProfile(cred.user, { displayName: nome });
+    await sendEmailVerification(cred.user);
+    authMsg.textContent = "Cadastro realizado! Verifique seu e-mail antes de fazer login.";
+    await signOut(auth);
+  } catch (e) {
+    authMsg.textContent = "Erro no cadastro: " + e.message;
+  }
+});
+
   // Enter para login
   ["login-email", "login-senha"].forEach(id => {
     const campo = document.getElementById(id);
