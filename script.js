@@ -39,13 +39,12 @@ loginBtn.addEventListener("click", async () => {
   if (!email || !senha) return authMsg.textContent = "Informe e-mail e senha.";
   try {
     const cred = await signInWithEmailAndPassword(auth, email, senha);
-    await cred.user.reload(); // garante info atualizada
+    await cred.user.reload();
+    // Não alerta aqui — deixa para o onAuthStateChanged
     if (!cred.user.emailVerified) {
       await signOut(auth);
-      alert("E-mail não verificado. Confira sua caixa de entrada.");
       return;
     }
-    // Se verificado, o onAuthStateChanged fará o resto
   } catch (e) {
     authMsg.textContent = "Erro no login: " + (e.message || e);
   }
@@ -81,7 +80,10 @@ cadastroBtn.addEventListener("click", async () => {
   authMsg.textContent = "Validando e-mail...";
   let valido = await isValidEmailAPI(email);
   if (valido === null) valido = isValidEmailFallback(email);
-  if (!valido) return authMsg.textContent = "E-mail inválido ou temporário.";
+  if (!valido) {
+    alert("E-mail inválido ou temporário."); // agora é alert
+    return;
+  }
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, senha);
     await updateProfile(cred.user, { displayName: nome });
@@ -124,6 +126,11 @@ if (googleBtn) {
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     await user.reload();
+    if (!user.emailVerified) {
+      alert("E-mail não verificado. Confira sua caixa de entrada.");
+      await signOut(auth);
+      return;
+    }
     initUser(user);
   } else {
     document.getElementById("saudacao").classList.add("hidden");
