@@ -2,13 +2,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
 import {
   getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile,
-  onAuthStateChanged, signOut, sendEmailVerification, GoogleAuthProvider, signInWithPopup
+  onAuthStateChanged, signOut, sendEmailVerification, GoogleAuthProvider, signInWithPopup,
+  sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
 import {
   getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, getDocs, query, where, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
-import { fetchSignInMethodsForEmail, sendPasswordResetEmail } 
-  from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDSy_V62ZUXK-2E1H05uTbvLvM9Q6D_Lng",
@@ -142,32 +141,6 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("conteudo").classList.add("hidden");
     logoutBtn.classList.add("hidden");
   }
-  // Recuperação de senha
-const resetSenhaBtn = document.getElementById("reset-senha-btn");
-if (resetSenhaBtn) {
-  resetSenhaBtn.addEventListener("click", async () => {
-    authMsg.textContent = "";
-    const email = prompt("Digite o e-mail cadastrado para redefinir a senha:");
-    if (!email) return; // cancelou
-
-    try {
-      // Verifica se o e-mail existe no Firebase
-      const methods = await fetchSignInMethodsForEmail(auth, email);
-      if (!methods.length) {
-        authMsg.textContent = "Este e-mail não está cadastrado.";
-        return;
-      }
-
-      await sendPasswordResetEmail(auth, email);
-      authMsg.style.color = "green";
-      authMsg.textContent = "Um link para redefinir a senha foi enviado para seu e-mail.";
-    } catch (e) {
-      console.error(e);
-      authMsg.style.color = "red";
-      authMsg.textContent = "Erro ao enviar redefinição: " + (e.message || e);
-    }
-  });
-}
 });
 
 // Logout
@@ -496,3 +469,44 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// Recuperação de senha (fora do onAuthStateChanged)
+const resetSenhaBtn = document.getElementById("reset-senha-btn");
+
+if (resetSenhaBtn) {
+  resetSenhaBtn.addEventListener("click", async () => {
+    authMsg.textContent = "";
+    authMsg.style.color = "";
+
+    let email = prompt("Digite o e-mail cadastrado para redefinir a senha:");
+    if (!email) return;
+
+    email = email.trim().toLowerCase();
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      authMsg.style.color = "green";
+      authMsg.textContent = "Enviamos um link para redefinir a senha. Veja sua caixa de entrada e o spam.";
+    } catch (e) {
+      console.error("Erro reset:", e);
+      const code = e.code || "";
+      authMsg.style.color = "red";
+      switch (code) {
+        case "auth/user-not-found":
+          authMsg.textContent = "Este e-mail não está cadastrado ou a conta usa login pelo Google.";
+          break;
+        case "auth/invalid-email":
+          authMsg.textContent = "E-mail inválido. Verifique e tente novamente.";
+          break;
+        case "auth/too-many-requests":
+          authMsg.textContent = "Muitas tentativas. Tente novamente em alguns minutos.";
+          break;
+        case "auth/network-request-failed":
+          authMsg.textContent = "Falha de rede. Verifique sua conexão.";
+          break;
+        default:
+          authMsg.textContent = "Não foi possível enviar o e-mail de redefinição. Tente novamente mais tarde.";
+      }
+    }
+  });
+}
