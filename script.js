@@ -470,42 +470,48 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Recuperação de senha (fora do onAuthStateChanged)
+// Reset de senha sem pré-checagem (compatível com proteção de enumeração)
 const resetSenhaBtn = document.getElementById("reset-senha-btn");
 
 if (resetSenhaBtn) {
   resetSenhaBtn.addEventListener("click", async () => {
-    authMsg.textContent = "";
-    authMsg.style.color = "";
-
+    authMsg.textContent = ""; authMsg.style.color = "";
     let email = prompt("Digite o e-mail cadastrado para redefinir a senha:");
     if (!email) return;
-
     email = email.trim().toLowerCase();
 
     try {
-      await sendPasswordResetEmail(auth, email);
+      await sendPasswordResetEmail(auth, email); // envia mesmo se proteção estiver ativa
       authMsg.style.color = "green";
-      authMsg.textContent = "Enviamos um link para redefinir a senha. Veja sua caixa de entrada e o spam.";
+      authMsg.textContent = "Se o e-mail estiver cadastrado, você receberá um link para redefinir a senha.";
     } catch (e) {
-      console.error("Erro reset:", e);
+      console.error("[RESET] Erro:", e);
       const code = e.code || "";
-      authMsg.style.color = "red";
       switch (code) {
-        case "auth/user-not-found":
-          authMsg.textContent = "Este e-mail não está cadastrado ou a conta usa login pelo Google.";
-          break;
         case "auth/invalid-email":
+          authMsg.style.color = "red";
           authMsg.textContent = "E-mail inválido. Verifique e tente novamente.";
           break;
+        case "auth/operation-not-allowed":
+          authMsg.style.color = "red";
+          authMsg.textContent = "Login por e-mail/senha está desativado no projeto. Ative em Authentication > Sign-in method.";
+          break;
         case "auth/too-many-requests":
+          authMsg.style.color = "red";
           authMsg.textContent = "Muitas tentativas. Tente novamente em alguns minutos.";
           break;
         case "auth/network-request-failed":
+          authMsg.style.color = "red";
           authMsg.textContent = "Falha de rede. Verifique sua conexão.";
           break;
+        case "auth/user-not-found":
+          // Com proteção de enumeração, trate como sucesso para não vazar existência de conta
+          authMsg.style.color = "green";
+          authMsg.textContent = "Se o e-mail estiver cadastrado, você receberá um link para redefinir a senha.";
+          break;
         default:
-          authMsg.textContent = "Não foi possível enviar o e-mail de redefinição. Tente novamente mais tarde.";
+          authMsg.style.color = "red";
+          authMsg.textContent = "Não foi possível enviar o e-mail de redefinição agora. Tente mais tarde.";
       }
     }
   });
