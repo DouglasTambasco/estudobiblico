@@ -7,6 +7,8 @@ import {
 import {
   getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, getDocs, query, where, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { fetchSignInMethodsForEmail, sendPasswordResetEmail } 
+  from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDSy_V62ZUXK-2E1H05uTbvLvM9Q6D_Lng",
@@ -140,6 +142,32 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("conteudo").classList.add("hidden");
     logoutBtn.classList.add("hidden");
   }
+  // Recuperação de senha
+const resetSenhaBtn = document.getElementById("reset-senha-btn");
+if (resetSenhaBtn) {
+  resetSenhaBtn.addEventListener("click", async () => {
+    authMsg.textContent = "";
+    const email = prompt("Digite o e-mail cadastrado para redefinir a senha:");
+    if (!email) return; // cancelou
+
+    try {
+      // Verifica se o e-mail existe no Firebase
+      const methods = await fetchSignInMethodsForEmail(auth, email);
+      if (!methods.length) {
+        authMsg.textContent = "Este e-mail não está cadastrado.";
+        return;
+      }
+
+      await sendPasswordResetEmail(auth, email);
+      authMsg.style.color = "green";
+      authMsg.textContent = "Um link para redefinir a senha foi enviado para seu e-mail.";
+    } catch (e) {
+      console.error(e);
+      authMsg.style.color = "red";
+      authMsg.textContent = "Erro ao enviar redefinição: " + (e.message || e);
+    }
+  });
+}
 });
 
 // Logout
