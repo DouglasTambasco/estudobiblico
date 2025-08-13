@@ -178,24 +178,46 @@ document.querySelectorAll(".toggle-password").forEach(btn => {
   });
 });
 
-let biblia = null;
+// Normalizar texto (ignora acentos e case)
+function normalizar(str) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+// Abreviações completas de todos os livros
+const abreviacoes = {
+  "gn":"genesis","ex":"exodo","lv":"levitico","nm":"numeros","dt":"deuteronomio",
+  "js":"josue","jg":"juizes","rt":"rute","1sm":"1samuel","2sm":"2samuel",
+  "1rs":"1reis","2rs":"2reis","1cr":"1cronicas","2cr":"2cronicas",
+  "ed":"esdras","ne":"neemias","et":"ester","jó":"jo","sl":"salmos",
+  "pv":"provérbios","ec":"eclesiastes","ct":"cantares","is":"isaias",
+  "jr":"jeremias","lm":"lamentacoes","ez":"ezequiel","dn":"daniel",
+  "os":"oseias","jl":"joel","am":"amos","ob":"obadias","jn":"jonas",
+  "mq":"miqueias","na":"naum","hc":"habacuque","sf":"sofeias",
+  "ag":"ageu","zc":"zacarias","ml":"malaquias",
+  "mt":"mateus","mc":"marcos","lc":"lucas","jo":"joao","atos":"atos",
+  "rm":"romanos","1co":"1corintios","2co":"2corintios","gl":"galatas",
+  "ef":"efesios","fp":"filipenses","cl":"colossenses","1ts":"1tessalonicenses",
+  "2ts":"2tessalonicenses","1tm":"1timoteo","2tm":"2timoteo","tt":"tito",
+  "fm":"filemom","hb":"hebreus","tg":"tiago","1pe":"1pedro","2pe":"2pedro",
+  "1jo":"1joao","2jo":"2joao","3jo":"3joao","jd":"judas","ap":"apocalipse"
+};
 
 // Carrega a Bíblia local do arquivo JSON
+let biblia = null;
 async function carregarBiblia() {
   try {
-    const res = await fetch("bibliaAveMaria.json"); // caminho do seu JSON
+    const res = await fetch("bibliaAveMaria.json"); 
     if (!res.ok) throw new Error("Não foi possível carregar o arquivo JSON.");
     biblia = await res.json();
   } catch (e) {
     console.error("Erro ao carregar Bíblia:", e);
   }
 }
-
-// Chama logo que o script inicia
 carregarBiblia();
 
+// Botão de busca
 document.getElementById("buscar-btn").addEventListener("click", async () => {
-  const livro = document.getElementById("livro").value.trim().toLowerCase();
+  const livroInputRaw = document.getElementById("livro").value.trim();
   const cap = parseInt(document.getElementById("capitulo").value.trim());
   const div = document.getElementById("versiculos");
   const box = document.getElementById("marcacao-box");
@@ -205,23 +227,39 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
 
   const user = auth.currentUser;
   if (!user) return alert("Faça login para continuar.");
-  if (!livro || !cap) return alert("Informe livro e capítulo.");
-  if (!biblia) return div.innerHTML = `<p style="color:red;">Biblia ainda não carregada.</p>`;
+  if (!livroInputRaw || !cap) return alert("Informe livro e capítulo.");
+  if (!biblia) return div.innerHTML = `<p style="color:red;">Bíblia ainda não carregada.</p>`;
 
-  // Procurar livro no JSON
-  const livroObj = biblia.antigoTestamento.concat(biblia.novoTestamento || [])
-                    .find(l => l.nome.toLowerCase() === livro);
+  // Procurar livro no JSON considerando normalização e abreviações
+  const todosLivros = biblia.antigoTestamento.concat(biblia.novoTestamento || []);
+  const livroObj = todosLivros.find(l => {
+    const nomeNormalizado = normalizar(l.nome);
+    const inputNormalizado = normalizar(livroInputRaw);
+    return nomeNormalizado === inputNormalizado || (abreviacoes[inputNormalizado] === nomeNormalizado);
+  });
 
-  if (!livroObj) return div.innerHTML = `<p style="color:red;">Não foi possível encontrar ${livro}.</p>`;
+  if (!livroObj) return div.innerHTML = `<p style="color:red;">Não foi possível encontrar ${livroInputRaw}.</p>`;
 
   // Procurar capítulo
   const capObj = livroObj.capitulos.find(c => c.capitulo === cap);
-  if (!capObj) return div.innerHTML = `<p style="color:red;">Não foi possível encontrar ${livro} ${cap}.</p>`;
+  if (!capObj) return div.innerHTML = `<p style="color:red;">Não foi possível encontrar ${livroObj.nome} ${cap}.</p>`;
 
-  // Exibir versículos
+  // Inserir título do livro + capítulo abaixo do botão Modo Foco
+  const tituloCapituloId = "titulo-capitulo";
+  let tituloExistente = document.getElementById(tituloCapituloId);
+  if (tituloExistente) tituloExistente.remove();
+  const titulo = document.createElement("h2");
+  titulo.id = tituloCapituloId;
+  titulo.textContent = `${livroObj.nome} ${cap}`;
+  titulo.style.margin = "10px 0";
+  titulo.style.textAlign = "center";
   const focusBtn = document.getElementById("focus-toggle");
+  focusBtn.insertAdjacentElement("afterend", titulo);
+
+  // Exibir ou esconder botão de foco
   if (capObj.versiculos?.length) focusBtn.classList.remove("hidden"); else focusBtn.classList.add("hidden");
 
+  // Exibir versículos
   capObj.versiculos.forEach(v => {
     const row = document.createElement("div"); row.classList.add("versiculo");
     const chk = document.createElement("input"); chk.type = "checkbox"; chk.classList.add("versiculo-checkbox");
@@ -230,7 +268,7 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
     const content = document.createElement("div"); content.classList.add("versiculo-conteudo"); content.textContent = v.texto;
     row.append(numeroContainer, content); div.appendChild(row);
 
-    const info = { uid: user.uid, livro, capitulo: cap, numero: v.versiculo, texto: v.texto };
+    const info = { uid: user.uid, livro: livroObj.nome, capitulo: cap, numero: v.versiculo, texto: v.texto };
     chk.addEventListener("change", () => {
       if (chk.checked) marcacoesSelecionadas.push(info);
       else marcacoesSelecionadas = marcacoesSelecionadas.filter(x => x.numero !== v.versiculo);
@@ -238,6 +276,7 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
     });
   });
 });
+
 
 // Salvar marcações agrupadas
 document.getElementById("salvar-todos").addEventListener("click", async () => {
