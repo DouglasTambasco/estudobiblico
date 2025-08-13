@@ -75,7 +75,7 @@ cadastroBtn.addEventListener("click", async () => {
     alert("Conta criada com sucesso! Foi enviado um e-mail para verificação. Confira sua caixa de entrada.");
     authMsg.textContent = "Cadastro realizado! Verifique seu e-mail.";
 
-    await signOut(auth); // força login só após verificação
+    await signOut(auth);
   } catch (e) {
     authMsg.textContent = "Erro no cadastro: " + (e.message || e);
   }
@@ -106,7 +106,6 @@ if (googleBtn) {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-      // onAuthStateChanged vai rodar, e se o e-mail não estiver verificado, vai barrar
     } catch (err) {
       authMsg.textContent = "Erro no login com Google: " + (err.message || err);
     }
@@ -125,7 +124,7 @@ if (googleBtn) {
   });
 });
 
-// Sessão ativa com checagem única
+// Sessão ativa
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     await user.reload();
@@ -172,47 +171,72 @@ document.querySelectorAll(".toggle-password").forEach(btn => {
     const input = document.getElementById(targetId);
     if (!input) return;
     if (input.type === "password") {
-      input.type = "text";
-      btn.textContent = "🙈"; // olho fechado
+      input.type = "text"; btn.textContent = "🙈";
     } else {
-      input.type = "password";
-      btn.textContent = "👁️"; // olho aberto
+      input.type = "password"; btn.textContent = "👁️";
     }
   });
 });
 
-// Buscar versículos
+let biblia = null;
+
+// Carrega a Bíblia local do arquivo JSON
+async function carregarBiblia() {
+  try {
+    const res = await fetch("bibliaAveMaria.json"); // caminho do seu JSON
+    if (!res.ok) throw new Error("Não foi possível carregar o arquivo JSON.");
+    biblia = await res.json();
+  } catch (e) {
+    console.error("Erro ao carregar Bíblia:", e);
+  }
+}
+
+// Chama logo que o script inicia
+carregarBiblia();
+
 document.getElementById("buscar-btn").addEventListener("click", async () => {
   const livro = document.getElementById("livro").value.trim().toLowerCase();
-  const cap = document.getElementById("capitulo").value.trim();
+  const cap = parseInt(document.getElementById("capitulo").value.trim());
   const div = document.getElementById("versiculos");
   const box = document.getElementById("marcacao-box");
-  div.innerHTML = ""; box.classList.add("hidden"); marcacoesSelecionadas = [];
-  const user = auth.currentUser; if (!user) return alert("Faça login para continuar.");
+  div.innerHTML = "";
+  box.classList.add("hidden");
+  marcacoesSelecionadas = [];
+
+  const user = auth.currentUser;
+  if (!user) return alert("Faça login para continuar.");
   if (!livro || !cap) return alert("Informe livro e capítulo.");
-  try {
-    const res = await fetch(`https://bible-api.com/${livro}+${cap}?translation=almeida`);
-    if (!res.ok) return div.innerHTML = `<p style="color:red;">Não foi possível buscar ${livro} ${cap}.</p>`;
-    const dados = await res.json();
-    const focusBtn = document.getElementById("focus-toggle");
-    if (dados.verses?.length) focusBtn.classList.remove("hidden"); else focusBtn.classList.add("hidden");
-    (dados.verses || []).forEach(v => {
-      const row = document.createElement("div"); row.classList.add("versiculo");
-      const chk = document.createElement("input"); chk.type = "checkbox"; chk.classList.add("versiculo-checkbox");
-      const sup = document.createElement("sup"); sup.classList.add("num-versiculo"); sup.textContent = v.verse;
-      const numeroContainer = document.createElement("div"); numeroContainer.classList.add("versiculo-numero"); numeroContainer.append(chk, sup);
-      const content = document.createElement("div"); content.classList.add("versiculo-conteudo"); content.textContent = v.text;
-      row.append(numeroContainer, content); div.appendChild(row);
-      const info = { uid: user.uid, livro, capitulo: parseInt(cap), numero: v.verse, texto: v.text };
-      chk.addEventListener("change", () => {
-        if (chk.checked) marcacoesSelecionadas.push(info);
-        else marcacoesSelecionadas = marcacoesSelecionadas.filter(x => x.numero !== v.verse);
-        box.classList.toggle("hidden", marcacoesSelecionadas.length === 0);
-      });
+  if (!biblia) return div.innerHTML = `<p style="color:red;">Biblia ainda não carregada.</p>`;
+
+  // Procurar livro no JSON
+  const livroObj = biblia.antigoTestamento.concat(biblia.novoTestamento || [])
+                    .find(l => l.nome.toLowerCase() === livro);
+
+  if (!livroObj) return div.innerHTML = `<p style="color:red;">Não foi possível encontrar ${livro}.</p>`;
+
+  // Procurar capítulo
+  const capObj = livroObj.capitulos.find(c => c.capitulo === cap);
+  if (!capObj) return div.innerHTML = `<p style="color:red;">Não foi possível encontrar ${livro} ${cap}.</p>`;
+
+  // Exibir versículos
+  const focusBtn = document.getElementById("focus-toggle");
+  if (capObj.versiculos?.length) focusBtn.classList.remove("hidden"); else focusBtn.classList.add("hidden");
+
+  capObj.versiculos.forEach(v => {
+    const row = document.createElement("div"); row.classList.add("versiculo");
+    const chk = document.createElement("input"); chk.type = "checkbox"; chk.classList.add("versiculo-checkbox");
+    const sup = document.createElement("sup"); sup.classList.add("num-versiculo"); sup.textContent = v.versiculo;
+    const numeroContainer = document.createElement("div"); numeroContainer.classList.add("versiculo-numero"); numeroContainer.append(chk, sup);
+    const content = document.createElement("div"); content.classList.add("versiculo-conteudo"); content.textContent = v.texto;
+    row.append(numeroContainer, content); div.appendChild(row);
+
+    const info = { uid: user.uid, livro, capitulo: cap, numero: v.versiculo, texto: v.texto };
+    chk.addEventListener("change", () => {
+      if (chk.checked) marcacoesSelecionadas.push(info);
+      else marcacoesSelecionadas = marcacoesSelecionadas.filter(x => x.numero !== v.versiculo);
+      box.classList.toggle("hidden", marcacoesSelecionadas.length === 0);
     });
-  } catch (e) {
-    div.innerHTML = `<p style="color:red;">Erro: ${e.message}</p>`;
-  }
+  });
 });
 
 // Salvar marcações agrupadas
@@ -516,3 +540,4 @@ if (resetSenhaBtn) {
     }
   });
 }
+
