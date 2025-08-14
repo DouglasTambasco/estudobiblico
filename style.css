@@ -63,19 +63,19 @@ h2 {
   align-items: center;
   position: relative;
   min-height: 100px;
-  background: var(--vatican-white);
-  background-color: #d6d6d661;
-  border: 2px solid var(--vatican-yellow);
+  background-color: var(--vatican-yellow);
   border-radius: var(--border-radius-main);
+  border: 2px solid #000000;
   padding: 24px 20px 16px;
   margin-bottom: 30px;
+  margin-top: 5px;
   box-shadow: var(--shadow-light);
   transition: background 0.3s, border-color 0.3s;
 }
 
 body.night .header-estudo {
   background-color: #1e1e1e;
-  border-color: var(--vatican-yellow);
+  border: 2px solid var(--vatican-yellow);
 }
 
 /* Área central */
@@ -91,12 +91,12 @@ body.night .header-estudo {
 .header-center h1 {
   font-size: 2rem;
   margin: 0;
-  color: var(--vatican-yellow);
-  text-shadow: #000000 0px 1px 1px;
+  color: var(--text-dark);
+  text-shadow: #ffffff 0px 1px 1px;
 }
 
 body.night .header-center h1 {
-  text-shadow: #a5a5a5 0px 1px 1px;
+  color: var(--vatican-yellow);
 }
 
 .header-icon-left,
@@ -121,7 +121,7 @@ body.night .header-center h1 {
   height: 50px;
   border: none;
   background-color: transparent;
-  background-image: url('https://cdn-icons-png.flaticon.com/128/581/581601.png');
+  background-image: url('https://cdn-icons-png.flaticon.com/128/42/42011.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 60%;
@@ -130,18 +130,23 @@ body.night .header-center h1 {
 }
 
 body.night .theme-toggle-square {
-  background-image: url('https://cdn-icons-png.flaticon.com/512/869/869869.png');
+  background-image: url('https://cdn-icons-png.flaticon.com/128/9055/9055356.png');
 }
 
 .logout-btn {
-  background: var(--vatican-yellow);
-  color: var(--text-dark);
+  background: var(--text-dark);
+  color: var(--vatican-white);
   border: none;
   padding: 10px 10px;
   border-radius: var(--border-radius-main);
   cursor: pointer;
   font-size: 0.9rem;
   transition: background 0.3s;
+}
+
+body.night .logout-btn {
+  background: var(--vatican-yellow);
+  color: #000000;
 }
 
 .logout-btn:hover {
@@ -154,8 +159,8 @@ body.night .theme-toggle-square {
   align-items: center;
   gap: 2px;
   padding: 10px 5px;
-  background: var(--vatican-yellow);
-  color: #000000;
+  background: var(--text-dark);
+  color: #ffffff;
   border-radius: var(--border-radius-main);
   font-size: 0.85rem;
   font-weight: bold; 
@@ -532,10 +537,11 @@ body.night .versiculo-card.principio {
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: #d6d6d661  /* fundo claro semi-transparente */;
-  color: var(--vatican-yellow);
+  margin-bottom: 5px;
+  background-color: var(--vatican-yellow)  /* fundo claro semi-transparente */;
+  color: var(--text-dark);
   font-family: 'Quicksand', sans-serif;
-  border: 2px solid var(--vatican-yellow);
+  border: 2px solid var(--text-dark);
   border-radius: var(--border-radius-main);
   padding: 1rem;
   text-align: center;
@@ -543,13 +549,21 @@ body.night .versiculo-card.principio {
 
 body.night .rodape {
   background-color: #1e1e1e;
-  /* mantém a mesma cor de texto */
+  border-color: var(--vatican-yellow);
 }
 
 .rodape a {
-  color: var(--vatican-yellow);
+  color: var(--text-dark);
   font-weight: bold;
-  text-decoration: none;
+  text-decoration: underline;
+}
+
+body.night .rodape a {
+  color: var(--vatican-yellow);
+}
+
+body.night .rodape p {
+  color: var(--vatican-yellow);    
 }
 
 footer#rodape p {
