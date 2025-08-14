@@ -178,7 +178,7 @@ document.querySelectorAll(".toggle-password").forEach(btn => {
   });
 });
 
-// Normalizar texto (ignora acentos e case)
+// Normalizar texto (ignora acentos e case) 
 function normalizar(str) {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 }
@@ -190,11 +190,18 @@ const abreviacoes = {
   "1rs":"1reis","1 reis":"1reis","2rs":"2reis","2 reis":"2reis", "1 rs":"1reis", "2 rs":"2reis",
   "1cr":"1cronicas","1 cronicas":"1cronicas","2cr":"2cronicas","2 cronicas":"2cronicas", "1 cr":"1cronicas", "2 cr":"2cronicas",
   "ed":"esdras","ne":"neemias","et":"ester", 
-  "1mac":"1macabeus","1 macabeus":"1macabeus","2mac":"2macabeus","2 macabeus":"2macabeus", "1 mac":"macabeus", "2 mac":"2macabeus",
-  "jó":"jo","sl":"salmos","pv":"provérbios","ec":"eclesiastes","ct":"cantares","is":"isaias","jr":"jeremias","lm":"lamentacoes","br":"baruc", "baruque": "baruc", "ez":"ezequiel","dn":"daniel", "os":"oseias","jl":"joel","am":"amos","ob":"obadias","jn":"jonas", "mq":"miqueias","na":"naum","hc":"habacuque","sf":"sofeias", "ag":"ageu","zc":"zacarias","ml":"malaquias", "mt":"mateus","mc":"marcos","lc":"lucas","jo":"joao","atos":"atos", "rm":"romanos", "1co":"1corintios","1 corintios":"1corintios","2co":"2corintios","2 corintios":"2corintios", "1 co":"1corintios", "2 co":"2corintios", "gl":"galatas", "ef":"efesios","fp":"filipenses","cl":"colossenses",
-  "1ts":"1tessalonicenses","1 tessalonicenses":"1tessalonicenses","2ts":"2tessalonicenses","2 tessalonicenses":"2tessalonicenses", "1 1ts":"1tessalonicenses", "2 ts":"2tessalonicenses", "1tm":"1timoteo","1 timoteo":"1timoteo","2tm":"2timoteo","2 timoteo":"2timoteo", "1 tm":"1timoteo", "2 tm":"2timoteo", "tt":"tito", "fm":"filemom","hb":"hebreus","tg":"tiago",
-  "1pe":"1pedro","1 pedro":"1pedro","2pe":"2pedro","2 pedro":"2pedro", "1 pe":"1pedro", "2 pe":"2pedro",
-  "1jo":"1joao","1 joao":"1joao","2jo":"2joao","2 joao":"2joao", "1 jo":"1joao", "2 jo":"2joao", "3jo":"3joao","3 joao":"3joao",
+  "1mac":"1macabeus","1 macabeus":"1macabeus","2mac":"2macabeus","2 macabeus":"2macabeus", "1 mac":"1macabeus", "2 mac":"2macabeus",
+  "jó":"jo","sl":"salmos","pv":"provérbios","ec":"eclesiastes","ct":"cantares","is":"isaias","jr":"jeremias","lm":"lamentacoes","br":"baruc", "baruque": "baruc", "ez":"ezequiel","dn":"daniel",
+  "os":"oseias","jl":"joel","am":"amos","ob":"obadias","jn":"jonas","mq":"miqueias","na":"naum","hc":"habacuque","sf":"sofeias",
+  "ag":"ageu","zc":"zacarias","ml":"malaquias",
+  "mt":"mateus","mc":"marcos","lc":"lucas","jo":"joao","atos":"atos",
+  "rm":"romanos","1co":"1corintios","1 corintios":"1corintios","2co":"2corintios","2 corintios":"2corintios","1 co":"1corintios","2 co":"2corintios",
+  "gl":"galatas","ef":"efesios","fp":"filipenses","cl":"colossenses",
+  "1ts":"1tessalonicenses","1 tessalonicenses":"1tessalonicenses","2ts":"2tessalonicenses","2 tessalonicenses":"2tessalonicenses","1 ts":"1tessalonicenses","2 ts":"2tessalonicenses",
+  "1tm":"1timoteo","1 timoteo":"1timoteo","2tm":"2timoteo","2 timoteo":"2timoteo","1 tm":"1timoteo","2 tm":"2timoteo",
+  "tt":"tito","fm":"filemom","hb":"hebreus","tg":"tiago",
+  "1pe":"1pedro","1 pedro":"1pedro","2pe":"2pedro","2 pedro":"2pedro","1 pe":"1pedro","2 pe":"2pedro",
+  "1jo":"1joao","1 joao":"1joao","2jo":"2joao","2 joao":"2joao","1 jo":"1joao","2 jo":"2joao","3jo":"3joao","3 joao":"3joao",
   "jd":"judas","ap":"apocalipse"
 };
 
@@ -202,7 +209,7 @@ const abreviacoes = {
 let biblia = null;
 async function carregarBiblia() {
   try {
-    const res = await fetch("bibliaAveMaria.json"); 
+    const res = await fetch("bibliaAveMaria.json");
     if (!res.ok) throw new Error("Não foi possível carregar o arquivo JSON.");
     biblia = await res.json();
   } catch (e) {
@@ -211,51 +218,98 @@ async function carregarBiblia() {
 }
 carregarBiblia();
 
-// Botão de busca
-document.getElementById("buscar-btn").addEventListener("click", async () => {
-  const livroInputRaw = document.getElementById("livro").value.trim();
-  const cap = parseInt(document.getElementById("capitulo").value.trim());
+// ===== Estado de navegação (livro/capítulo atual) =====
+const navContainer = document.getElementById("nav-capitulos");
+const btnAnterior   = document.getElementById("btn-anterior");
+const btnProximo    = document.getElementById("btn-proximo");
+
+const estadoLeitura = {
+  livroObj: null,
+  capAtual: null,
+  capMin: 1,
+  capMax: 1
+};
+
+// Lista de todos os livros em ordem
+function listaLivros() {
+  return (biblia?.antigoTestamento || []).concat(biblia?.novoTestamento || []);
+}
+
+// Localiza livro considerando normalização + abreviações
+function localizarLivro(livroInputRaw) {
+  if (!biblia) return null;
+  const todos = listaLivros();
+  const inputN = normalizar(livroInputRaw);
+  return todos.find(l => {
+    const nomeN = normalizar(l.nome);
+    return nomeN === inputN || abreviacoes[inputN] === nomeN;
+  }) || null;
+}
+
+// Limites de capítulos do livro
+function limitesCapitulos(livroObj) {
+  const caps = (livroObj.capitulos || []).map(c => parseInt(c.capitulo, 10)).filter(Number.isFinite);
+  return {
+    min: Math.min(...caps),
+    max: Math.max(...caps)
+  };
+}
+
+// Atualiza botões Anterior/Próximo
+function atualizarNavegacao() {
+  if (!navContainer) return;
+  const ativo = !!estadoLeitura.livroObj;
+  navContainer.classList.toggle("hidden", !ativo);
+  if (!ativo) return;
+
+  const estaNoPrimeiro = estadoLeitura.capAtual <= estadoLeitura.capMin;
+  const estaNoUltimo = estadoLeitura.capAtual >= estadoLeitura.capMax;
+
+  btnAnterior.textContent = estaNoPrimeiro ? "⟵ Livro anterior" : "⟵ Anterior";
+  btnProximo.textContent  = estaNoUltimo   ? "Próximo livro ⟶" : "Próximo ⟶";
+
+  btnAnterior.dataset.tipo = estaNoPrimeiro ? "livroAnterior" : "capAnterior";
+  btnProximo.dataset.tipo  = estaNoUltimo   ? "livroProximo"  : "capProximo";
+}
+
+// Renderiza capítulo
+function mostrarCapitulo(livroObj, cap) {
+  const user = auth.currentUser;
   const div = document.getElementById("versiculos");
   const box = document.getElementById("marcacao-box");
+  const focusBtn = document.getElementById("focus-toggle");
+
+  estadoLeitura.livroObj = livroObj;
+  estadoLeitura.capAtual = cap;
+  const { min, max } = limitesCapitulos(livroObj);
+  estadoLeitura.capMin = min;
+  estadoLeitura.capMax = max;
+
+  document.getElementById("livro").value = livroObj.nome;
+  document.getElementById("capitulo").value = cap;
+
   div.innerHTML = "";
   box.classList.add("hidden");
   marcacoesSelecionadas = [];
 
-  const user = auth.currentUser;
-  if (!user) return alert("Faça login para continuar.");
-  if (!livroInputRaw || !cap) return alert("Informe livro e capítulo.");
-  if (!biblia) return div.innerHTML = `<p style="color:red;">Bíblia ainda não carregada.</p>`;
+  const capObj = (livroObj.capitulos || []).find(c => parseInt(c.capitulo, 10) === parseInt(cap, 10));
+  if (!capObj) {
+    div.innerHTML = `<p style="color:red;">Não foi possível encontrar ${livroObj.nome} ${cap}.</p>`;
+    atualizarNavegacao();
+    return;
+  }
 
-  // Procurar livro no JSON considerando normalização e abreviações
-  const todosLivros = biblia.antigoTestamento.concat(biblia.novoTestamento || []);
-  const livroObj = todosLivros.find(l => {
-    const nomeNormalizado = normalizar(l.nome);
-    const inputNormalizado = normalizar(livroInputRaw);
-    return nomeNormalizado === inputNormalizado || (abreviacoes[inputNormalizado] === nomeNormalizado);
-  });
-
-  if (!livroObj) return div.innerHTML = `<p style="color:red;">Não foi possível encontrar ${livroInputRaw}.</p>`;
-
-  // Procurar capítulo
-  const capObj = livroObj.capitulos.find(c => c.capitulo === cap);
-  if (!capObj) return div.innerHTML = `<p style="color:red;">Não foi possível encontrar ${livroObj.nome} ${cap}.</p>`;
-
-  // Inserir título do livro + capítulo abaixo do botão Modo Foco
-  const tituloCapituloId = "titulo-capitulo";
-  let tituloExistente = document.getElementById(tituloCapituloId);
-  if (tituloExistente) tituloExistente.remove();
+  const velho = document.getElementById("titulo-capitulo");
+  if (velho) velho.remove();
   const titulo = document.createElement("h2");
-  titulo.id = tituloCapituloId;
+  titulo.id = "titulo-capitulo";
   titulo.textContent = `${livroObj.nome} ${cap}`;
   titulo.style.margin = "10px 0";
   titulo.style.textAlign = "center";
-  const focusBtn = document.getElementById("focus-toggle");
   focusBtn.insertAdjacentElement("afterend", titulo);
 
-  // Exibir ou esconder botão de foco
-  if (capObj.versiculos?.length) focusBtn.classList.remove("hidden"); else focusBtn.classList.add("hidden");
+  focusBtn.classList.toggle("hidden", !capObj.versiculos?.length);
 
-  // Exibir versículos
   capObj.versiculos.forEach(v => {
     const row = document.createElement("div"); row.classList.add("versiculo");
     const chk = document.createElement("input"); chk.type = "checkbox"; chk.classList.add("versiculo-checkbox");
@@ -264,15 +318,65 @@ document.getElementById("buscar-btn").addEventListener("click", async () => {
     const content = document.createElement("div"); content.classList.add("versiculo-conteudo"); content.textContent = v.texto;
     row.append(numeroContainer, content); div.appendChild(row);
 
-    const info = { uid: user.uid, livro: livroObj.nome, capitulo: cap, numero: v.versiculo, texto: v.texto };
+    const info = { uid: user?.uid, livro: livroObj.nome, capitulo: cap, numero: v.versiculo, texto: v.texto };
     chk.addEventListener("change", () => {
       if (chk.checked) marcacoesSelecionadas.push(info);
       else marcacoesSelecionadas = marcacoesSelecionadas.filter(x => x.numero !== v.versiculo);
       box.classList.toggle("hidden", marcacoesSelecionadas.length === 0);
     });
   });
+
+  atualizarNavegacao();
+  titulo.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// Buscar
+document.getElementById("buscar-btn").addEventListener("click", () => {
+  const livroInputRaw = document.getElementById("livro").value.trim();
+  const cap = parseInt(document.getElementById("capitulo").value.trim(), 10);
+  const div = document.getElementById("versiculos");
+
+  const user = auth.currentUser;
+  if (!user) return alert("Faça login para continuar.");
+  if (!livroInputRaw || !cap) return alert("Informe livro e capítulo.");
+  if (!biblia) return div.innerHTML = `<p style="color:red;">Bíblia ainda não carregada.</p>`;
+
+  const livroObj = localizarLivro(livroInputRaw);
+  if (!livroObj) return div.innerHTML = `<p style="color:red;">Não foi possível encontrar ${livroInputRaw}.</p>`;
+
+  mostrarCapitulo(livroObj, cap);
 });
 
+// Eventos botões
+if (btnAnterior && btnProximo) {
+  btnAnterior.addEventListener("click", () => {
+    if (!estadoLeitura.livroObj) return;
+    if (btnAnterior.dataset.tipo === "capAnterior") {
+      mostrarCapitulo(estadoLeitura.livroObj, estadoLeitura.capAtual - 1);
+    } else {
+      const livros = listaLivros();
+      const idx = livros.findIndex(l => l.nome === estadoLeitura.livroObj.nome);
+      if (idx > 0) {
+        const livroAnterior = livros[idx - 1];
+        mostrarCapitulo(livroAnterior, limitesCapitulos(livroAnterior).max);
+      }
+    }
+  });
+
+  btnProximo.addEventListener("click", () => {
+    if (!estadoLeitura.livroObj) return;
+    if (btnProximo.dataset.tipo === "capProximo") {
+      mostrarCapitulo(estadoLeitura.livroObj, estadoLeitura.capAtual + 1);
+    } else {
+      const livros = listaLivros();
+      const idx = livros.findIndex(l => l.nome === estadoLeitura.livroObj.nome);
+      if (idx < livros.length - 1) {
+        const proximoLivro = livros[idx + 1];
+        mostrarCapitulo(proximoLivro, 1);
+      }
+    }
+  });
+}
 
 // Salvar marcações agrupadas
 document.getElementById("salvar-todos").addEventListener("click", async () => {
