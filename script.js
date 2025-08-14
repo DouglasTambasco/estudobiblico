@@ -185,21 +185,17 @@ function normalizar(str) {
 
 // Abreviações completas de todos os livros
 const abreviacoes = {
-  "gn":"genesis","ex":"exodo","lv":"levitico","nm":"numeros","dt":"deuteronomio",
-  "js":"josue","jg":"juizes","rt":"rute","1sm":"1samuel","2sm":"2samuel",
-  "1rs":"1reis","2rs":"2reis","1cr":"1cronicas","2cr":"2cronicas",
-  "ed":"esdras","ne":"neemias","et":"ester","jó":"jo","sl":"salmos",
-  "pv":"provérbios","ec":"eclesiastes","ct":"cantares","is":"isaias",
-  "jr":"jeremias","lm":"lamentacoes","ez":"ezequiel","dn":"daniel",
-  "os":"oseias","jl":"joel","am":"amos","ob":"obadias","jn":"jonas",
-  "mq":"miqueias","na":"naum","hc":"habacuque","sf":"sofeias",
-  "ag":"ageu","zc":"zacarias","ml":"malaquias",
-  "mt":"mateus","mc":"marcos","lc":"lucas","jo":"joao","atos":"atos",
-  "rm":"romanos","1co":"1corintios","2co":"2corintios","gl":"galatas",
-  "ef":"efesios","fp":"filipenses","cl":"colossenses","1ts":"1tessalonicenses",
-  "2ts":"2tessalonicenses","1tm":"1timoteo","2tm":"2timoteo","tt":"tito",
-  "fm":"filemom","hb":"hebreus","tg":"tiago","1pe":"1pedro","2pe":"2pedro",
-  "1jo":"1joao","2jo":"2joao","3jo":"3joao","jd":"judas","ap":"apocalipse"
+  "gn":"genesis","ex":"exodo","lv":"levitico","nm":"numeros","dt":"deuteronomio","js":"josue","jz":"juizes","rt":"rute",
+  "1sm":"1samuel","1 samuel":"1samuel","2sm":"2samuel","2 samuel":"2samuel", "1 sm":"1samuel", "2 sm":"2samuel",
+  "1rs":"1reis","1 reis":"1reis","2rs":"2reis","2 reis":"2reis", "1 rs":"1reis", "2 rs":"2reis",
+  "1cr":"1cronicas","1 cronicas":"1cronicas","2cr":"2cronicas","2 cronicas":"2cronicas", "1 cr":"1cronicas", "2 cr":"2cronicas",
+  "ed":"esdras","ne":"neemias","et":"ester", 
+  "1mac":"1macabeus","1 macabeus":"1macabeus","2mac":"2macabeus","2 macabeus":"2macabeus", "1 mac":"macabeus", "2 mac":"2macabeus",
+  "jó":"jo","sl":"salmos","pv":"provérbios","ec":"eclesiastes","ct":"cantares","is":"isaias","jr":"jeremias","lm":"lamentacoes","br":"baruc", "baruque": "baruc", "ez":"ezequiel","dn":"daniel", "os":"oseias","jl":"joel","am":"amos","ob":"obadias","jn":"jonas", "mq":"miqueias","na":"naum","hc":"habacuque","sf":"sofeias", "ag":"ageu","zc":"zacarias","ml":"malaquias", "mt":"mateus","mc":"marcos","lc":"lucas","jo":"joao","atos":"atos", "rm":"romanos", "1co":"1corintios","1 corintios":"1corintios","2co":"2corintios","2 corintios":"2corintios", "1 co":"1corintios", "2 co":"2corintios", "gl":"galatas", "ef":"efesios","fp":"filipenses","cl":"colossenses",
+  "1ts":"1tessalonicenses","1 tessalonicenses":"1tessalonicenses","2ts":"2tessalonicenses","2 tessalonicenses":"2tessalonicenses", "1 1ts":"1tessalonicenses", "2 ts":"2tessalonicenses", "1tm":"1timoteo","1 timoteo":"1timoteo","2tm":"2timoteo","2 timoteo":"2timoteo", "1 tm":"1timoteo", "2 tm":"2timoteo", "tt":"tito", "fm":"filemom","hb":"hebreus","tg":"tiago",
+  "1pe":"1pedro","1 pedro":"1pedro","2pe":"2pedro","2 pedro":"2pedro", "1 pe":"1pedro", "2 pe":"2pedro",
+  "1jo":"1joao","1 joao":"1joao","2jo":"2joao","2 joao":"2joao", "1 jo":"1joao", "2 jo":"2joao", "3jo":"3joao","3 joao":"3joao",
+  "jd":"judas","ap":"apocalipse"
 };
 
 // Carrega a Bíblia local do arquivo JSON

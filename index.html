@@ -77,17 +77,94 @@
     <div class="hidden" id="conteudo"> <!-- botão de sair -->
 
       <!-- Busca de capítulo -->
-      <div class="busca-verse">
-        <label for="livro">Livro</label>
-        <input type="text" id="livro" placeholder="ex: 1 João" aria-label="Nome do livro bíblico" />
+<div class="busca-verse">
+  <label for="livro">Livro</label>
+  <input list="lista-livros" type="text" id="livro" placeholder="ex: 1 João" aria-label="Nome do livro bíblico" />
 
-        <label for="capitulo">Capítulo</label>
-        <input type="number" id="capitulo" placeholder="ex: 2" aria-label="Número do capítulo bíblico" />
+  <datalist id="lista-livros">
+    <option value="Gênesis">
+    <option value="Êxodo">
+    <option value="Levítico">
+    <option value="Números">
+    <option value="Deuteronômio">
+    <option value="Josué">
+    <option value="Juízes">
+    <option value="Rute">
+    <option value="1 Samuel">
+    <option value="2 Samuel">
+    <option value="1 Reis">
+    <option value="2 Reis">
+    <option value="1 Crônicas">
+    <option value="2 Crônicas">
+    <option value="Esdras">
+    <option value="Neemias">
+    <option value="Tobias">
+    <option value="Judite">
+    <option value="Ester">
+    <option value="1 Macabeus">
+    <option value="2 Macabeus">
+    <option value="Jó">
+    <option value="Salmos">
+    <option value="Provérbios">
+    <option value="Eclesiastes">
+    <option value="Cântico dos Cânticos">
+    <option value="Sabedoria">
+    <option value="Eclesiástico">
+    <option value="Isaías">
+    <option value="Jeremias">
+    <option value="Lamentações">
+    <option value="Baruc">
+    <option value="Ezequiel">
+    <option value="Daniel">
+    <option value="Oséias">
+    <option value="Joel">
+    <option value="Amós">
+    <option value="Obadias">
+    <option value="Jonas">
+    <option value="Miquéias">
+    <option value="Naum">
+    <option value="Habacuque">
+    <option value="Sofonias">
+    <option value="Ageu">
+    <option value="Zacarias">
+    <option value="Malaquias">
+    <option value="Mateus">
+    <option value="Marcos">
+    <option value="Lucas">
+    <option value="João">
+    <option value="Atos">
+    <option value="Romanos">
+    <option value="1 Coríntios">
+    <option value="2 Coríntios">
+    <option value="Gálatas">
+    <option value="Efésios">
+    <option value="Filipenses">
+    <option value="Colossenses">
+    <option value="1 Tessalonicenses">
+    <option value="2 Tessalonicenses">
+    <option value="1 Timóteo">
+    <option value="2 Timóteo">
+    <option value="Tito">
+    <option value="Filemom">
+    <option value="Hebreus">
+    <option value="Tiago">
+    <option value="1 Pedro">
+    <option value="2 Pedro">
+    <option value="1 João">
+    <option value="2 João">
+    <option value="3 João">
+    <option value="Judas">
+    <option value="Apocalipse">
+  </datalist>
 
-        <button id="buscar-btn" aria-label="Buscar versículos">
-          <img src="https://cdn-icons-png.flaticon.com/128/2770/2770487.png" alt="Ícone de busca" class="btn-icon" /> Buscar
-        </button>
-      </div>
+  <label for="capitulo">Capítulo</label>
+  <input type="number" id="capitulo" placeholder="ex: 2" aria-label="Número do capítulo bíblico" />
+
+  <button id="buscar-btn" aria-label="Buscar versículos">
+    <img src="https://cdn-icons-png.flaticon.com/128/2770/2770487.png" alt="Ícone de busca" class="btn-icon" /> Buscar
+  </button>
+</div>
+
         <br>
       <!-- Botão Modo Estudo Focado -->
       <button id="focus-toggle" class="hidden" title="Modo Estudo Focado" aria-label="Alternar modo de estudo focado"> 🎯 Modo Foco </button>
