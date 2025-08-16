@@ -59,6 +59,7 @@ cadastroBtn.addEventListener("click", async () => {
   const email = document.getElementById("cadastro-email").value.trim();
   const senha = document.getElementById("cadastro-senha").value.trim();
   if (!nome) return authMsg.textContent = "Por favor, insira seu nome.";
+
   authMsg.textContent = "Validando e-mail...";
   let valido = await isValidEmailAPI(email);
   if (valido === null) valido = isValidEmailFallback(email);
@@ -66,12 +67,14 @@ cadastroBtn.addEventListener("click", async () => {
     alert("E-mail inválido ou temporário.");
     return;
   }
+
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, senha);
     await updateProfile(cred.user, { displayName: nome });
     await cred.user.reload();
     await sendEmailVerification(cred.user);
 
+    // Apenas mensagem de sucesso, sem alerta de verificação
     alert("Conta criada com sucesso! Foi enviado um e-mail para verificação. Confira sua caixa de entrada.");
     authMsg.textContent = "Cadastro realizado! Verifique seu e-mail.";
 
@@ -87,13 +90,16 @@ loginBtn.addEventListener("click", async () => {
   const email = document.getElementById("login-email").value.trim();
   const senha = document.getElementById("login-senha").value.trim();
   if (!email || !senha) return authMsg.textContent = "Informe e-mail e senha.";
+
   try {
     const cred = await signInWithEmailAndPassword(auth, email, senha);
     await cred.user.reload();
     if (!cred.user.emailVerified) {
       await signOut(auth);
+      alert("E-mail não verificado. Confira sua caixa de entrada."); // Apenas aqui
       return;
     }
+    initUser(cred.user);
   } catch (e) {
     authMsg.textContent = "Erro no login: " + (e.message || e);
   }
@@ -124,16 +130,19 @@ if (googleBtn) {
   });
 });
 
-// Sessão ativa
+// Sessão ativa (onAuthStateChanged)
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     await user.reload();
-    if (!user.emailVerified) {
-      alert("E-mail não verificado. Confira sua caixa de entrada.");
-      await signOut(auth);
-      return;
+    // Apenas atualiza a interface, sem alert
+    if (user.emailVerified) {
+      initUser(user);
+    } else {
+      // Usuário não verificado: apenas mostrar login
+      document.getElementById("conteudo").classList.add("hidden");
+      document.getElementById("auth-area").classList.remove("hidden");
+      logoutBtn.classList.add("hidden");
     }
-    initUser(user);
   } else {
     document.getElementById("saudacao").classList.add("hidden");
     document.getElementById("auth-area").classList.remove("hidden");
@@ -141,6 +150,7 @@ onAuthStateChanged(auth, async (user) => {
     logoutBtn.classList.add("hidden");
   }
 });
+
 
 // Logout
 logoutBtn.addEventListener("click", () => {
