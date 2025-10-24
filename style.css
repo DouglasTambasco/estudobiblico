@@ -779,3 +779,26 @@ body.focus-mode footer {
     min-height: 44px;
   }
 }
+.favorito-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.favorito-label input {
+  display: none; /* escondemos o checkbox real */
+}
+
+.favorito-label .estrela {
+  font-size: 18px;
+  color: #ccc;
+  transition: color 0.2s;
+}
+
+.favorito-label input:checked + .estrela {
+  color: gold;
+  content: "★";
+}

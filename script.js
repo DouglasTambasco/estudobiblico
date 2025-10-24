@@ -396,24 +396,30 @@ document.getElementById("salvar-todos").addEventListener("click", async () => {
   if (!user) return alert("Faça login para continuar.");
   if (!tipo) return alert("Selecione uma categoria.");
   if (!marcacoesSelecionadas.length) return alert("Nenhum versículo selecionado.");
+
   try {
     const refMarc = doc(collection(db, "marcacoes_grupadas"));
-    await setDoc(refMarc, {
-      uid: user.uid,
-      tipo,
-      comentario: coment,
-      versiculos: marcacoesSelecionadas.map(v => ({
-        livro: v.livro,
-        capitulo: v.capitulo,
-        numero: v.numero,
-        texto: v.texto
-      })),
-      favorito: false,
-      timestamp: serverTimestamp()
-    });
+        const favorito = document.getElementById("marcar-favorito")?.checked || false; // <- checkbox extra
+await setDoc(refMarc, {
+  uid: user.uid,
+  tipo,
+  comentario: coment,
+  versiculos: marcacoesSelecionadas.map(v => ({
+    livro: v.livro,
+    capitulo: v.capitulo,
+    numero: v.numero,
+    texto: v.texto
+  })),
+  favorito, // <- salva já como favorito
+  timestamp: serverTimestamp()
+});
+
+    // --- NOVO: desmarcar automaticamente os versículos selecionados ---
+    marcacoesSelecionadas = [];
+    document.querySelectorAll(".versiculo-checkbox").forEach(chk => chk.checked = false);
+
     document.getElementById("tipo-marcacao").value = "";
     document.getElementById("comentario-geral").value = "";
-    marcacoesSelecionadas = [];
     document.getElementById("marcacao-box").classList.add("hidden");
     document.getElementById("versiculos-marcados").classList.remove("hidden");
     await exibirGruposMarcacoes();
@@ -421,6 +427,7 @@ document.getElementById("salvar-todos").addEventListener("click", async () => {
     console.error(e); alert("Erro ao salvar os versículos agrupados.");
   }
 });
+
 
 // Exibir grupos de marcações
 async function exibirGruposMarcacoes() {
@@ -574,6 +581,15 @@ document.getElementById("ver-marcados-btn").addEventListener("click", () => {
 });
 document.getElementById("filtro-marcacao").addEventListener("change", exibirGruposMarcacoes);
 document.getElementById("filtro-livro").addEventListener("change", exibirGruposMarcacoes);
+document.getElementById("buscar-marcados")?.addEventListener("input", () => {
+  const termo = document.getElementById("buscar-marcados").value.toLowerCase();
+  document.querySelectorAll("#lista-marcados .versiculo-card").forEach(card => {
+    const versiculosText = Array.from(card.querySelectorAll("p")).map(p => p.innerText).join(" ");
+    const comentarioText = card.querySelector(".group-comment")?.value || card.querySelector(".group-comment")?.innerText || "";
+    const texto = (versiculosText + " " + comentarioText).toLowerCase();
+    card.style.display = texto.includes(termo) ? "" : "none";
+  });
+});
 
 // Citação bíblica aleatória
 const citacoes = [
@@ -605,13 +621,18 @@ document.getElementById("citacao-biblica").innerHTML =
 document.getElementById("btn-imprimir").addEventListener("click", () => {
   const area = document.getElementById("lista-marcados");
   if (area.innerHTML.trim() === "") return alert("Nada para imprimir.");
+  
   const clone = area.cloneNode(true);
+  // Substitui textareas por parágrafos
   clone.querySelectorAll("textarea.group-comment").forEach(textarea => {
     const p = document.createElement("p");
-    p.className = "group-comment"; p.textContent = textarea.value;
+    p.className = "group-comment";
+    p.textContent = textarea.value;
     textarea.replaceWith(p);
   });
+  // Remove botões e ações
   clone.querySelectorAll(".versiculo-actions").forEach(el => el.remove());
+  
   const styles = `
     <style>
       body { font-family: system-ui, sans-serif; padding: 20px; line-height: 1.4; color: #333; }
@@ -621,16 +642,30 @@ document.getElementById("btn-imprimir").addEventListener("click", () => {
       .versiculo-card.promessa { border-left-color: #4CAF50; background-color: #C8E6C9; }
       .versiculo-card.ordem { border-left-color: #3F51B5; background-color: #E1BEE7; }
       .versiculo-card.principio { border-left-color: #F44336; background-color: #FFE0B2; }
-      .versiculo-card p { margin: 4px 0; font-size: 10px; }
-      .group-comment { display: block; margin-top: 12px; font-style: italic; font-weight: bold; color: #000000; white-space: pre-wrap; }
+      .versiculo-card p { margin: 4px 0; font-size: 12px; }
+      .group-comment { display: block; margin-top: 12px; font-style: italic; font-weight: bold; color: #000; white-space: pre-wrap; }
       .group-tipo { font-weight: bold; color: #006699; }
     </style>
   `;
-  const htmlContent = `<h1>Meu Estudo Bíblico Católico</h1>${clone.innerHTML}`;
+
+  const htmlContent = `
+    <html>
+      <head>
+        <title>Meu Estudo Bíblico Católico</title>
+        ${styles}
+      </head>
+      <body>
+        <h1>Meu Estudo Bíblico Católico</h1>
+        ${clone.innerHTML}
+      </body>
+    </html>
+  `;
+
   const printWindow = window.open("", "_blank");
-  printWindow.document.write(`<html><head><title>Marcações Bíblicas</title>${styles}</head><body>${htmlContent}</body></html>`);
+  printWindow.document.write(htmlContent);
   printWindow.document.close();
-  printWindow.onload = () => { printWindow.focus(); printWindow.print(); };
+  printWindow.focus();
+  printWindow.print();
 });
 
 // Modo foco
@@ -689,4 +724,3 @@ if (resetSenhaBtn) {
     }
   });
 }
-
