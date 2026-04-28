@@ -119,6 +119,7 @@ if (googleBtn) {
 
 // Sessão ativa (onAuthStateChanged)
 authFunctions.onAuthStateChanged(auth, async (user) => {
+
   if (user) {
     await user.reload();
     // Apenas atualiza a interface, sem alert
