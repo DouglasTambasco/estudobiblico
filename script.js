@@ -64,23 +64,28 @@ cadastroBtn.addEventListener("click", async () => {
 });
 
 // Login
+import { login } from "./auth.js";
+
 loginBtn.addEventListener("click", async () => {
   authMsg.textContent = "";
+
   const email = document.getElementById("login-email").value.trim();
   const senha = document.getElementById("login-senha").value.trim();
-  if (!email || !senha) return authMsg.textContent = "Informe e-mail e senha.";
+
+  if (!email || !senha) {
+    authMsg.textContent = "Informe e-mail e senha.";
+    return;
+  }
 
   try {
-    const cred = await signInWithEmailAndPassword(auth, email, senha);
-    await cred.user.reload();
-    if (!cred.user.emailVerified) {
-      await signOut(auth);
-      alert("E-mail não verificado. Confira sua caixa de entrada."); // Apenas aqui
-      return;
-    }
-    initUser(cred.user);
+    const user = await login(email, senha);
+    initUser(user);
   } catch (e) {
-    authMsg.textContent = "Erro no login: " + (e.message || e);
+    if (e.message === "EMAIL_NAO_VERIFICADO") {
+      alert("E-mail não verificado. Confira sua caixa de entrada.");
+    } else {
+      authMsg.textContent = "Erro no login: " + (e.message || e);
+    }
   }
 });
 
