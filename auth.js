@@ -15,15 +15,3 @@ export async function login(email, senha) {
 
   return cred.user;
 }
-
-export async function login(email, senha) {
-  const cred = await signInWithEmailAndPassword(auth, email, senha);
-  await cred.user.reload();
-
-  if (!cred.user.emailVerified) {
-    await signOut(auth);
-    throw new Error("EMAIL_NAO_VERIFICADO");
-  }
-
-  return cred.user;
-}

@@ -65,7 +65,6 @@ cadastroBtn.addEventListener("click", async () => {
 
 // Login
 import { login } from "./auth.js";
-
 loginBtn.addEventListener("click", async () => {
   authMsg.textContent = "";
 
