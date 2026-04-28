@@ -1,5 +1,16 @@
 // Firebase Setup
 import { auth, db } from "./firebase.js";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  onAuthStateChanged,
+  signOut,
+  sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithPopup,
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
 
 let marcacoesSelecionadas = [];
 
