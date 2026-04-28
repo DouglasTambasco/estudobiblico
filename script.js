@@ -1,16 +1,9 @@
+console.log("IMPORT TESTE:", onAuthStateChanged);
+
 // Firebase Setup
 import { auth, db } from "./firebase.js";
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  updateProfile,
-  onAuthStateChanged,
-  signOut,
-  sendEmailVerification,
-  GoogleAuthProvider,
-  signInWithPopup,
-  sendPasswordResetEmail
-} from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+import * as authFunctions from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+
 
 let marcacoesSelecionadas = [];
 
@@ -125,7 +118,7 @@ if (googleBtn) {
 });
 
 // Sessão ativa (onAuthStateChanged)
-onAuthStateChanged(auth, async (user) => {
+authFunctions.onAuthStateChanged(auth, async (user) => {
   if (user) {
     await user.reload();
     // Apenas atualiza a interface, sem alert
