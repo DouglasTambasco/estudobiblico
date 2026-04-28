@@ -82,7 +82,7 @@ loginBtn.addEventListener("click", async () => {
     initUser(user);
   } catch (e) {
     if (e.message === "EMAIL_NAO_VERIFICADO") {
-      alert("E-mail não verificado. Confira sua caixa de entrada.");
+      alert("E-mail não verificado.");
     } else {
       authMsg.textContent = "Erro no login: " + (e.message || e);
     }
