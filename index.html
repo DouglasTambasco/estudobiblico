@@ -176,6 +176,7 @@
 
 <div id="versiculos"></div>
 
+
         <br>
       <!-- Botão Modo Estudo Focado -->
       <button id="focus-toggle" class="hidden" title="Modo Estudo Focado" aria-label="Alternar modo de estudo focado"> 🎯 Modo Foco </button>
@@ -185,11 +186,6 @@
       <!-- Área de marcação -->
       <div class="hidden marcacao-box" id="marcacao-box">
         <h3>Marcar selecionados</h3>
-        <label class="favorito-label">
-          <input type="checkbox" id="marcar-favorito">
-          <span class="estrela">☆</span>
-          Salvar como favorito
-        </label>
         <label for="tipo-marcacao">Categoria</label>
         <select id="tipo-marcacao" aria-label="Categoria da marcação">
           <option value="">Selecione...</option>
@@ -227,9 +223,6 @@
           <option value="">Todos</option>
         </select>
           <br>
-          <label for="filtro-marcacao">Filtrar por versículo ou comentário</label>
-          <input type="text" id="buscar-marcados" placeholder="Buscar versículo ou comentário..." style="margin-bottom:10px;width:100%;padding:6px;">
-          <br>
           <button id="btn-imprimir" title="Imprimir marcações" aria-label="Imprimir marcações">🖨️ Imprimir</button>
         <div class="grid-cards" id="lista-marcados"></div>
       </div>
@@ -241,7 +234,7 @@
 <footer class="rodape" id="rodape" role="contentinfo">
   <p id="citacao-biblica" aria-live="polite"></p>
   <br>
-  <p>Feito por <a href="https://linktr.ee/dtambasco" target="_blank" rel="noopener">Douglas Tambasco</a> ©</p> 
+  <p>Feito por <a href="https://github.com/DouglasTambasco" target="_blank" rel="noopener">Douglas Tambasco</a> ©</p> 
   <p> 2025 </p>
 </footer>
 
