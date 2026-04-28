@@ -1,10 +1,27 @@
-console.log("IMPORT TESTE:", onAuthStateChanged);
-
 // Firebase Setup
-import { auth, db } from "./firebase.js";
-import * as authFunctions from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+import {
+  getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile,
+  onAuthStateChanged, signOut, sendEmailVerification, GoogleAuthProvider, signInWithPopup,
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+import {
+  getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, getDocs, query, where, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyDSy_V62ZUXK-2E1H05uTbvLvM9Q6D_Lng",
+  authDomain: "estudobiblico-1b794.firebaseapp.com",
+  projectId: "estudobiblico-1b794",
+  storageBucket: "estudobiblico-1b794.appspot.com",
+  messagingSenderId: "92626454313",
+  appId: "1:92626454313:web:ac8cbded596cb179265938",
+  measurementId: "G-P927QCEMQM"
+};
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 let marcacoesSelecionadas = [];
 
 // Elementos fixos
@@ -68,27 +85,23 @@ cadastroBtn.addEventListener("click", async () => {
 });
 
 // Login
-import { login } from "./auth.js";
 loginBtn.addEventListener("click", async () => {
   authMsg.textContent = "";
-
   const email = document.getElementById("login-email").value.trim();
   const senha = document.getElementById("login-senha").value.trim();
-
-  if (!email || !senha) {
-    authMsg.textContent = "Informe e-mail e senha.";
-    return;
-  }
+  if (!email || !senha) return authMsg.textContent = "Informe e-mail e senha.";
 
   try {
-    const user = await login(email, senha);
-    initUser(user);
-  } catch (e) {
-    if (e.message === "EMAIL_NAO_VERIFICADO") {
-      alert("E-mail não verificado.");
-    } else {
-      authMsg.textContent = "Erro no login: " + (e.message || e);
+    const cred = await signInWithEmailAndPassword(auth, email, senha);
+    await cred.user.reload();
+    if (!cred.user.emailVerified) {
+      await signOut(auth);
+      alert("E-mail não verificado. Confira sua caixa de entrada."); // Apenas aqui
+      return;
     }
+    initUser(cred.user);
+  } catch (e) {
+    authMsg.textContent = "Erro no login: " + (e.message || e);
   }
 });
 
@@ -118,8 +131,7 @@ if (googleBtn) {
 });
 
 // Sessão ativa (onAuthStateChanged)
-authFunctions.onAuthStateChanged(auth, async (user) => {
-
+onAuthStateChanged(auth, async (user) => {
   if (user) {
     await user.reload();
     // Apenas atualiza a interface, sem alert
@@ -384,24 +396,30 @@ document.getElementById("salvar-todos").addEventListener("click", async () => {
   if (!user) return alert("Faça login para continuar.");
   if (!tipo) return alert("Selecione uma categoria.");
   if (!marcacoesSelecionadas.length) return alert("Nenhum versículo selecionado.");
+
   try {
     const refMarc = doc(collection(db, "marcacoes_grupadas"));
-    await setDoc(refMarc, {
-      uid: user.uid,
-      tipo,
-      comentario: coment,
-      versiculos: marcacoesSelecionadas.map(v => ({
-        livro: v.livro,
-        capitulo: v.capitulo,
-        numero: v.numero,
-        texto: v.texto
-      })),
-      favorito: false,
-      timestamp: serverTimestamp()
-    });
+        const favorito = document.getElementById("marcar-favorito")?.checked || false; // <- checkbox extra
+await setDoc(refMarc, {
+  uid: user.uid,
+  tipo,
+  comentario: coment,
+  versiculos: marcacoesSelecionadas.map(v => ({
+    livro: v.livro,
+    capitulo: v.capitulo,
+    numero: v.numero,
+    texto: v.texto
+  })),
+  favorito, // <- salva já como favorito
+  timestamp: serverTimestamp()
+});
+
+    // --- NOVO: desmarcar automaticamente os versículos selecionados ---
+    marcacoesSelecionadas = [];
+    document.querySelectorAll(".versiculo-checkbox").forEach(chk => chk.checked = false);
+
     document.getElementById("tipo-marcacao").value = "";
     document.getElementById("comentario-geral").value = "";
-    marcacoesSelecionadas = [];
     document.getElementById("marcacao-box").classList.add("hidden");
     document.getElementById("versiculos-marcados").classList.remove("hidden");
     await exibirGruposMarcacoes();
@@ -409,6 +427,7 @@ document.getElementById("salvar-todos").addEventListener("click", async () => {
     console.error(e); alert("Erro ao salvar os versículos agrupados.");
   }
 });
+
 
 // Exibir grupos de marcações
 async function exibirGruposMarcacoes() {
@@ -562,6 +581,15 @@ document.getElementById("ver-marcados-btn").addEventListener("click", () => {
 });
 document.getElementById("filtro-marcacao").addEventListener("change", exibirGruposMarcacoes);
 document.getElementById("filtro-livro").addEventListener("change", exibirGruposMarcacoes);
+document.getElementById("buscar-marcados")?.addEventListener("input", () => {
+  const termo = document.getElementById("buscar-marcados").value.toLowerCase();
+  document.querySelectorAll("#lista-marcados .versiculo-card").forEach(card => {
+    const versiculosText = Array.from(card.querySelectorAll("p")).map(p => p.innerText).join(" ");
+    const comentarioText = card.querySelector(".group-comment")?.value || card.querySelector(".group-comment")?.innerText || "";
+    const texto = (versiculosText + " " + comentarioText).toLowerCase();
+    card.style.display = texto.includes(termo) ? "" : "none";
+  });
+});
 
 // Citação bíblica aleatória
 const citacoes = [
@@ -593,13 +621,18 @@ document.getElementById("citacao-biblica").innerHTML =
 document.getElementById("btn-imprimir").addEventListener("click", () => {
   const area = document.getElementById("lista-marcados");
   if (area.innerHTML.trim() === "") return alert("Nada para imprimir.");
+  
   const clone = area.cloneNode(true);
+  // Substitui textareas por parágrafos
   clone.querySelectorAll("textarea.group-comment").forEach(textarea => {
     const p = document.createElement("p");
-    p.className = "group-comment"; p.textContent = textarea.value;
+    p.className = "group-comment";
+    p.textContent = textarea.value;
     textarea.replaceWith(p);
   });
+  // Remove botões e ações
   clone.querySelectorAll(".versiculo-actions").forEach(el => el.remove());
+  
   const styles = `
     <style>
       body { font-family: system-ui, sans-serif; padding: 20px; line-height: 1.4; color: #333; }
@@ -609,16 +642,30 @@ document.getElementById("btn-imprimir").addEventListener("click", () => {
       .versiculo-card.promessa { border-left-color: #4CAF50; background-color: #C8E6C9; }
       .versiculo-card.ordem { border-left-color: #3F51B5; background-color: #E1BEE7; }
       .versiculo-card.principio { border-left-color: #F44336; background-color: #FFE0B2; }
-      .versiculo-card p { margin: 4px 0; font-size: 10px; }
-      .group-comment { display: block; margin-top: 12px; font-style: italic; font-weight: bold; color: #000000; white-space: pre-wrap; }
+      .versiculo-card p { margin: 4px 0; font-size: 12px; }
+      .group-comment { display: block; margin-top: 12px; font-style: italic; font-weight: bold; color: #000; white-space: pre-wrap; }
       .group-tipo { font-weight: bold; color: #006699; }
     </style>
   `;
-  const htmlContent = `<h1>Meu Estudo Bíblico Católico</h1>${clone.innerHTML}`;
+
+  const htmlContent = `
+    <html>
+      <head>
+        <title>Meu Estudo Bíblico Católico</title>
+        ${styles}
+      </head>
+      <body>
+        <h1>Meu Estudo Bíblico Católico</h1>
+        ${clone.innerHTML}
+      </body>
+    </html>
+  `;
+
   const printWindow = window.open("", "_blank");
-  printWindow.document.write(`<html><head><title>Marcações Bíblicas</title>${styles}</head><body>${htmlContent}</body></html>`);
+  printWindow.document.write(htmlContent);
   printWindow.document.close();
-  printWindow.onload = () => { printWindow.focus(); printWindow.print(); };
+  printWindow.focus();
+  printWindow.print();
 });
 
 // Modo foco
@@ -677,4 +724,3 @@ if (resetSenhaBtn) {
     }
   });
 }
-
