@@ -15,8 +15,8 @@
   --border-radius-main: 8px;
   --shadow-light: 0 2px 6px rgba(0, 0, 0, 0.1);
   --promessa-bg: #C8E6C9;
-  --ordem-bg:    #E1BEE7;
-  --principio-bg:#FFE0B2;
+  --ordem-bg: #E1BEE7;
+  --principio-bg: #FFE0B2;
 }
 
 /* Estilos gerais */
@@ -44,8 +44,8 @@ body.night {
 
 html {
   -webkit-text-size-adjust: 100%;
-  -moz-text-size-adjust:    100%;
-  -ms-text-size-adjust:     100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
 h2 {
@@ -163,7 +163,7 @@ body.night .logout-btn {
   color: #ffffff;
   border-radius: var(--border-radius-main);
   font-size: 0.85rem;
-  font-weight: bold; 
+  font-weight: bold;
   width: auto !important;
 }
 
@@ -182,6 +182,44 @@ body.night .badge {
   position: absolute;
   left: 10px;
   z-index: 2;
+}
+
+#titulo-capitulo {
+  text-align: center;
+  margin: 16px 0 12px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  position: relative;
+}
+
+#titulo-capitulo span {
+  color: var(--vatican-yellow);
+  font-weight: 700;
+}
+
+body.night #titulo-capitulo span {
+  color: #fff;
+}
+
+/* Linha decorativa */
+#titulo-capitulo::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: var(--vatican-yellow);
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+/* Modo noturno */
+body.night #titulo-capitulo {
+  color: var(--vatican-yellow);
+}
+
+body.night #titulo-capitulo::after {
+  background: var(--text-light);
 }
 
 /* Autenticação */
@@ -263,13 +301,8 @@ body.night textarea {
   color: #fff;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-  outline: 2px solid var(--vatican-yellow);
-}
-
-button { /* Botão imprimir e modo escuro está aqui */
+button {
+  /* Botão imprimir e modo escuro está aqui */
   background: var(--vatican-yellow);
   color: var(--text-dark);
   border: none;
@@ -326,14 +359,18 @@ button { /* Botão imprimir e modo escuro está aqui */
 }
 
 #ver-marcados-btn {
-  display: inline-flex;           /* flex no botão */
-  align-items: center;            /* verticalmente centralizado */
-  justify-content: center;        /* horizontalmente centralizado */
-  gap: 0.5rem;                    /* espaço entre ícone e texto */
-  padding: 0.5rem 1rem;           
+  display: inline-flex;
+  /* flex no botão */
+  align-items: center;
+  /* verticalmente centralizado */
+  justify-content: center;
+  /* horizontalmente centralizado */
+  gap: 0.5rem;
+  /* espaço entre ícone e texto */
+  padding: 0.5rem 1rem;
   border: none;
   background-color: var(--vatican-yellow);
-  color: 000000;
+  color: #000000;
   cursor: pointer;
 }
 
@@ -480,7 +517,8 @@ body.night .versiculo-card p {
   justify-content: center;
   border: none;
   border-radius: 50%;
-  background: #2196F3; /* azul padrão */
+  background: #2196F3;
+  /* azul padrão */
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -538,7 +576,9 @@ body.night .versiculo-card.principio {
   bottom: 0;
   width: 100%;
   margin-bottom: 5px;
-  background-color: var(--vatican-yellow)  /* fundo claro semi-transparente */;
+  background-color: var(--vatican-yellow)
+    /* fundo claro semi-transparente */
+  ;
   color: var(--text-dark);
   font-family: 'Quicksand', sans-serif;
   border: 2px solid var(--text-dark);
@@ -563,7 +603,7 @@ body.night .rodape a {
 }
 
 body.night .rodape p {
-  color: var(--vatican-yellow);    
+  color: var(--vatican-yellow);
 }
 
 footer#rodape p {
@@ -571,7 +611,6 @@ footer#rodape p {
   line-height: 1.0;
   word-break: break-word;
   hyphens: auto;
-  margin: 0 0 0.1em;
 }
 
 /* ==== Layout dos Versículos ==== */
@@ -607,14 +646,16 @@ body.night .versiculo {
 .versiculo-numero {
   display: flex;
   align-items: center;
-  gap: 0.25rem;       /* ajusta o espaço entre checkbox e número */
+  gap: 0.25rem;
+  /* ajusta o espaço entre checkbox e número */
 }
 
 .num-versiculo {
   flex: 0 0 auto;
   width: 2.5rem;
   height: 2.5rem;
-  display: inline-flex;      /* antes era display:flex (bloco) */
+  display: inline-flex;
+  /* antes era display:flex (bloco) */
   align-items: center;
   justify-content: center;
   font-weight: bold;
@@ -639,21 +680,13 @@ body.night .versiculo-conteudo {
   color: var(--text-light);
 }
 
-body.focus-mode .header-estudo,
-body.focus-mode .busca-verse,
-body.focus-mode .marcacao-box,
-body.focus-mode #ver-marcados-btn,
-body.focus-mode #versiculos-marcados,
-body.focus-mode footer {    
-  display: none !important;
-}
-
 /* ========= RESPONSIVIDADE ========= */
 /* Tablet / Small Desktop até 1200px */
 @media (max-width: 1200px) {
   .container {
     padding: 0 16px;
   }
+
   .header-estudo {
     flex-direction: column;
     align-items: stretch;
@@ -665,9 +698,12 @@ body.focus-mode footer {
       "saudacao controles"
       "center   center";
     grid-template-columns: 1fr auto;
-    row-gap: 12px;        /* espaço vertical entre linhas */
-    align-items: center;  /* centraliza verticalmente na primeira linha */
+    row-gap: 12px;
+    /* espaço vertical entre linhas */
+    align-items: center;
+    /* centraliza verticalmente na primeira linha */
   }
+
   .header-saudacao,
   .header-center,
   .header-controls {
@@ -677,18 +713,23 @@ body.focus-mode footer {
     display: flex;
     justify-content: flex-end;
     grid-area: controles;
-    justify-self: end;    /* força a coluna de controles à direita */
+    justify-self: end;
+    /* força a coluna de controles à direita */
   }
+
   .header-saudacao {
     justify-content: flex-start;
     grid-area: saudacao;
   }
+
   .header-center {
     justify-content: center;
     gap: 12px;
     grid-area: center;
-    justify-self: center; /* título centralizado na 2ª linha */
+    justify-self: center;
+    /* título centralizado na 2ª linha */
   }
+
   .header-controls .logout-btn {
     width: auto;
     flex: 0 0 auto;
@@ -702,34 +743,39 @@ body.focus-mode footer {
   }
 
   h2 {
-  color: var(--vatican-yellow);
-  margin-bottom: 10px;
-  text-align: center;
-  font-size: 1rem;
-}
+    color: var(--vatican-yellow);
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 1rem;
+  }
 
   .header-estudo {
     padding: 16px 8px 10px;
   }
+
   .header-center h1 {
     font-size: 1.9rem;
     text-align: left;
   }
+
   .login-box,
   .cadastro-box {
     max-width: 100%;
     padding: 14px;
   }
+
   .busca-verse {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     align-items: stretch;
     gap: 6px;
     max-width: 100%;
   }
+
   .marcacao-box {
     padding: 12px;
     max-width: 100%;
   }
+
   .grid-cards {
     grid-template-columns: 1fr;
     gap: 12px;
@@ -738,6 +784,7 @@ body.focus-mode footer {
 
 /* Pequenos dispositivos até 500px */
 @media (max-width: 500px) {
+
   /* Título do header */
   .header-center h1 {
     font-size: clamp(1.3rem, 5vw, 2.2rem);

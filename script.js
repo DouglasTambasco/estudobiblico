@@ -1,27 +1,11 @@
-// Firebase Setup
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import {
-  getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile,
-  onAuthStateChanged, signOut, sendEmailVerification, GoogleAuthProvider, signInWithPopup,
-  sendPasswordResetEmail
-} from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
-import {
-  getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, getDocs, query, where, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { citacoes } from "./citacoes.js";
+import { carregarBiblia, listaLivros, biblia, localizarLivro } from "./biblia.js";
+import { imprimirMarcacoes } from "./print.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDSy_V62ZUXK-2E1H05uTbvLvM9Q6D_Lng",
-  authDomain: "estudobiblico-1b794.firebaseapp.com",
-  projectId: "estudobiblico-1b794",
-  storageBucket: "estudobiblico-1b794.appspot.com",
-  messagingSenderId: "92626454313",
-  appId: "1:92626454313:web:ac8cbded596cb179265938",
-  measurementId: "G-P927QCEMQM"
-};
+await carregarBiblia();
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+import { auth, db, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut, sendEmailVerification, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, collection, doc, setDoc, updateDoc, deleteDoc, getDocs, query, where, serverTimestamp } from "./firebase.js";
+
 let marcacoesSelecionadas = [];
 
 // Elementos fixos
@@ -188,50 +172,10 @@ document.querySelectorAll(".toggle-password").forEach(btn => {
   });
 });
 
-// Normalizar texto (ignora acentos e case) 
-function normalizar(str) {
-  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-}
-
-// Abreviações completas de todos os livros
-const abreviacoes = {
-  "gn":"genesis","ex":"exodo","lv":"levitico","nm":"numeros","dt":"deuteronomio","js":"josue","jz":"juizes","rt":"rute",
-  "1sm":"1samuel","1 samuel":"1samuel","2sm":"2samuel","2 samuel":"2samuel", "1 sm":"1samuel", "2 sm":"2samuel",
-  "1rs":"1reis","1 reis":"1reis","2rs":"2reis","2 reis":"2reis", "1 rs":"1reis", "2 rs":"2reis",
-  "1cr":"1cronicas","1 cronicas":"1cronicas","2cr":"2cronicas","2 cronicas":"2cronicas", "1 cr":"1cronicas", "2 cr":"2cronicas",
-  "ed":"esdras","ne":"neemias","et":"ester", 
-  "1mac":"1macabeus","1 macabeus":"1macabeus","2mac":"2macabeus","2 macabeus":"2macabeus", "1 mac":"1macabeus", "2 mac":"2macabeus",
-  "jó":"jo","sl":"salmos","pv":"provérbios","ec":"eclesiastes","ct":"cantares","is":"isaias","jr":"jeremias","lm":"lamentacoes","br":"baruc", "baruque": "baruc", "ez":"ezequiel","dn":"daniel",
-  "os":"oseias","jl":"joel","am":"amos","ob":"obadias","jn":"jonas","mq":"miqueias","na":"naum","hc":"habacuque","sf":"sofeias",
-  "ag":"ageu","zc":"zacarias","ml":"malaquias",
-  "mt":"mateus","mc":"marcos","lc":"lucas","jo":"joao","atos":"atos",
-  "rm":"romanos","1co":"1corintios","1 corintios":"1corintios","2co":"2corintios","2 corintios":"2corintios","1 co":"1corintios","2 co":"2corintios",
-  "gl":"galatas","ef":"efesios","fp":"filipenses","cl":"colossenses",
-  "1ts":"1tessalonicenses","1 tessalonicenses":"1tessalonicenses","2ts":"2tessalonicenses","2 tessalonicenses":"2tessalonicenses","1 ts":"1tessalonicenses","2 ts":"2tessalonicenses",
-  "1tm":"1timoteo","1 timoteo":"1timoteo","2tm":"2timoteo","2 timoteo":"2timoteo","1 tm":"1timoteo","2 tm":"2timoteo",
-  "tt":"tito","fm":"filemom","hb":"hebreus","tg":"tiago",
-  "1pe":"1pedro","1 pedro":"1pedro","2pe":"2pedro","2 pedro":"2pedro","1 pe":"1pedro","2 pe":"2pedro",
-  "1jo":"1joao","1 joao":"1joao","2jo":"2joao","2 joao":"2joao","1 jo":"1joao","2 jo":"2joao","3jo":"3joao","3 joao":"3joao",
-  "jd":"judas","ap":"apocalipse"
-};
-
-// Carrega a Bíblia local do arquivo JSON
-let biblia = null;
-async function carregarBiblia() {
-  try {
-    const res = await fetch("bibliaAveMaria.json");
-    if (!res.ok) throw new Error("Não foi possível carregar o arquivo JSON.");
-    biblia = await res.json();
-  } catch (e) {
-    console.error("Erro ao carregar Bíblia:", e);
-  }
-}
-carregarBiblia();
-
 // ===== Estado de navegação (livro/capítulo atual) =====
 const navContainer = document.getElementById("nav-capitulos");
-const btnAnterior   = document.getElementById("btn-anterior");
-const btnProximo    = document.getElementById("btn-proximo");
+const btnAnterior = document.getElementById("btn-anterior");
+const btnProximo = document.getElementById("btn-proximo");
 
 const estadoLeitura = {
   livroObj: null,
@@ -239,22 +183,6 @@ const estadoLeitura = {
   capMin: 1,
   capMax: 1
 };
-
-// Lista de todos os livros em ordem
-function listaLivros() {
-  return (biblia?.antigoTestamento || []).concat(biblia?.novoTestamento || []);
-}
-
-// Localiza livro considerando normalização + abreviações
-function localizarLivro(livroInputRaw) {
-  if (!biblia) return null;
-  const todos = listaLivros();
-  const inputN = normalizar(livroInputRaw);
-  return todos.find(l => {
-    const nomeN = normalizar(l.nome);
-    return nomeN === inputN || abreviacoes[inputN] === nomeN;
-  }) || null;
-}
 
 // Limites de capítulos do livro
 function limitesCapitulos(livroObj) {
@@ -276,10 +204,10 @@ function atualizarNavegacao() {
   const estaNoUltimo = estadoLeitura.capAtual >= estadoLeitura.capMax;
 
   btnAnterior.textContent = estaNoPrimeiro ? "⟵ Livro anterior" : "⟵ Anterior";
-  btnProximo.textContent  = estaNoUltimo   ? "Próximo livro ⟶" : "Próximo ⟶";
+  btnProximo.textContent = estaNoUltimo ? "Próximo livro ⟶" : "Próximo ⟶";
 
   btnAnterior.dataset.tipo = estaNoPrimeiro ? "livroAnterior" : "capAnterior";
-  btnProximo.dataset.tipo  = estaNoUltimo   ? "livroProximo"  : "capProximo";
+  btnProximo.dataset.tipo = estaNoUltimo ? "livroProximo" : "capProximo";
 }
 
 // Renderiza capítulo
@@ -287,7 +215,6 @@ function mostrarCapitulo(livroObj, cap) {
   const user = auth.currentUser;
   const div = document.getElementById("versiculos");
   const box = document.getElementById("marcacao-box");
-  const focusBtn = document.getElementById("focus-toggle");
 
   estadoLeitura.livroObj = livroObj;
   estadoLeitura.capAtual = cap;
@@ -311,14 +238,14 @@ function mostrarCapitulo(livroObj, cap) {
 
   const velho = document.getElementById("titulo-capitulo");
   if (velho) velho.remove();
+
   const titulo = document.createElement("h2");
   titulo.id = "titulo-capitulo";
-  titulo.textContent = `${livroObj.nome} ${cap}`;
+  titulo.innerHTML = `📖 ${livroObj.nome} <span>${cap}</span>`;
   titulo.style.margin = "10px 0";
   titulo.style.textAlign = "center";
-  focusBtn.insertAdjacentElement("afterend", titulo);
 
-  focusBtn.classList.toggle("hidden", !capObj.versiculos?.length);
+  div.insertAdjacentElement("beforebegin", titulo);
 
   capObj.versiculos.forEach(v => {
     const row = document.createElement("div"); row.classList.add("versiculo");
@@ -399,22 +326,22 @@ document.getElementById("salvar-todos").addEventListener("click", async () => {
 
   try {
     const refMarc = doc(collection(db, "marcacoes_grupadas"));
-        const favorito = document.getElementById("marcar-favorito")?.checked || false; // <- checkbox extra
-await setDoc(refMarc, {
-  uid: user.uid,
-  tipo,
-  comentario: coment,
-  versiculos: marcacoesSelecionadas.map(v => ({
-    livro: v.livro,
-    capitulo: v.capitulo,
-    numero: v.numero,
-    texto: v.texto
-  })),
-  favorito, // <- salva já como favorito
-  timestamp: serverTimestamp()
-});
+    const favorito = document.getElementById("marcar-favorito")?.checked || false; // <- checkbox extra
+    await setDoc(refMarc, {
+      uid: user.uid,
+      tipo,
+      comentario: coment,
+      versiculos: marcacoesSelecionadas.map(v => ({
+        livro: v.livro,
+        capitulo: v.capitulo,
+        numero: v.numero,
+        texto: v.texto
+      })),
+      favorito, 
+      timestamp: serverTimestamp()
+    });
 
-    // --- NOVO: desmarcar automaticamente os versículos selecionados ---
+    //desmarcar automaticamente os versículos selecionados
     marcacoesSelecionadas = [];
     document.querySelectorAll(".versiculo-checkbox").forEach(chk => chk.checked = false);
 
@@ -427,7 +354,6 @@ await setDoc(refMarc, {
     console.error(e); alert("Erro ao salvar os versículos agrupados.");
   }
 });
-
 
 // Exibir grupos de marcações
 async function exibirGruposMarcacoes() {
@@ -490,9 +416,9 @@ async function exibirGruposMarcacoes() {
     const header = document.createElement("div");
     header.innerHTML = `
       <p><strong>Categoria: <select class="group-tipo" disabled>
-        <option value="promessa" ${g.tipo==="promessa"?"selected":""}>Promessa</option>
-        <option value="ordem" ${g.tipo==="ordem"?"selected":""}>Ordem</option>
-        <option value="principio" ${g.tipo==="principio"?"selected":""}>Princípio Eterno</option>
+        <option value="promessa" ${g.tipo === "promessa" ? "selected" : ""}>Promessa</option>
+        <option value="ordem" ${g.tipo === "ordem" ? "selected" : ""}>Ordem</option>
+        <option value="principio" ${g.tipo === "principio" ? "selected" : ""}>Princípio Eterno</option>
       </select></strong></p>`;
     header.style.marginBottom = "12px";
 
@@ -591,92 +517,12 @@ document.getElementById("buscar-marcados")?.addEventListener("input", () => {
   });
 });
 
-// Citação bíblica aleatória
-const citacoes = [
-  "\"Porque Deus tanto amou o mundo que deu o seu Filho Unigênito, para que todo o que nele crer não pereça, mas tenha a vida eterna.\" — João 3:16",
-  "\"Portanto, vão e façam discípulos de todas as nações, batizando-os em nome do Pai e do Filho e do Espírito Santo, ensinando-os a obedecer a tudo o que eu lhes ordenei. E eu estarei sempre com vocês, até o fim dos tempos.\" — Mateus 28:19-20",
-  "\"Busquem, pois, em primeiro lugar o Reino de Deus e a sua justiça, e todas essas coisas lhes serão acrescentadas.\" — Mateus 6:33",
-  "\"E a paz de Deus, que excede todo o entendimento, guardará os seus corações e as suas mentes em Cristo Jesus.\" — Filipenses 4:7",
-  "\"Porque sou eu que conheço os planos que tenho para vocês, diz o Senhor, planos de fazê-los prosperar e não de causar dano, planos de dar a vocês esperança e um futuro.\" — Jeremias 29:11",
-  "\"Eu sou o caminho, a verdade e a vida. Ninguém vem ao Pai, a não ser por mim.\" — João 14:6",
-  "\"Eu disse essas coisas para que em mim vocês tenham paz. Neste mundo vocês terão aflições; contudo, tenham ânimo! Eu venci o mundo.\" — João 16:33",
-  "\"O Senhor te abençoe e te guarde; o Senhor faça resplandecer o seu rosto sobre ti e te conceda graça; o Senhor volte para ti o seu rosto e te dê paz.\" — Números 6:24-26",
-  "\"Por isso não temas, pois estou com você; não tenha medo, pois sou o seu Deus. Eu o fortalecerei e o ajudarei; eu o segurarei com a minha mão direita vitoriosa.\" — Isaías 41:10",
-  "\"Confie no Senhor de todo o seu coração e não se apoie em seu próprio entendimento.\" — Provérbios 3:5",
-  "\"Vocês, orem assim: Pai nosso, que estás nos céus! Santificado seja o teu nome. Venha o teu Reino; seja feita a tua vontade, assim na terra como no céu. Dá-nos hoje o nosso pão de cada dia. Perdoa as nossas dívidas, assim como perdoamos aos nossos devedores. E não nos deixes cair em tentação, mas livra-nos do mal, porque teu é o Reino, o poder e a glória para sempre. Amém.\" — Mateus 6:9-13",
-  "\"O Senhor é o meu pastor; de nada terei falta.\" — Salmos 23:1",
-  "\"Assim, eles já não são dois, mas sim uma só carne. Portanto, o que Deus uniu, ninguém separe.\" — Mateus 19:6",
-  "\"Que diremos, pois, diante dessas coisas? Se Deus é por nós, quem será contra nós?\" — Romanos 8:31",
-  "\"Honra teu pai e tua mãe, a fim de que tenhas vida longa na terra que o Senhor, o teu Deus, te dá.\" — Êxodo 20:12",
-  "\"Portanto, não se preocupem com o amanhã, pois o amanhã trará as suas próprias preocupações. Basta a cada dia o seu próprio mal.\" — Mateus 6:34",
-  "\"Tudo posso naquele que me fortalece.\" — Filipenses 4:13",
-  "\"Não fui eu que ordenei a você? Seja forte e corajoso! Não se apavore nem desanime, pois o Senhor, o seu Deus, estará com você por onde você andar.\" — Josué 1:9",
-  "\"O amor é paciente, o amor é bondoso. Não inveja, não se vangloria, não se orgulha. Não maltrata, não procura seus interesses, não se ira facilmente, não guarda rancor. O amor não se alegra com a injustiça, mas se alegra com a verdade. Tudo sofre, tudo crê, tudo espera, tudo suporta.\" — 1 Coríntios 13:4-7",
-  "\"Então Pedro aproximou-se de Jesus e perguntou: 'Senhor, quantas vezes deverei perdoar a meu irmão quando ele pecar contra mim? Até sete vezes?' Jesus respondeu: 'Eu digo a você: Não até sete, mas até setenta vezes sete.'\" — Mateus 18:21-22"
-];
 document.getElementById("citacao-biblica").innerHTML =
   `<em><strong>${citacoes[Math.floor(Math.random() * citacoes.length)]}</strong></em>`;
 
 // Impressão
-document.getElementById("btn-imprimir").addEventListener("click", () => {
-  const area = document.getElementById("lista-marcados");
-  if (area.innerHTML.trim() === "") return alert("Nada para imprimir.");
-  
-  const clone = area.cloneNode(true);
-  // Substitui textareas por parágrafos
-  clone.querySelectorAll("textarea.group-comment").forEach(textarea => {
-    const p = document.createElement("p");
-    p.className = "group-comment";
-    p.textContent = textarea.value;
-    textarea.replaceWith(p);
-  });
-  // Remove botões e ações
-  clone.querySelectorAll(".versiculo-actions").forEach(el => el.remove());
-  
-  const styles = `
-    <style>
-      body { font-family: system-ui, sans-serif; padding: 20px; line-height: 1.4; color: #333; }
-      h1 { text-align: center; margin-bottom: 10px; }
-      h4 { margin-top: 5px; font-size: 15px; color: #222; border-bottom: 1px solid #aaa; padding-bottom: 4px; }
-      .versiculo-card { margin-bottom: 20px; padding: 12px; border-left: 6px solid #888; background-color: #f9f9f9; page-break-inside: avoid; border-radius: 6px; }
-      .versiculo-card.promessa { border-left-color: #4CAF50; background-color: #C8E6C9; }
-      .versiculo-card.ordem { border-left-color: #3F51B5; background-color: #E1BEE7; }
-      .versiculo-card.principio { border-left-color: #F44336; background-color: #FFE0B2; }
-      .versiculo-card p { margin: 4px 0; font-size: 12px; }
-      .group-comment { display: block; margin-top: 12px; font-style: italic; font-weight: bold; color: #000; white-space: pre-wrap; }
-      .group-tipo { font-weight: bold; color: #006699; }
-    </style>
-  `;
-
-  const htmlContent = `
-    <html>
-      <head>
-        <title>Meu Estudo Bíblico Católico</title>
-        ${styles}
-      </head>
-      <body>
-        <h1>Meu Estudo Bíblico Católico</h1>
-        ${clone.innerHTML}
-      </body>
-    </html>
-  `;
-
-  const printWindow = window.open("", "_blank");
-  printWindow.document.write(htmlContent);
-  printWindow.document.close();
-  printWindow.focus();
-  printWindow.print();
-});
-
-// Modo foco
-document.addEventListener("DOMContentLoaded", () => {
-  const focusBtn = document.getElementById("focus-toggle");
-  if (focusBtn) {
-    focusBtn.addEventListener("click", () => {
-      document.body.classList.toggle("focus-mode");
-    });
-  }
-});
+document.getElementById("btn-imprimir")
+  .addEventListener("click", imprimirMarcacoes);
 
 // Reset de senha sem pré-checagem (compatível com proteção de enumeração)
 const resetSenhaBtn = document.getElementById("reset-senha-btn");

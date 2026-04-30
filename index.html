@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/2600/2600768.png" />
 </head>
+
 <body>
 
   <!-- Cabeçalho -->
@@ -32,7 +34,7 @@
 
     <!-- Autenticação -->
     <section class="auth-area" id="auth-area">
-      <h2>A bíblia na palma da sua mão!<br >
+      <h2>A bíblia na palma da sua mão!<br>
         Faça login ou cadastre-se para salvar e organizar seus versículos favoritos.</h2>
       <div class="login-box" id="login-box">
         <h3>Login</h3>
@@ -42,16 +44,18 @@
         <label for="login-senha">Senha</label>
         <div class="senha-wrapper">
           <input type="password" id="login-senha" placeholder="••••••••" aria-label="Senha para login" />
-          <button type="button" class="toggle-password" data-target="login-senha" aria-label="Mostrar/ocultar senha">👁️</button>
+          <button type="button" class="toggle-password" data-target="login-senha"
+            aria-label="Mostrar/ocultar senha">👁️</button>
         </div>
 
         <button type="button" id="login-btn" aria-label="Entrar">Entrar</button>
         <br>
-        <button id="login-google" class="google-btn"> Entrar com 
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="18" height="18">oogle </button>
+        <button id="login-google" class="google-btn"> Entrar com
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="18"
+            height="18">oogle </button>
         <br>
         <button type="button" id="reset-senha-btn" class="google-btn">Esqueci minha senha</button>
-        </div>
+      </div>
 
       <div class="cadastro-box" id="cadastro-box">
         <h3>Cadastro</h3>
@@ -64,7 +68,8 @@
         <label for="cadastro-senha">Senha</label>
         <div class="senha-wrapper">
           <input type="password" id="cadastro-senha" placeholder="••••••••" aria-label="Senha para cadastro" />
-          <button type="button" class="toggle-password" data-target="cadastro-senha" aria-label="Mostrar/ocultar senha">👁️</button>
+          <button type="button" class="toggle-password" data-target="cadastro-senha"
+            aria-label="Mostrar/ocultar senha">👁️</button>
         </div>
 
         <button type="button" id="cadastro-btn" aria-label="Cadastrar">Cadastrar</button>
@@ -77,109 +82,102 @@
     <div class="hidden" id="conteudo"> <!-- botão de sair -->
 
       <!-- Busca de capítulo -->
-<div class="busca-verse">
-  <label for="livro">Livro</label>
-  <input list="lista-livros" type="text" id="livro" placeholder="ex: 1 João" aria-label="Nome do livro bíblico" />
+      <div class="busca-verse">
+        <label for="livro">Livro</label>
+        <input list="lista-livros" type="text" id="livro" placeholder="ex: 1 João" aria-label="Nome do livro bíblico" />
 
-  <datalist id="lista-livros">
-    <option value="Gênesis">
-    <option value="Êxodo">
-    <option value="Levítico">
-    <option value="Números">
-    <option value="Deuteronômio">
-    <option value="Josué">
-    <option value="Juízes">
-    <option value="Rute">
-    <option value="1 Samuel">
-    <option value="2 Samuel">
-    <option value="1 Reis">
-    <option value="2 Reis">
-    <option value="1 Crônicas">
-    <option value="2 Crônicas">
-    <option value="Esdras">
-    <option value="Neemias">
-    <option value="Tobias">
-    <option value="Judite">
-    <option value="Ester">
-    <option value="1 Macabeus">
-    <option value="2 Macabeus">
-    <option value="Jó">
-    <option value="Salmos">
-    <option value="Provérbios">
-    <option value="Eclesiastes">
-    <option value="Cântico dos Cânticos">
-    <option value="Sabedoria">
-    <option value="Eclesiástico">
-    <option value="Isaías">
-    <option value="Jeremias">
-    <option value="Lamentações">
-    <option value="Baruc">
-    <option value="Ezequiel">
-    <option value="Daniel">
-    <option value="Oséias">
-    <option value="Joel">
-    <option value="Amós">
-    <option value="Obadias">
-    <option value="Jonas">
-    <option value="Miquéias">
-    <option value="Naum">
-    <option value="Habacuque">
-    <option value="Sofonias">
-    <option value="Ageu">
-    <option value="Zacarias">
-    <option value="Malaquias">
-    <option value="Mateus">
-    <option value="Marcos">
-    <option value="Lucas">
-    <option value="João">
-    <option value="Atos dos Apóstolos">
-    <option value="Romanos">
-    <option value="1 Coríntios">
-    <option value="2 Coríntios">
-    <option value="Gálatas">
-    <option value="Efésios">
-    <option value="Filipenses">
-    <option value="Colossenses">
-    <option value="1 Tessalonicenses">
-    <option value="2 Tessalonicenses">
-    <option value="1 Timóteo">
-    <option value="2 Timóteo">
-    <option value="Tito">
-    <option value="Filemom">
-    <option value="Hebreus">
-    <option value="Tiago">
-    <option value="1 Pedro">
-    <option value="2 Pedro">
-    <option value="1 João">
-    <option value="2 João">
-    <option value="3 João">
-    <option value="Judas">
-    <option value="Apocalipse">
-  </datalist>
+        <datalist id="lista-livros">
+          <option value="Gênesis">
+          <option value="Êxodo">
+          <option value="Levítico">
+          <option value="Números">
+          <option value="Deuteronômio">
+          <option value="Josué">
+          <option value="Juízes">
+          <option value="Rute">
+          <option value="1Samuel">
+          <option value="2Samuel">
+          <option value="1Reis">
+          <option value="2Reis">
+          <option value="1Crônicas">
+          <option value="2Crônicas">
+          <option value="Esdras">
+          <option value="Neemias">
+          <option value="Tobias">
+          <option value="Judite">
+          <option value="Ester">
+          <option value="1Macabeus">
+          <option value="2Macabeus">
+          <option value="Jó">
+          <option value="Salmos">
+          <option value="Provérbios">
+          <option value="Eclesiastes">
+          <option value="Cântico dos Cânticos">
+          <option value="Sabedoria">
+          <option value="Eclesiástico">
+          <option value="Isaías">
+          <option value="Jeremias">
+          <option value="Lamentações">
+          <option value="Baruc">
+          <option value="Ezequiel">
+          <option value="Daniel">
+          <option value="Oséias">
+          <option value="Joel">
+          <option value="Amós">
+          <option value="Obadias">
+          <option value="Jonas">
+          <option value="Miquéias">
+          <option value="Naum">
+          <option value="Habacuque">
+          <option value="Sofonias">
+          <option value="Ageu">
+          <option value="Zacarias">
+          <option value="Malaquias">
+          <option value="Mateus">
+          <option value="Marcos">
+          <option value="Lucas">
+          <option value="João">
+          <option value="Atos dos Apóstolos">
+          <option value="Romanos">
+          <option value="1Coríntios">
+          <option value="2Coríntios">
+          <option value="Gálatas">
+          <option value="Efésios">
+          <option value="Filipenses">
+          <option value="Colossenses">
+          <option value="1Tessalonicenses">
+          <option value="2Tessalonicenses">
+          <option value="1Timóteo">
+          <option value="2Timóteo">
+          <option value="Tito">
+          <option value="Filemom">
+          <option value="Hebreus">
+          <option value="Tiago">
+          <option value="1Pedro">
+          <option value="2Pedro">
+          <option value="1João">
+          <option value="2João">
+          <option value="3João">
+          <option value="Judas">
+          <option value="Apocalipse">
+        </datalist>
 
-  <label for="capitulo">Capítulo</label>
-  <input type="number" id="capitulo" placeholder="ex: 2" aria-label="Número do capítulo bíblico" />
+        <label for="capitulo">Capítulo</label>
+        <input type="number" id="capitulo" placeholder="ex: 2" aria-label="Número do capítulo bíblico" />
 
-  <button id="buscar-btn" aria-label="Buscar versículos">
-    <img src="https://cdn-icons-png.flaticon.com/128/2770/2770487.png" alt="Ícone de busca" class="btn-icon" /> Buscar
-  </button>
-</div>
-
-<!-- Botão Modo Estudo Focado -->
-<button id="focus-toggle" class="hidden" title="Modo Estudo Focado" aria-label="Alternar modo de estudo focado"> 🎯 Modo Foco </button>
-
-<!-- Navegação de capítulos (mostrada após a primeira busca) -->
-<div id="nav-capitulos" class="hidden" style="display:flex; gap:8px; justify-content:center; align-items:center; margin:8px 0;">
-  <button id="btn-anterior" type="button" aria-label="Capítulo anterior">⟵ Anterior</button>
-  <button id="btn-proximo"  type="button" aria-label="Próximo capítulo">Próximo ⟶</button>
-</div>
-
-<div id="versiculos"></div>
+        <button id="buscar-btn" aria-label="Buscar versículos">
+          <img src="https://cdn-icons-png.flaticon.com/128/2770/2770487.png" alt="Ícone de busca" class="btn-icon" />
+          Buscar
+        </button>
+      </div>
 
 
-        <br>
-      <!-- Botão Modo Estudo Focado -->
-      <button id="focus-toggle" class="hidden" title="Modo Estudo Focado" aria-label="Alternar modo de estudo focado"> 🎯 Modo Foco </button>
+      <!-- Navegação de capítulos (mostrada após a primeira busca) -->
+      <div id="nav-capitulos" class="hidden"
+        style="display:flex; gap:8px; justify-content:center; align-items:center; margin:8px 0;">
+        <button id="btn-anterior" type="button" aria-label="Capítulo anterior">⟵ Anterior</button>
+        <button id="btn-proximo" type="button" aria-label="Próximo capítulo">Próximo ⟶</button>
+      </div>
 
       <div id="versiculos"></div>
 
@@ -199,15 +197,13 @@
 
         <button id="salvar-todos" aria-label="Salvar marcações">💾 Salvar</button>
       </div>
-
       <hr />
-
       <!-- Versículos marcados -->
       <button id="ver-marcados-btn" aria-label="Ver meus versículos">
-        <img src="https://cdn-icons-png.flaticon.com/128/4364/4364664.png" alt="Ícone de versículos marcados" class="btn-icon" /> Meus Versículos
+        <img src="https://cdn-icons-png.flaticon.com/128/4364/4364664.png" alt="Ícone de versículos marcados"
+          class="btn-icon" /> Versículos Salvos
       </button>
       <div class="hidden" id="versiculos-marcados">
-        <h3>Versículos Marcados</h3>
 
         <label for="filtro-marcacao">Filtrar</label>
         <select id="filtro-marcacao" aria-label="Filtrar por categoria">
@@ -222,22 +218,28 @@
         <select id="filtro-livro" aria-label="Filtrar por livro">
           <option value="">Todos</option>
         </select>
-          <br>
-          <button id="btn-imprimir" title="Imprimir marcações" aria-label="Imprimir marcações">🖨️ Imprimir</button>
+        <br>
+        <label for="filtro-marcacao">Filtrar por versículo ou comentário</label>
+        <input type="text" id="buscar-marcados" placeholder="Buscar versículo ou comentário..."
+          style="margin-bottom:10px;width:100%;padding:6px;">
+        <br>
+        <br>
+        <button id="btn-imprimir" title="Imprimir marcações" aria-label="Imprimir marcações">🖨️ Imprimir</button>
         <div class="grid-cards" id="lista-marcados"></div>
       </div>
-
     </div>
+    <hr />
   </main>
 
   <!-- Rodapé -->
-<footer class="rodape" id="rodape" role="contentinfo">
-  <p id="citacao-biblica" aria-live="polite"></p>
-  <br>
-  <p>Feito por <a href="https://github.com/DouglasTambasco" target="_blank" rel="noopener">Douglas Tambasco</a> ©</p> 
-  <p> 2025 </p>
-</footer>
+  <footer class="rodape" id="rodape" role="contentinfo">
+    <p id="citacao-biblica" aria-live="polite"></p>
+    <br>
+    <p>Feito por <a href="https://github.com/DouglasTambasco" target="_blank" rel="noopener">Douglas Tambasco</a> ©</p>
+    <p> 2025 </p>
+  </footer>
 
   <script type="module" src="script.js"></script>
 </body>
+
 </html>
