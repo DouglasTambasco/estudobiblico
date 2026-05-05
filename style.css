@@ -24,7 +24,15 @@ body {
   font-family: 'Quicksand', sans-serif;
   background-color: var(--vatican-white);
   color: var(--text-dark);
-  transition: background 0.3s, color 0.3s;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: stretch;
+}
+
+main.container {
+  flex: 1;
+  width: 100%;
 }
 
 body.night {
@@ -71,6 +79,7 @@ h2 {
   margin-top: 5px;
   box-shadow: var(--shadow-light);
   transition: background 0.3s, border-color 0.3s;
+  width: 100%;
 }
 
 body.night .header-estudo {
@@ -702,6 +711,26 @@ body.night .versiculo-conteudo {
 .favorito-label input:checked + .estrela {
   color: gold;
   content: "★";
+}
+
+#btn-topo {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background: var(--vatican-yellow);
+  color: #000;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 20px;
+  cursor: pointer;
+  display: none;
+  z-index: 999;
+}
+
+#btn-topo:hover {
+  background: #e1c967;
 }
 
 /* ========= RESPONSIVIDADE ========= */

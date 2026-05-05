@@ -87,104 +87,108 @@
         <input list="lista-livros" type="text" id="livro" placeholder="ex: 1 João" aria-label="Nome do livro bíblico" />
 
         <datalist id="lista-livros">
-          <option value="Gênesis">
-          <option value="Êxodo">
-          <option value="Levítico">
-          <option value="Números">
-          <option value="Deuteronômio">
-          <option value="Josué">
-          <option value="Juízes">
-          <option value="Rute">
-          <option value="1Samuel">
-          <option value="2Samuel">
-          <option value="1Reis">
-          <option value="2Reis">
-          <option value="1Crônicas">
-          <option value="2Crônicas">
-          <option value="Esdras">
-          <option value="Neemias">
-          <option value="Tobias">
-          <option value="Judite">
-          <option value="Ester">
-          <option value="1Macabeus">
-          <option value="2Macabeus">
-          <option value="Jó">
-          <option value="Salmos">
-          <option value="Provérbios">
-          <option value="Eclesiastes">
-          <option value="Cântico dos Cânticos">
-          <option value="Sabedoria">
-          <option value="Eclesiástico">
-          <option value="Isaías">
-          <option value="Jeremias">
-          <option value="Lamentações">
-          <option value="Baruc">
-          <option value="Ezequiel">
-          <option value="Daniel">
-          <option value="Oséias">
-          <option value="Joel">
-          <option value="Amós">
-          <option value="Obadias">
-          <option value="Jonas">
-          <option value="Miquéias">
-          <option value="Naum">
-          <option value="Habacuque">
-          <option value="Sofonias">
-          <option value="Ageu">
-          <option value="Zacarias">
-          <option value="Malaquias">
-          <option value="Mateus">
-          <option value="Marcos">
-          <option value="Lucas">
-          <option value="João">
-          <option value="Atos dos Apóstolos">
-          <option value="Romanos">
-          <option value="1Coríntios">
-          <option value="2Coríntios">
-          <option value="Gálatas">
-          <option value="Efésios">
-          <option value="Filipenses">
-          <option value="Colossenses">
-          <option value="1Tessalonicenses">
-          <option value="2Tessalonicenses">
-          <option value="1Timóteo">
-          <option value="2Timóteo">
-          <option value="Tito">
-          <option value="Filemom">
-          <option value="Hebreus">
-          <option value="Tiago">
-          <option value="1Pedro">
-          <option value="2Pedro">
-          <option value="1João">
-          <option value="2João">
-          <option value="3João">
-          <option value="Judas">
-          <option value="Apocalipse">
+          <optgroup label="Antigo Testamento">
+            <option value="Gênesis">
+            <option value="Êxodo">
+            <option value="Levítico">
+            <option value="Números">
+            <option value="Deuteronômio">
+            <option value="Josué">
+            <option value="Juízes">
+            <option value="Rute">
+            <option value="1Samuel">
+            <option value="2Samuel">
+            <option value="1Reis">
+            <option value="2Reis">
+            <option value="1Crônicas">
+            <option value="2Crônicas">
+            <option value="Esdras">
+            <option value="Neemias">
+            <option value="Tobias">
+            <option value="Judite">
+            <option value="Ester">
+            <option value="1Macabeus">
+            <option value="2Macabeus">
+            <option value="Jó">
+            <option value="Salmos">
+            <option value="Provérbios">
+            <option value="Eclesiastes">
+            <option value="Cântico dos Cânticos">
+            <option value="Sabedoria">
+            <option value="Eclesiástico">
+            <option value="Isaías">
+            <option value="Jeremias">
+            <option value="Lamentações">
+            <option value="Baruc">
+            <option value="Ezequiel">
+            <option value="Daniel">
+            <option value="Oséias">
+            <option value="Joel">
+            <option value="Amós">
+            <option value="Obadias">
+            <option value="Jonas">
+            <option value="Miquéias">
+            <option value="Naum">
+            <option value="Habacuque">
+            <option value="Sofonias">
+            <option value="Ageu">
+            <option value="Zacarias">
+            <option value="Malaquias">
+          </optgroup>
+
+          <optgroup label="Novo Testamento">
+            <option value="Mateus">
+            <option value="Marcos">
+            <option value="Lucas">
+            <option value="João">
+            <option value="Atos dos Apóstolos">
+            <option value="Romanos">
+            <option value="1Coríntios">
+            <option value="2Coríntios">
+            <option value="Gálatas">
+            <option value="Efésios">
+            <option value="Filipenses">
+            <option value="Colossenses">
+            <option value="1Tessalonicenses">
+            <option value="2Tessalonicenses">
+            <option value="1Timóteo">
+            <option value="2Timóteo">
+            <option value="Tito">
+            <option value="Filemom">
+            <option value="Hebreus">
+            <option value="Tiago">
+            <option value="1Pedro">
+            <option value="2Pedro">
+            <option value="1João">
+            <option value="2João">
+            <option value="3João">
+            <option value="Judas">
+            <option value="Apocalipse">
+          </optgroup>
         </datalist>
 
         <label for="capitulo">Capítulo</label>
         <input type="number" id="capitulo" placeholder="ex: 2" aria-label="Número do capítulo bíblico" />
 
-        <button id="buscar-btn" aria-label="Buscar versículos">
+        <button id="buscar-btn" aria-label="Buscar versículos" title="Buscar versículos">
           <img src="https://cdn-icons-png.flaticon.com/128/2770/2770487.png" alt="Ícone de busca" class="btn-icon" />
           Buscar
         </button>
       </div>
 
-
       <!-- Navegação de capítulos (mostrada após a primeira busca) -->
       <div id="nav-capitulos" class="hidden"
         style="display:flex; gap:8px; justify-content:center; align-items:center; margin:8px 0;">
-        <button id="btn-anterior" type="button" aria-label="Capítulo anterior">⟵ Anterior</button>
-        <button id="btn-proximo" type="button" aria-label="Próximo capítulo">Próximo ⟶</button>
+        <button id="btn-anterior" type="button" aria-label="Capítulo anterior"></button>
+        <button id="btn-proximo" type="button" aria-label="Próximo capítulo"></button>
       </div>
 
       <div id="versiculos"></div>
 
       <!-- Área de marcação -->
       <div class="hidden marcacao-box" id="marcacao-box">
-        <h3>Marcar selecionados</h3>
-         <label class="favorito-label">
+        <h3>Salvar versículo(s) selecionado(s)</h3>
+        <label class="favorito-label">
           <input type="checkbox" id="marcar-favorito">
           <span class="estrela">☆</span>
           Salvar como favorito
@@ -204,7 +208,7 @@
       </div>
       <hr />
       <!-- Versículos marcados -->
-      <button id="ver-marcados-btn" aria-label="Ver meus versículos">
+      <button id="ver-marcados-btn" aria-label="Ver meus versículos" title="Ver meus versículos">
         <img src="https://cdn-icons-png.flaticon.com/128/4364/4364664.png" alt="Ícone de versículos marcados"
           class="btn-icon" /> Versículos Salvos
       </button>
@@ -245,6 +249,7 @@
   </footer>
 
   <script type="module" src="script.js"></script>
+  <button id="btn-topo" title="Voltar ao topo">⬆️</button>
 </body>
 
 </html>

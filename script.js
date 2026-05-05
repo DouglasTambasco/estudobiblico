@@ -102,7 +102,7 @@ if (googleBtn) {
   });
 }
 
-// Enter para login/cadastro
+// Enter para login/cadastro e buscar
 ["login-email", "login-senha"].forEach(id => {
   document.getElementById(id).addEventListener("keydown", e => {
     if (e.key === "Enter") { e.preventDefault(); loginBtn.click(); }
@@ -111,6 +111,15 @@ if (googleBtn) {
 ["cadastro-nome", "cadastro-email", "cadastro-senha"].forEach(id => {
   document.getElementById(id).addEventListener("keydown", e => {
     if (e.key === "Enter") { e.preventDefault(); cadastroBtn.click(); }
+  });
+});
+
+["livro", "capitulo"].forEach(id => {
+  document.getElementById(id).addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      document.getElementById("buscar-btn").click();
+    }
   });
 });
 
@@ -203,8 +212,8 @@ function atualizarNavegacao() {
   const estaNoPrimeiro = estadoLeitura.capAtual <= estadoLeitura.capMin;
   const estaNoUltimo = estadoLeitura.capAtual >= estadoLeitura.capMax;
 
-  btnAnterior.textContent = estaNoPrimeiro ? "⟵ Livro anterior" : "⟵ Anterior";
-  btnProximo.textContent = estaNoUltimo ? "Próximo livro ⟶" : "Próximo ⟶";
+  btnAnterior.textContent = estaNoPrimeiro ? "⏪ Livro anterior" : "◀️ Anterior";
+  btnProximo.textContent = estaNoUltimo ? "Próximo livro ⏩" : "Próximo ▶️";
 
   btnAnterior.dataset.tipo = estaNoPrimeiro ? "livroAnterior" : "capAnterior";
   btnProximo.dataset.tipo = estaNoUltimo ? "livroProximo" : "capProximo";
@@ -314,6 +323,15 @@ if (btnAnterior && btnProximo) {
     }
   });
 }
+
+// Botão voltar ao topo
+const btnTopo = document.getElementById("btn-topo");
+window.addEventListener("scroll", () => {
+  btnTopo.style.display = window.scrollY > 300 ? "block" : "none";
+});
+btnTopo.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
 
 // Salvar marcações agrupadas
 document.getElementById("salvar-todos").addEventListener("click", async () => {
