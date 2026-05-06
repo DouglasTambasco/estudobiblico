@@ -1,3 +1,8 @@
+/**
+ * Abre uma janela de impressão com os versículos salvos.
+ * Remove botões de ação e substitui textareas por parágrafos
+ * para garantir uma impressão limpa e legível.
+ */
 export function imprimirMarcacoes() {
   const area = document.getElementById("lista-marcados");
 
@@ -8,7 +13,7 @@ export function imprimirMarcacoes() {
 
   const clone = area.cloneNode(true);
 
-  // Substituir textareas por texto
+  // Substitui textareas pelos seus valores em texto simples
   clone.querySelectorAll("textarea.group-comment").forEach(textarea => {
     const p = document.createElement("p");
     p.className = "group-comment";
@@ -16,21 +21,30 @@ export function imprimirMarcacoes() {
     textarea.replaceWith(p);
   });
 
-  // Remover botões
+  // Remove botões de ação (editar, salvar, excluir, favoritar)
   clone.querySelectorAll(".versiculo-actions").forEach(el => el.remove());
 
   const styles = `
     <style>
       body { font-family: system-ui, sans-serif; padding: 20px; line-height: 1.4; color: #333; }
-      h1 { text-align: center; margin-bottom: 10px; }
-      h4 { margin-top: 5px; font-size: 15px; color: #222; border-bottom: 1px solid #aaa; padding-bottom: 4px; }
-      .versiculo-card { margin-bottom: 20px; padding: 12px; border-left: 6px solid #888; background-color: #f9f9f9; page-break-inside: avoid; border-radius: 6px; }
-      .versiculo-card.promessa { border-left-color: #4CAF50; background-color: #C8E6C9; }
-      .versiculo-card.ordem { border-left-color: #3F51B5; background-color: #E1BEE7; }
+      h1   { text-align: center; margin-bottom: 10px; }
+      h4   { margin-top: 5px; font-size: 15px; color: #222; border-bottom: 1px solid #aaa; padding-bottom: 4px; }
+
+      .versiculo-card {
+        margin-bottom: 20px;
+        padding: 12px;
+        border-left: 6px solid #888;
+        background-color: #f9f9f9;
+        page-break-inside: avoid;
+        border-radius: 6px;
+      }
+      .versiculo-card.promessa  { border-left-color: #4CAF50; background-color: #C8E6C9; }
+      .versiculo-card.ordem     { border-left-color: #3F51B5; background-color: #E1BEE7; }
       .versiculo-card.principio { border-left-color: #F44336; background-color: #FFE0B2; }
+
       .versiculo-card p { margin: 4px 0; font-size: 12px; }
-      .group-comment { display: block; margin-top: 12px; font-style: italic; font-weight: bold; color: #000; white-space: pre-wrap; }
-      .group-tipo { font-weight: bold; color: #006699; }
+      .group-comment    { display: block; margin-top: 12px; font-style: italic; font-weight: bold; color: #000; white-space: pre-wrap; }
+      .group-tipo       { font-weight: bold; color: #006699; }
     </style>
   `;
 
@@ -47,12 +61,12 @@ export function imprimirMarcacoes() {
     </html>
   `;
 
-const win = window.open("", "_blank");
+  const win = window.open("", "_blank");
 
-if (!win) {
-  alert("Permita pop-ups para imprimir.");
-  return;
-}
+  if (!win) {
+    alert("Permita pop-ups para imprimir.");
+    return;
+  }
 
   win.document.write(htmlContent);
   win.document.close();
