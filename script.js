@@ -25,7 +25,6 @@ import {
   serverTimestamp
 } from "./firebase.js";
 
-
 // ============================================================
 // ESTADO GLOBAL
 // ============================================================
@@ -44,7 +43,6 @@ const estadoLeitura = {
   capMax: 1
 };
 
-
 // ============================================================
 // REFERÊNCIAS AO DOM
 // ============================================================
@@ -59,7 +57,6 @@ const navContainer = document.getElementById("nav-capitulos");
 const btnAnterior  = document.getElementById("btn-anterior");
 const btnProximo   = document.getElementById("btn-proximo");
 
-
 // ============================================================
 // TEMA (MODO ESCURO / CLARO)
 // ============================================================
@@ -73,7 +70,6 @@ themeBtn.addEventListener("click", () => {
   const nightMode = document.body.classList.toggle("night");
   localStorage.setItem("modoEscuro", nightMode ? "on" : "off");
 });
-
 
 // ============================================================
 // AUTENTICAÇÃO — VALIDAÇÃO DE E-MAIL
@@ -110,7 +106,6 @@ function isValidEmailFallback(email) {
   return dominio && !bloqueados.includes(dominio);
 }
 
-
 // ============================================================
 // AUTENTICAÇÃO — CADASTRO
 // ============================================================
@@ -146,7 +141,6 @@ cadastroBtn.addEventListener("click", async () => {
   }
 });
 
-
 // ============================================================
 // AUTENTICAÇÃO — LOGIN (E-MAIL / SENHA)
 // ============================================================
@@ -174,7 +168,6 @@ loginBtn.addEventListener("click", async () => {
   }
 });
 
-
 // ============================================================
 // AUTENTICAÇÃO — LOGIN COM GOOGLE
 // ============================================================
@@ -190,7 +183,6 @@ if (googleBtn) {
     }
   });
 }
-
 
 // ============================================================
 // AUTENTICAÇÃO — REDEFINIR SENHA
@@ -232,7 +224,6 @@ if (resetSenhaBtn) {
   });
 }
 
-
 // ============================================================
 // AUTENTICAÇÃO — LOGOUT E SESSÃO ATIVA
 // ============================================================
@@ -265,7 +256,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-
 // ============================================================
 // INTERFACE — INICIALIZAÇÃO PÓS-LOGIN
 // ============================================================
@@ -284,7 +274,6 @@ function initUser(user) {
   logoutBtn.classList.remove("hidden");
 }
 
-
 // ============================================================
 // INTERFACE — MOSTRAR/OCULTAR SENHA
 // ============================================================
@@ -298,7 +287,6 @@ document.querySelectorAll(".toggle-password").forEach(btn => {
     btn.textContent = visivel ? "👁️" : "🙈";
   });
 });
-
 
 // ============================================================
 // INTERFACE — ATALHOS DE TECLADO (ENTER)
@@ -327,7 +315,6 @@ document.querySelectorAll(".toggle-password").forEach(btn => {
     }
   });
 });
-
 
 // ============================================================
 // NAVEGAÇÃO — LÓGICA DE CAPÍTULOS E LIVROS
@@ -399,7 +386,6 @@ if (btnAnterior && btnProximo) {
     }
   });
 }
-
 
 // ============================================================
 // LEITURA — RENDERIZAÇÃO DO CAPÍTULO
@@ -492,7 +478,6 @@ function mostrarCapitulo(livroObj, cap) {
   titulo.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-
 // ============================================================
 // LEITURA — BUSCA DE CAPÍTULO
 // ============================================================
@@ -512,7 +497,6 @@ document.getElementById("buscar-btn").addEventListener("click", () => {
 
   mostrarCapitulo(livroObj, cap);
 });
-
 
 // ============================================================
 // MARCAÇÕES — SALVAR GRUPO DE VERSÍCULOS
@@ -559,7 +543,6 @@ document.getElementById("salvar-todos").addEventListener("click", async () => {
     alert("Erro ao salvar os versículos agrupados.");
   }
 });
-
 
 // ============================================================
 // MARCAÇÕES — EXIBIR GRUPOS SALVOS
@@ -661,7 +644,7 @@ async function exibirGruposMarcacoes() {
     const lista = document.createElement("div");
     g.versiculos.forEach(v => {
       const p = document.createElement("p");
-      p.textContent = `${v.livro} ${v.capitulo}:${v.numero} – ${v.texto}`;
+      p.innerHTML = `<i><strong>${v.livro} ${v.capitulo},${v.numero} </strong></i> – ${v.texto}`;
       lista.appendChild(p);
     });
 
@@ -753,7 +736,6 @@ async function exibirGruposMarcacoes() {
   });
 }
 
-
 // ============================================================
 // MARCAÇÕES — FILTROS E BUSCA TEXTUAL
 // ============================================================
@@ -781,7 +763,6 @@ document.getElementById("buscar-marcados")?.addEventListener("input", () => {
   });
 });
 
-
 // ============================================================
 // UTILITÁRIOS — BOTÃO VOLTAR AO TOPO
 // ============================================================
@@ -795,7 +776,6 @@ window.addEventListener("scroll", () => {
 btnTopo.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
-
 
 // ============================================================
 // RODAPÉ — CITAÇÃO BÍBLICA ALEATÓRIA

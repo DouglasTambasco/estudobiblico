@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
 
-
 /* ============================================================
    RESET E VARIÁVEIS GLOBAIS
    ============================================================ */
@@ -24,7 +23,6 @@
   --ordem-bg:     #E1BEE7;
   --principio-bg: #FFE0B2;
 }
-
 
 /* ============================================================
    BASE — BODY E LAYOUT PRINCIPAL
@@ -79,7 +77,6 @@ hr {
   border-top: 1px solid #ccc;
   margin: 30px 0;
 }
-
 
 /* ============================================================
    CABEÇALHO
@@ -214,7 +211,6 @@ body.night .badge {
   height: 25px;
 }
 
-
 /* ============================================================
    TÍTULO DO CAPÍTULO
    ============================================================ */
@@ -256,7 +252,6 @@ body.night #titulo-capitulo::after {
   background: var(--text-light);
 }
 
-
 /* ============================================================
    AUTENTICAÇÃO — LOGIN E CADASTRO
    ============================================================ */
@@ -292,7 +287,6 @@ body.night .cadastro-box {
   border-color: var(--vatican-yellow);
   color: var(--text-light);
 }
-
 
 /* ============================================================
    FORMULÁRIOS — LABELS, INPUTS, SELECTS, TEXTAREAS E BOTÕES
@@ -352,7 +346,6 @@ button {
   transition: background 0.3s;
 }
 
-
 /* ============================================================
    BUSCA DE VERSÍCULOS
    ============================================================ */
@@ -405,7 +398,6 @@ button {
   background-color: #e1c967;
 }
 
-
 /* ============================================================
    BOTÃO — VER VERSÍCULOS SALVOS
    ============================================================ */
@@ -430,7 +422,6 @@ button {
 #ver-marcados-btn:hover {
   background-color: #e1c967;
 }
-
 
 /* ============================================================
    CAIXA DE MARCAÇÃO (SALVAR VERSÍCULOS)
@@ -480,7 +471,6 @@ body.night .marcacao-box {
   color: gold;
   content: "★";
 }
-
 
 /* ============================================================
    GRID DE CARDS DE VERSÍCULOS SALVOS
@@ -543,7 +533,6 @@ body.night .versiculo-card p {
 body.night .versiculo-card.promessa  { background-color: #2e4731; }
 body.night .versiculo-card.ordem     { background-color: #422753; }
 body.night .versiculo-card.principio { background-color: #5e4524; }
-
 
 /* ============================================================
    CARDS — INPUTS E AÇÕES
@@ -669,7 +658,6 @@ body.night .versiculo-conteudo {
   color: var(--text-light);
 }
 
-
 /* ============================================================
    RODAPÉ
    ============================================================ */
@@ -709,7 +697,6 @@ footer#rodape p {
   hyphens: auto;
 }
 
-
 /* ============================================================
    BOTÃO — VOLTAR AO TOPO
    ============================================================ */
@@ -733,7 +720,6 @@ footer#rodape p {
 #btn-topo:hover {
   background: #e1c967;
 }
-
 
 /* ============================================================
    RESPONSIVIDADE — TABLET E SMALL DESKTOP (até 1200px)
@@ -788,7 +774,6 @@ footer#rodape p {
   }
 }
 
-
 /* ============================================================
    RESPONSIVIDADE — MOBILE (até 750px)
    ============================================================ */
@@ -834,7 +819,6 @@ footer#rodape p {
     gap: 12px;
   }
 }
-
 
 /* ============================================================
    RESPONSIVIDADE — DISPOSITIVOS PEQUENOS (até 500px)
